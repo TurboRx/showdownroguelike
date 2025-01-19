@@ -3088,6 +3088,10 @@ export class Battle {
 		if (options.team && typeof options.team !== 'string') {
 			options.team = Teams.pack(options.team);
 		}
+    if (options.isAI && side.isAI !== options.isAI) {
+      side.isAI = options.isAI;
+      didSomething = true;
+    }
 		if (!didSomething) return;
 		this.inputLog.push(`>player ${slot} ` + JSON.stringify(options));
 		this.add('player', side.id, side.name, side.avatar, options.rating || '');
