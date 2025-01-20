@@ -24,6 +24,7 @@ import {State} from './state';
 import {BattleQueue, Action} from './battle-queue';
 import {BattleActions} from './battle-actions';
 import {Utils} from '../lib/utils';
+import {roguelikeAI} from '../server/chat-plugins/roguelike';
 declare const __version: any;
 
 export type ChannelID = 0 | 1 | 2 | 3 | 4;
@@ -1225,7 +1226,10 @@ export class Battle {
 			throw new Error(`Choices are done immediately after a request`);
 		}
     for (const side of this.sides) {
-			if (side.isAI) this.choose(side.id, 'default');
+			if (side.isAI) {
+        const decision = roguelikeAI();
+        this.choose(side.id, decision);
+      }
 		}
 	}
 
