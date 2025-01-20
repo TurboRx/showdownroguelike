@@ -1224,6 +1224,9 @@ export class Battle {
 		if (this.sides.every(side => side.isChoiceDone())) {
 			throw new Error(`Choices are done immediately after a request`);
 		}
+    for (const side of this.sides) {
+			if (side.isAI) this.choose(side.id, 'default');
+		}
 	}
 
 	clearRequest() {
