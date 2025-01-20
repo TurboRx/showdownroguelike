@@ -1630,6 +1630,18 @@
       "spe": 0
     }
   },
+  "taurospaldeaaqua": {
+    "expYield": 172,
+    "expType": "Slow",
+    "evYield": {
+      "hp": 0,
+      "atk": 2,
+      "def": 0,
+      "spa": 0,
+      "spd": 0,
+      "spe": 0
+    }
+  },
   "magikarp": {
     "expYield": 40,
     "expType": "Slow",
