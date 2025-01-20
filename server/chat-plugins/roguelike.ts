@@ -2,7 +2,7 @@
 
 export function roguelikeAI() {
 	return 'default';
-};
+}
 
 export const commands: Chat.ChatCommands = {
 

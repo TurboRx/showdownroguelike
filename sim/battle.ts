@@ -1225,11 +1225,11 @@ export class Battle {
 		if (this.sides.every(side => side.isChoiceDone())) {
 			throw new Error(`Choices are done immediately after a request`);
 		}
-    for (const side of this.sides) {
+		for (const side of this.sides) {
 			if (side.isAI) {
-        const decision = roguelikeAI();
-        this.choose(side.id, decision);
-      }
+				const decision = roguelikeAI();
+				this.choose(side.id, decision);
+			}
 		}
 	}
 
@@ -3095,10 +3095,10 @@ export class Battle {
 		if (options.team && typeof options.team !== 'string') {
 			options.team = Teams.pack(options.team);
 		}
-    if (options.isAI && side.isAI !== options.isAI) {
-      side.isAI = options.isAI;
-      didSomething = true;
-    }
+		if (options.isAI && side.isAI !== options.isAI) {
+			side.isAI = options.isAI;
+			didSomething = true;
+		}
 		if (!didSomething) return;
 		this.inputLog.push(`>player ${slot} ` + JSON.stringify(options));
 		this.add('player', side.id, side.name, side.avatar, options.rating || '');
