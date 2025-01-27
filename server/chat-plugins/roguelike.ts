@@ -1,4 +1,21 @@
+interface AITrainer {
+	name: string;
+	team?: PokemonSet[];
+}
 
+function createAIBattle(user: User, ai: AITrainer) {
+	Rooms.createBattle({
+		format: 'gen9randombattle',
+		players: [{
+			user: user,
+			// @ts-ignore
+		}, {
+			username: ai.name,
+			team: ai.team,
+			isAI: true,
+		}],
+	});
+}
 
 export function roguelikeAI() {
 	return 'default';
@@ -7,16 +24,8 @@ export function roguelikeAI() {
 export const commands: Chat.ChatCommands = {
 
 	testcmd(target, room, user) {
-		Rooms.createBattle({
-			format: 'gen9randombattle',
-			players: [{
-				user: user,
-				// @ts-ignore
-			}, {
-				username: 'test',
-				isAI: true,
-			}],
-		});
+		let ai = {name: 'test', team: ''};
+		createAIBattle(user, ai);
 	},
 };
 
