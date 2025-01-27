@@ -25,6 +25,7 @@ export const commands: Chat.ChatCommands = {
 
 	testcmd(target, room, user) {
 		let ai = {name: 'test', team: ''};
+		// @ts-ignore
 		createAIBattle(user, ai);
 	},
 };
