@@ -68,6 +68,7 @@ interface BattleOptions {
 	prng?: PRNG; // PRNG override (you usually don't need this, just pass a seed)
 	seed?: PRNGSeed; // PRNG seed
 	rated?: boolean | string; // Rated string
+	isRoguelikeBattle?: boolean;
 	p1?: PlayerOptions; // Player 1 data
 	p2?: PlayerOptions; // Player 2 data
 	p3?: PlayerOptions; // Player 3 data
@@ -134,6 +135,7 @@ export class Battle {
 	reportExactHP: boolean;
 	reportPercentages: boolean;
 	supportCancel: boolean;
+	isRoguelikeBattle?: boolean;
 
 	actions: BattleActions;
 	queue: BattleQueue;
@@ -198,6 +200,7 @@ export class Battle {
 		this.dex = Dex.forFormat(format);
 		this.gen = this.dex.gen;
 		this.ruleTable = this.dex.formats.getRuleTable(format);
+		this.isRoguelikeBattle = options.isRoguelikeBattle || false;
 
 		this.trunc = this.dex.trunc;
 		this.clampIntRange = Utils.clampIntRange;

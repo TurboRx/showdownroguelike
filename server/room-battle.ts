@@ -497,6 +497,7 @@ export interface RoomBattleOptions {
 	 * rather than a battle.
 	 */
 	isBestOfSubBattle?: boolean;
+	isRoguelikeBattle?: boolean;
 	vsAI?: boolean;
 }
 
@@ -542,6 +543,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	requestCount = 0;
 	options: RoomBattleOptions;
 	frozen?: boolean;
+	isRoguelikeBattle?: boolean;
 	dataResolvers?: [((args: string[]) => void), ((error: Error) => void)][];
 	constructor(room: GameRoom, options: RoomBattleOptions) {
 		super(room);
@@ -574,6 +576,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			roomid: this.roomid,
 			rated: ratedMessage,
 			seed: options.seed,
+			isRoguelikeBattle: options.isRoguelikeBattle || false,
 		};
 		if (options.inputLog) {
 			void this.stream.write(options.inputLog);
