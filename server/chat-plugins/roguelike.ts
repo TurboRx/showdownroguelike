@@ -6,7 +6,7 @@ interface AITrainer {
 function createAIBattle(user: User, ai?: AITrainer) {
 	let aiTrainer = ai ? ai : {name: 'debug', team: ''};
 	Rooms.createBattle({
-		format: 'gen9randombattle',
+		format: 'gen9roguelikebattle',
 		isRoguelikeBattle: true,
 		players: [{
 			user: user,
@@ -26,7 +26,6 @@ export function roguelikeAI() {
 export const commands: Chat.ChatCommands = {
 
 	testcmd(target, room, user) {
-		
 		// @ts-ignore
 		createAIBattle(user);
 	},

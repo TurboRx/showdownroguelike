@@ -4369,4 +4369,18 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		battle: {trunc: Math.trunc},
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
+	{
+    section: "Roguelike Formats (Alpha)",
+		column: 4,
+	},
+  {
+    name: "[Gen 9] Roguelike Battle",
+		desc: `Randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
+		mod: 'gen9',
+    // team: 'random',
+		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod'],
+    onValidateTeam() {
+      return [`This format cannot be battled via challenge or ladder.`];
+    },
+	},
 ];
