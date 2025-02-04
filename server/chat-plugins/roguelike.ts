@@ -23,6 +23,31 @@ export function roguelikeAI() {
 	return 'default';
 }
 
+export class Roguelike {
+	user: ID;
+	battle: Number;
+	streak: Number;
+	team: PokemonSet[];
+	teamData: {
+		curHP: Number;
+		status: String;
+		ppLeft: Number[];
+		exp: Number;
+	}[];
+	opponentTeam: PokemonSet[];
+	inBattle: boolean;
+
+	constructor(user: User) {
+		this.user = user.id;
+		this.battle = 0;
+		this.streak = 0;
+		this.team = [];
+		this.teamData = [];
+		this.opponentTeam = [];
+		this.inBattle = false;
+	}
+}
+
 export const commands: Chat.ChatCommands = {
 
 	testcmd(target, room, user) {
@@ -36,6 +61,11 @@ export const pages: Chat.PageTable = {
 };
 
 export const handlers: Chat.Handlers = {
+	onBattleStart(user, room) {
+		if (!room.options.isRoguelikeBattle) return;
+		console.log(user.id);
+	},
+
 	onBattleEnd(battle, winner, players) {
 		if (!battle.options.isRoguelikeBattle) return;
 		console.log(winner);
