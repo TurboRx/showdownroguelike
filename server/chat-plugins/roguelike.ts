@@ -1,3 +1,7 @@
+import {FS, Utils} from '../../lib';
+const SAVE_DATA = 'config/roguelike.json';
+const roguelikeGames = new Map<ID,Roguelike>();
+
 interface AITrainer {
 	name: string;
 	team?: PokemonSet[];
@@ -24,7 +28,6 @@ export function roguelikeAI() {
 }
 
 export class Roguelike {
-	user: ID;
 	battle: Number;
 	streak: Number;
 	team: PokemonSet[];
@@ -38,14 +41,25 @@ export class Roguelike {
 	inBattle: boolean;
 
 	constructor(user: User) {
-		this.user = user.id;
 		this.battle = 0;
 		this.streak = 0;
 		this.team = [];
 		this.teamData = [];
 		this.opponentTeam = [];
 		this.inBattle = false;
+	
+		roguelikeGames.set(user.id, this);
+		this.save();
 	}
+
+	save() {
+		FS(SAVE_DATA).write(JSON.stringify(roguelikeGames));
+	}
+
+	getUserData(user: User) {
+		return roguelikeGames.get(user.id) || false;
+	}
+
 }
 
 export const commands: Chat.ChatCommands = {
@@ -62,6 +76,7 @@ export const pages: Chat.PageTable = {
 
 export const handlers: Chat.Handlers = {
 	onBattleStart(user, room) {
+		// @ts-ignore
 		if (!room.options.isRoguelikeBattle) return;
 		console.log(user.id);
 	},
