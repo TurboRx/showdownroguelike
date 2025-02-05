@@ -2,13 +2,31 @@ import {FS, Utils} from '../../lib';
 const SAVE_DATA = 'config/roguelike.json';
 const roguelikeGames = new Map<ID,Roguelike>();
 
-interface AITrainer {
-	name: string;
-	team?: PokemonSet[];
+try {
+	const saveDataObj = JSON.parse(SAVE_DATA);
+	for (const key in saveDataObj) {
+		roguelikeGames.set(toID(key), saveDataObj[key])
+	}
+} catch {
+	FS(SAVE_DATA).writeSync(JSON.stringify(roguelikeGames));
 }
 
-function createAIBattle(user: User, ai?: AITrainer) {
-	let aiTrainer = ai ? ai : {name: 'debug', team: ''};
+interface AITrainer {
+	name: string;
+	team: PokemonSet[];
+}
+
+function saveRoguelikeData() {
+	FS(SAVE_DATA).writeUpdate(() => JSON.stringify(roguelikeGames));
+}
+
+function getUserRoguelikeData(userID: ID) {
+	return roguelikeGames.get(userID) || false;
+}
+
+function createAIBattle(userID: ID, ai: AITrainer) {
+	let user = Users.get(userID);
+	if (!user) return;
 	Rooms.createBattle({
 		format: 'gen9roguelikebattle',
 		isRoguelikeBattle: true,
@@ -16,8 +34,8 @@ function createAIBattle(user: User, ai?: AITrainer) {
 			user: user,
 			// @ts-ignore
 		}, {
-			username: aiTrainer.name,
-			team: aiTrainer.team,
+			username: ai.name,
+			team: Teams.pack(ai.team) || '',
 			isAI: true,
 		}],
 	});
@@ -28,61 +46,93 @@ export function roguelikeAI() {
 }
 
 export class Roguelike {
-	battle: Number;
-	streak: Number;
+	user: ID;
+	battle: number;
+	streak: number;
+	cash: number;
 	team: PokemonSet[];
 	teamData: {
-		curHP: Number;
+		curHP: number;
 		status: String;
-		ppLeft: Number[];
-		exp: Number;
+		ppLeft: number[];
+		exp: number;
 	}[];
 	opponentTeam: PokemonSet[];
 	inBattle: boolean;
 
 	constructor(user: User) {
-		this.battle = 0;
+		this.user = user.id;
+		this.battle = 1;
 		this.streak = 0;
+		this.cash = 10;
 		this.team = [];
 		this.teamData = [];
 		this.opponentTeam = [];
 		this.inBattle = false;
-	
+
 		roguelikeGames.set(user.id, this);
-		this.save();
+		saveRoguelikeData();
 	}
 
-	save() {
-		FS(SAVE_DATA).write(JSON.stringify(roguelikeGames));
+	win() {
+		if (this.battle % 7 === 0) this.streak++;
+		this.battle++;
+		let newFoe = this.createAITrainer();
+		createAIBattle(this.user, newFoe);
+		let realUser = Users.get(this.user);
+		if (realUser) {
+			Chat.parse(`/join view-roguelike`, null, realUser, realUser.connections[0]);
+		}
 	}
 
-	getUserData(user: User) {
-		return roguelikeGames.get(user.id) || false;
+	lose() {
+		this.battle = 1;
+		this.streak = 0;
 	}
-
+	createAITrainer() {
+		// TODO: name generation
+		const ai = {} as AITrainer;
+		ai.name = 'debug';
+		ai.team = this.opponentTeam;
+		return ai;
+	}
 }
 
 export const commands: Chat.ChatCommands = {
-
-	testcmd(target, room, user) {
-		// @ts-ignore
-		createAIBattle(user);
+	uwu(target, room, user) {
+		let userData = new Roguelike(user);
+		let newFoe = userData.createAITrainer();
+		createAIBattle(userData.user, newFoe);
+		return this.parse(`/join view-roguelike`);
 	},
 };
 
 export const pages: Chat.PageTable = {
-
+	async roguelike(args, user) {
+		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
+		let userGameData = getUserRoguelikeData(user.id);
+		if (!userGameData) return Rooms.RETRY_AFTER_LOGIN;
+		return `Current Match: ${userGameData.battle}<br />Streaks Won: ${userGameData.streak}`;
+	},
 };
 
 export const handlers: Chat.Handlers = {
-	onBattleStart(user, room) {
-		// @ts-ignore
-		if (!room.options.isRoguelikeBattle) return;
-		console.log(user.id);
-	},
+	// onBattleStart(user, room) {
+	// 	// @ts-ignore
+	// 	if (!room.options.isRoguelikeBattle) return;
+	// 	console.log(user.id);
+	// },
 
 	onBattleEnd(battle, winner, players) {
 		if (!battle.options.isRoguelikeBattle) return;
-		console.log(winner);
+		// Player 1 is the always the human
+		let human = players[0];
+		let humanGameData = getUserRoguelikeData(human);
+		if (!humanGameData) return;
+		if (human === winner) {
+			humanGameData.win();
+		} else {
+			humanGameData.lose();
+		}
 	},
 };
