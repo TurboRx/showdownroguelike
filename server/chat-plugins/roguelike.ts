@@ -77,12 +77,9 @@ export class Roguelike {
 	win() {
 		if (this.battle % 7 === 0) this.streak++;
 		this.battle++;
+		this.refreshPage();
 		let newFoe = this.createAITrainer();
 		createAIBattle(this.user, newFoe);
-		let realUser = Users.get(this.user);
-		if (realUser) {
-			Chat.parse(`/join view-roguelike`, null, realUser, realUser.connections[0]);
-		}
 	}
 
 	lose() {
@@ -95,6 +92,12 @@ export class Roguelike {
 		ai.name = 'debug';
 		ai.team = this.opponentTeam;
 		return ai;
+	}
+	refreshPage() {
+		let realUser = Users.get(this.user);
+		if (realUser) {
+			Chat.parse(`/join view-roguelike`, null, realUser, realUser.connections[0]);
+		}
 	}
 }
 
