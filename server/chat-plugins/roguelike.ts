@@ -2,6 +2,18 @@ import {FS/* , Utils*/} from '../../lib';
 const SAVE_DATA = 'config/roguelike.json';
 const roguelikeGames = new Map<ID, Roguelike>();
 
+interface shopItem {
+	name: string;
+	type: 'pokemon' | 'healHP' | 'healPP' | 'TM' | 'key' | 'scout' | 'debug';
+	cost: number;
+	minStreak: number;
+}
+
+const SHOP_ITEMS: {[k: string]: shopItem} = {
+	debug: {name: 'Debug', type: 'debug', cost: 1, minStreak: 0},
+	debug2: {name: 'Debug 2', type: 'debug', cost: 2, minStreak: 1},
+};
+
 interface AITrainer {
 	name: string;
 	team: PokemonSet[];
@@ -25,14 +37,6 @@ interface BackupData {
 	opponentTeam: PokemonSet[];
 	inBattle: boolean; // Should always be false
 	runEnded: boolean;
-}
-
-function saveRoguelikeData() {
-	FS(SAVE_DATA).writeUpdate(() => JSON.stringify(Object.fromEntries(roguelikeGames)));
-}
-
-function getUserRoguelikeData(userID: ID) {
-	return roguelikeGames.get(userID) || false;
 }
 
 function createAIBattle(userID: ID, ai: AITrainer) {
@@ -112,6 +116,14 @@ export class Roguelike {
 			Chat.parse(`/join view-roguelike`, null, realUser, realUser.connections[0]);
 		}
 	}
+}
+
+function saveRoguelikeData() {
+	FS(SAVE_DATA).writeUpdate(() => JSON.stringify(Object.fromEntries(roguelikeGames)));
+}
+
+function getUserRoguelikeData(userID: ID) {
+	return roguelikeGames.get(userID) || false;
 }
 
 function createSaveData(user: User) {
