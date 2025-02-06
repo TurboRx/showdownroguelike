@@ -5,7 +5,8 @@ const roguelikeGames = new Map<ID,Roguelike>();
 try {
 	const saveDataObj = JSON.parse(FS(SAVE_DATA).readSync());
 	for (const key in saveDataObj) {
-		roguelikeGames.set(key as ID, saveDataObj[key] as Roguelike);
+		// TODO: Figure out why this is isn't turning into a roguelike class.
+		// roguelikeGames.set(key as ID, saveDataObj[key] as Roguelike);
 	}
 } catch {
 	FS(SAVE_DATA).safeWriteSync(JSON.stringify(roguelikeGames));
@@ -57,8 +58,12 @@ export class Roguelike {
 		ppLeft: number[];
 		exp: number;
 	}[];
+	flags: {
+		[k: string]: any;
+	}
 	opponentTeam: PokemonSet[];
 	inBattle: boolean;
+	runEnded: boolean;
 
 	constructor(user: User) {
 		this.user = user.id;
@@ -67,8 +72,10 @@ export class Roguelike {
 		this.cash = 10;
 		this.team = [];
 		this.teamData = [];
+		this.flags = [];
 		this.opponentTeam = [];
 		this.inBattle = false;
+		this.runEnded = false;
 
 		roguelikeGames.set(user.id, this);
 		saveRoguelikeData();
@@ -84,8 +91,7 @@ export class Roguelike {
 	}
 
 	lose() {
-		this.battle = 1;
-		this.streak = 0;
+		this.runEnded = true;
 	}
 	createAITrainer() {
 		// TODO: name generation
