@@ -14,6 +14,11 @@ const SHOP_ITEMS: {[k: string]: shopItem} = {
 	debug2: {name: 'Debug 2', type: 'debug', cost: 2, minStreak: 1},
 };
 
+function genShopHTML() {
+	let buf;
+	return buf;
+}
+
 interface AITrainer {
 	name: string;
 	team: PokemonSet[];
