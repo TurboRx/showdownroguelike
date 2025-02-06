@@ -144,8 +144,7 @@ try {
 		const newData = convertJSONData(key as ID, saveDataObj[key] as BackupData);
 		roguelikeGames.set(key as ID, newData);
 	}
-} catch (e) {
-	console.log(e);
+} catch {
 	FS(SAVE_DATA).safeWriteSync(JSON.stringify(roguelikeGames));
 }
 
