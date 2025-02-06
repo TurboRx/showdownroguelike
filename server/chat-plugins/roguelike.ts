@@ -23,7 +23,7 @@ interface BackupData {
 		[k: string]: any;
 	}
 	opponentTeam: PokemonSet[];
-	inBattle: boolean;
+	inBattle: boolean; // Should always be false
 	runEnded: boolean;
 }
 
@@ -84,14 +84,13 @@ export class Roguelike {
 		this.teamData = backup?.teamData || [];
 		this.flags = backup?.flags || [];
 		this.opponentTeam = backup?.opponentTeam || [];
-		this.inBattle = backup?.inBattle || false;
+		this.inBattle = false;
 		this.runEnded = backup?.runEnded || false;
 	}
 
 	win() {
 		if (this.battle % 7 === 0) this.streak++;
 		this.battle++;
-		saveRoguelikeData();
 		this.refreshPage();
 		let newFoe = this.createAITrainer();
 		createAIBattle(this.user, newFoe);
@@ -140,7 +139,10 @@ try {
 
 export const commands: Chat.ChatCommands = {
 	uwu(target, room, user) {
-		let userData = getUserRoguelikeData(user.id) || createSaveData(user);
+		let userData = getUserRoguelikeData(user.id);
+		if (!userData || userData.runEnded) {
+			userData = createSaveData(user);
+		}
 		let newFoe = userData.createAITrainer();
 		createAIBattle(userData.user, newFoe);
 		return this.parse(`/join view-roguelike`);
@@ -157,11 +159,12 @@ export const pages: Chat.PageTable = {
 };
 
 export const handlers: Chat.Handlers = {
-	// onBattleStart(user, room) {
-	// 	// @ts-ignore
-	// 	if (!room.options.isRoguelikeBattle) return;
-	// 	console.log(user.id);
-	// },
+	onBattleStart(user, room) {
+		if (room.battle?.options.isRoguelikeBattle && user) {
+			const roguelikePlayer = getUserRoguelikeData(user.id);
+			if (roguelikePlayer) roguelikePlayer.inBattle = true;
+		}
+	},
 
 	onBattleEnd(battle, winner, players) {
 		if (!battle.options.isRoguelikeBattle) return;
@@ -169,10 +172,12 @@ export const handlers: Chat.Handlers = {
 		let human = players[0];
 		let humanGameData = getUserRoguelikeData(human);
 		if (!humanGameData) return;
+		humanGameData.inBattle = false;
 		if (human === winner) {
 			humanGameData.win();
 		} else {
 			humanGameData.lose();
 		}
+		saveRoguelikeData();
 	},
 };
