@@ -2,19 +2,29 @@ import {FS, Utils} from '../../lib';
 const SAVE_DATA = 'config/roguelike.json';
 const roguelikeGames = new Map<ID,Roguelike>();
 
-try {
-	const saveDataObj = JSON.parse(FS(SAVE_DATA).readSync());
-	for (const key in saveDataObj) {
-		// TODO: Figure out why this is isn't turning into a roguelike class.
-		// roguelikeGames.set(key as ID, saveDataObj[key] as Roguelike);
-	}
-} catch {
-	FS(SAVE_DATA).safeWriteSync(JSON.stringify(roguelikeGames));
-}
-
 interface AITrainer {
 	name: string;
 	team: PokemonSet[];
+}
+
+interface BackupData {
+	user: ID;
+	battle: number;
+	streak: number;
+	cash: number;
+	team: PokemonSet[];
+	teamData: {
+		curHP: number;
+		status: String;
+		ppLeft: number[];
+		exp: number;
+	}[];
+	flags: {
+		[k: string]: any;
+	}
+	opponentTeam: PokemonSet[];
+	inBattle: boolean;
+	runEnded: boolean;
 }
 
 function saveRoguelikeData() {
@@ -65,20 +75,17 @@ export class Roguelike {
 	inBattle: boolean;
 	runEnded: boolean;
 
-	constructor(user: User) {
-		this.user = user.id;
-		this.battle = 1;
-		this.streak = 0;
-		this.cash = 10;
-		this.team = [];
-		this.teamData = [];
-		this.flags = [];
-		this.opponentTeam = [];
-		this.inBattle = false;
-		this.runEnded = false;
-
-		roguelikeGames.set(user.id, this);
-		saveRoguelikeData();
+	constructor(userID: ID, backup?: BackupData) {
+		this.user = userID;
+		this.battle = backup?.battle || 1;
+		this.streak = backup?.streak || 0;
+		this.cash = backup?.cash || 10;
+		this.team = backup?.team || [];
+		this.teamData = backup?.teamData || [];
+		this.flags = backup?.flags || [];
+		this.opponentTeam = backup?.opponentTeam || [];
+		this.inBattle = backup?.inBattle || false;
+		this.runEnded = backup?.runEnded || false;
 	}
 
 	win() {
@@ -108,9 +115,32 @@ export class Roguelike {
 	}
 }
 
+function createSaveData(user: User) {
+	const rl = new Roguelike(user.id);
+	roguelikeGames.set(user.id, rl);
+	saveRoguelikeData();
+	return rl;
+}
+
+function convertJSONData(key: ID, backup: BackupData) {
+	const rl = new Roguelike(key, backup);
+	return rl;
+}
+
+try {
+	const saveDataObj = JSON.parse(FS(SAVE_DATA).readSync());
+	for (const key in saveDataObj) {
+		const newData = convertJSONData(key as ID, saveDataObj[key] as BackupData);
+		roguelikeGames.set(key as ID, newData);
+	}
+} catch (e) {
+	console.log(e);
+	FS(SAVE_DATA).safeWriteSync(JSON.stringify(roguelikeGames));
+}
+
 export const commands: Chat.ChatCommands = {
 	uwu(target, room, user) {
-		let userData = new Roguelike(user);
+		let userData = getUserRoguelikeData(user.id) || createSaveData(user);
 		let newFoe = userData.createAITrainer();
 		createAIBattle(userData.user, newFoe);
 		return this.parse(`/join view-roguelike`);
