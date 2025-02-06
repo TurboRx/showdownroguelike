@@ -93,7 +93,9 @@ export class Roguelike {
 	}
 
 	win() {
-		if (this.battle % 7 === 0) this.streak++;
+		if (this.battle % 7 === 0) {
+			this.streak++;
+		}
 		this.battle++;
 		this.refreshPage();
 		const newFoe = this.createAITrainer();
