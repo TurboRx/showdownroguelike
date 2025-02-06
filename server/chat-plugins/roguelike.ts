@@ -23,7 +23,7 @@ interface BackupData {
 	user: ID;
 	battle: number;
 	streak: number;
-	cash: number;
+	battlePoints: number;
 	team: PokemonSet[];
 	teamData: {
 		curHP: number,
@@ -47,7 +47,7 @@ function createAIBattle(userID: ID, ai: AITrainer) {
 		isRoguelikeBattle: true,
 		players: [{
 			user: user,
-			// @ts-ignore
+			// @ts-ignore AI has no user data
 		}, {
 			username: ai.name,
 			team: Teams.pack(ai.team) || '',
@@ -64,7 +64,7 @@ export class Roguelike {
 	user: ID;
 	battle: number;
 	streak: number;
-	cash: number;
+	battlePoints: number;
 	team: PokemonSet[];
 	teamData: {
 		curHP: number,
@@ -83,7 +83,7 @@ export class Roguelike {
 		this.user = userID;
 		this.battle = backup?.battle || 1;
 		this.streak = backup?.streak || 0;
-		this.cash = backup?.cash || 10;
+		this.battlePoints = backup?.battlePoints || 10;
 		this.team = backup?.team || [];
 		this.teamData = backup?.teamData || [];
 		this.flags = backup?.flags || [];
@@ -164,10 +164,13 @@ export const commands: Chat.ChatCommands = {
 
 export const pages: Chat.PageTable = {
 	roguelike(args, user) {
-		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		const userGameData = getUserRoguelikeData(user.id);
-		if (!userGameData) return Rooms.RETRY_AFTER_LOGIN;
-		return `Current Match: ${userGameData.battle}<br />Streaks Won: ${userGameData.streak}`;
+		if (!userGameData || !user.named) return Rooms.RETRY_AFTER_LOGIN;
+		this.title = '[Roguelike] Current Run Info';
+		let buf = `<div class = "pad">`;
+		buf += `Current Match: ${userGameData.battle}<br />Streaks Won: ${userGameData.streak}`;
+		buf += `</div>`;
+		return buf;
 	},
 };
 
