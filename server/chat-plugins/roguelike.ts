@@ -3,12 +3,12 @@ const SAVE_DATA = 'config/roguelike.json';
 const roguelikeGames = new Map<ID,Roguelike>();
 
 try {
-	const saveDataObj = JSON.parse(SAVE_DATA);
+	const saveDataObj = JSON.parse(FS(SAVE_DATA).readSync());
 	for (const key in saveDataObj) {
-		roguelikeGames.set(toID(key), saveDataObj[key])
+		roguelikeGames.set(key as ID, saveDataObj[key] as Roguelike);
 	}
 } catch {
-	FS(SAVE_DATA).writeSync(JSON.stringify(roguelikeGames));
+	FS(SAVE_DATA).safeWriteSync(JSON.stringify(roguelikeGames));
 }
 
 interface AITrainer {
@@ -17,7 +17,7 @@ interface AITrainer {
 }
 
 function saveRoguelikeData() {
-	FS(SAVE_DATA).writeUpdate(() => JSON.stringify(roguelikeGames));
+	FS(SAVE_DATA).writeUpdate(() => JSON.stringify(Object.fromEntries(roguelikeGames)));
 }
 
 function getUserRoguelikeData(userID: ID) {
@@ -77,6 +77,7 @@ export class Roguelike {
 	win() {
 		if (this.battle % 7 === 0) this.streak++;
 		this.battle++;
+		saveRoguelikeData();
 		this.refreshPage();
 		let newFoe = this.createAITrainer();
 		createAIBattle(this.user, newFoe);
