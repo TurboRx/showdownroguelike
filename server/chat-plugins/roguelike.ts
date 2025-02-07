@@ -121,7 +121,7 @@ export class Roguelike {
 	}
 	genShopHTML() {
 		let buf = `<center><h3>SHOP</h3></center><br />`;
-		buf += `<table style="width:100%;"border="1"><tr><th>Item</th><th>Description</th><th>Price</th></tr>`;
+		buf += `<table style="width:100%; border-collapse: collapse;"border="1"><tr><th>Item</th><th>Description</th><th>Price</th></tr>`;
 		for (const key in SHOP_ITEMS) {
 			const item = SHOP_ITEMS[key];
 			if (item.minStreak > this.streak) continue;
