@@ -155,7 +155,7 @@ export class Roguelike {
 function saveRoguelikeData() {
 	const JSONobj = Object.fromEntries(roguelikeGames);
 	for (const player in JSONobj) {
-		let playerData = JSONobj[player];
+		const playerData = JSONobj[player];
 		if (playerData.gamePhase === 'battle') {
 			playerData.gamePhase = 'battleError';
 		}
@@ -208,34 +208,34 @@ export const pages: Chat.PageTable = {
 		if (!userGameData || !user.named) return Rooms.RETRY_AFTER_LOGIN;
 		let subtitle = '';
 		let buf = `<div class = "pad">`;
-		switch(userGameData.gamePhase) {
-			case 'battle':
-				this.title = '[Roguelike] Currently in battle';
-				return this.errorReply('You are currently in battle!');
-			case 'results':
-				subtitle = 'Current Run Info';
-				break;
-			case 'shop':
-				subtitle = 'Shop';
-				buf += `<b>BP:</bp> ${userGameData.battlePoints}<br />`;
-				buf += userGameData.genShopHTML();
-				break;
-			case 'purchase':
-				subtitle = 'Complete Purchase';
-				// TODO: Be able to buy things
-				break;
-			case 'intro':
-				subtitle = 'Pick a Starter';
-				// TODO: Be able to add Pokemon
-				break;
-			case 'other':
-				// TODO: ????
-				buf += `<b>Current Match:</b> ${userGameData.battle} | <b>Streaks Won:</b> ${userGameData.streak} | <b>BP:</b> ${userGameData.battlePoints}<hr>`;
-				buf += `</div>`;
-				break;
-			case 'battleError':
-				subtitle = 'Error';
-				break;
+		switch (userGameData.gamePhase) {
+		case 'battle':
+			this.title = '[Roguelike] Currently in battle';
+			return this.errorReply('You are currently in battle!');
+		case 'results':
+			subtitle = 'Current Run Info';
+			break;
+		case 'shop':
+			subtitle = 'Shop';
+			buf += `<b>BP:</bp> ${userGameData.battlePoints}<br />`;
+			buf += userGameData.genShopHTML();
+			break;
+		case 'purchase':
+			subtitle = 'Complete Purchase';
+			// TODO: Be able to buy things
+			break;
+		case 'intro':
+			subtitle = 'Pick a Starter';
+			// TODO: Be able to add Pokemon
+			break;
+		case 'other':
+			// TODO: ????
+			buf += `<b>Current Match:</b> ${userGameData.battle} | <b>Streaks Won:</b> ${userGameData.streak} | <b>BP:</b> ${userGameData.battlePoints}<hr>`;
+			buf += `</div>`;
+			break;
+		case 'battleError':
+			subtitle = 'Error';
+			break;
 		}
 		this.title = '[Roguelike]' + subtitle;
 		return buf;
