@@ -5,17 +5,19 @@ const roguelikeGames = new Map<ID, Roguelike>();
 interface shopItem {
 	name: string;
 	type: 'pokemon' | 'healHP' | 'healPP' | 'TM' | 'key' | 'scout' | 'debug';
+	desc: string;
 	cost: number;
 	minStreak: number;
 }
 
 const SHOP_ITEMS: {[k: string]: shopItem} = {
-	debug: {name: 'Debug', type: 'debug', cost: 1, minStreak: 0},
-	debug2: {name: 'Debug 2', type: 'debug', cost: 2, minStreak: 1},
+	debug: {name: 'Debug', type: 'debug', desc: 'Bans HoeenHero from this server.', cost: 1, minStreak: 0},
+	debug2: {name: 'Debug 2', type: 'debug', desc: 'Bans HoeenHero from this server twice.', cost: 2, minStreak: 1},
 };
 
 function genShopHTML() {
 	let buf;
+	
 	return buf;
 }
 
