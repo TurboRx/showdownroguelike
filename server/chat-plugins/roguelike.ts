@@ -205,19 +205,19 @@ export const commands: Chat.ChatCommands = {
 			return this.parse(`/join view-roguelike`);
 		},
 		shop(target, room, user) {
-			let userData = getUserRoguelikeData(user.id);
+			const userData = getUserRoguelikeData(user.id);
 			if (!userData) return this.errorReply(`No data found.`);
 			if (userData.gamePhase !== 'results') return this.errorReply(`Can't go to shop yet`);
 			userData.goToPhase('shop');
 		},
 		next(target, room, user) {
-			let userData = getUserRoguelikeData(user.id);
+			const userData = getUserRoguelikeData(user.id);
 			if (!userData) return this.errorReply(`No data found.`);
 			if (userData.gamePhase !== 'shop') return this.errorReply(`Can't battle yet`);
 			const newFoe = userData.createAITrainer();
 			createAIBattle(userData.user, newFoe);
 		},
-	}
+	},
 };
 
 export const pages: Chat.PageTable = {
@@ -236,7 +236,6 @@ export const pages: Chat.PageTable = {
 				buf += `<center><h3>Too bad!</h3><br />`;
 				buf += `<b>Matches won:</b> ${userGameData.battle - 1}<br /><b>Streaks Won:</b> ${userGameData.streak}<br /><b>BP:</b> ${userGameData.battlePoints}`;
 				buf += `<br /><button class="button" name="send" value="/roguelike start">Start a new run</button></center>`;
-
 			} else {
 				subtitle = 'Current Run Info';
 				buf += `<center><h3>Nice win!</h3><br />`;
