@@ -2,7 +2,7 @@ import {FS/* , Utils*/} from '../../lib';
 const SAVE_DATA = 'config/roguelike.json';
 const roguelikeGames = new Map<ID, Roguelike>();
 
-interface shopItem {
+interface ShopItem {
 	name: string;
 	type: 'pokemon' | 'healHP' | 'healPP' | 'TM' | 'key' | 'scout' | 'debug';
 	desc: string;
@@ -10,7 +10,7 @@ interface shopItem {
 	minStreak: number;
 }
 
-const SHOP_ITEMS: {[k: string]: shopItem} = {
+const SHOP_ITEMS: {[k: string]: ShopItem} = {
 	debug: {name: 'Debug', type: 'debug', desc: 'Bans HoeenHero from this server.', cost: 1, minStreak: 0},
 	debug2: {name: 'Debug 2', type: 'debug', desc: 'Bans HoeenHero from this server twice.', cost: 999, minStreak: 1},
 };
@@ -130,7 +130,7 @@ export class Roguelike {
 			} else {
 				buf += `<td><button class="button">Purchase</button>`;
 			}
-			buf += `</tr>`
+			buf += `</tr>`;
 		}
 		buf += `</table>`;
 		return buf;
