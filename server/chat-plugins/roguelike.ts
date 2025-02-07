@@ -7,6 +7,8 @@ import {FS/* , Utils*/} from '../../lib';
 const SAVE_DATA = 'config/roguelike.json';
 const roguelikeGames = new Map<ID, Roguelike>();
 
+type Phase = 'battle' | 'results' | 'shop' | 'purchase' | 'intro' | 'other' | 'battleError';
+
 interface ShopItem {
 	name: string;
 	type: 'pokemon' | 'healHP' | 'healPP' | 'TM' | 'key' | 'scout' | 'debug';
@@ -41,7 +43,7 @@ interface BackupData {
 		[k: string]: any,
 	};
 	opponentTeam: PokemonSet[];
-	inBattle: boolean; // Should always be false
+	gamePhase: Phase;
 	runEnded: boolean;
 }
 
@@ -82,7 +84,7 @@ export class Roguelike {
 		[k: string]: any,
 	};
 	opponentTeam: PokemonSet[];
-	inBattle: boolean;
+	gamePhase: Phase;
 	runEnded: boolean;
 
 	constructor(userID: ID, backup?: BackupData) {
@@ -94,7 +96,7 @@ export class Roguelike {
 		this.teamData = backup?.teamData || [];
 		this.flags = backup?.flags || [];
 		this.opponentTeam = backup?.opponentTeam || [];
-		this.inBattle = false;
+		this.gamePhase = backup?.gamePhase || 'intro';
 		this.runEnded = backup?.runEnded || false;
 	}
 
@@ -110,6 +112,13 @@ export class Roguelike {
 
 	lose() {
 		this.runEnded = true;
+	}
+	goToPhase(direction: Phase) {
+		this.gamePhase = direction;
+		this.refreshPage();
+		if (direction !== 'battle') {
+			saveRoguelikeData();
+		}
 	}
 	createAITrainer() {
 		// TODO: name generation
@@ -144,7 +153,14 @@ export class Roguelike {
 }
 
 function saveRoguelikeData() {
-	FS(SAVE_DATA).writeUpdate(() => JSON.stringify(Object.fromEntries(roguelikeGames)));
+	const JSONobj = Object.fromEntries(roguelikeGames);
+	for (const player in JSONobj) {
+		let playerData = JSONobj[player];
+		if (playerData.gamePhase === 'battle') {
+			playerData.gamePhase = 'battleError';
+		}
+	}
+	FS(SAVE_DATA).writeUpdate(() => JSON.stringify(JSONobj));
 }
 
 function getUserRoguelikeData(userID: ID) {
@@ -187,13 +203,41 @@ export const commands: Chat.ChatCommands = {
 
 export const pages: Chat.PageTable = {
 	roguelike(args, user) {
+		console.log(args);
 		const userGameData = getUserRoguelikeData(user.id);
 		if (!userGameData || !user.named) return Rooms.RETRY_AFTER_LOGIN;
-		this.title = '[Roguelike] Current Run Info';
+		let subtitle = '';
 		let buf = `<div class = "pad">`;
-		buf += `<b>Current Match:</b> ${userGameData.battle} | <b>Streaks Won:</b> ${userGameData.streak} | <b>BP:</b> ${userGameData.battlePoints}<hr>`;
-		buf += userGameData.genShopHTML();
-		buf += `</div>`;
+		switch(userGameData.gamePhase) {
+			case 'battle':
+				this.title = '[Roguelike] Currently in battle';
+				return this.errorReply('You are currently in battle!');
+			case 'results':
+				subtitle = 'Current Run Info';
+				break;
+			case 'shop':
+				subtitle = 'Shop';
+				buf += `<b>BP:</bp> ${userGameData.battlePoints}<br />`;
+				buf += userGameData.genShopHTML();
+				break;
+			case 'purchase':
+				subtitle = 'Complete Purchase';
+				// TODO: Be able to buy things
+				break;
+			case 'intro':
+				subtitle = 'Pick a Starter';
+				// TODO: Be able to add Pokemon
+				break;
+			case 'other':
+				// TODO: ????
+				buf += `<b>Current Match:</b> ${userGameData.battle} | <b>Streaks Won:</b> ${userGameData.streak} | <b>BP:</b> ${userGameData.battlePoints}<hr>`;
+				buf += `</div>`;
+				break;
+			case 'battleError':
+				subtitle = 'Error';
+				break;
+		}
+		this.title = '[Roguelike]' + subtitle;
 		return buf;
 	},
 };
@@ -202,7 +246,7 @@ export const handlers: Chat.Handlers = {
 	onBattleStart(user, room) {
 		if (room.battle?.options.isRoguelikeBattle && user) {
 			const roguelikePlayer = getUserRoguelikeData(user.id);
-			if (roguelikePlayer) roguelikePlayer.inBattle = true;
+			if (roguelikePlayer) roguelikePlayer.goToPhase('battle');
 		}
 	},
 
@@ -212,12 +256,11 @@ export const handlers: Chat.Handlers = {
 		const human = players[0];
 		const humanGameData = getUserRoguelikeData(human);
 		if (!humanGameData) return;
-		humanGameData.inBattle = false;
 		if (human === winner) {
 			humanGameData.win();
 		} else {
 			humanGameData.lose();
 		}
-		saveRoguelikeData();
+		humanGameData.goToPhase('results');
 	},
 };
