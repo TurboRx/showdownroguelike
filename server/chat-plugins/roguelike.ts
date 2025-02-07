@@ -7,7 +7,7 @@ import {FS/* , Utils*/} from '../../lib';
 const SAVE_DATA = 'config/roguelike.json';
 const roguelikeGames = new Map<ID, Roguelike>();
 
-type Phase = 'battle' | 'results' | 'shop' | 'purchase' | 'intro' | 'other' | 'battleError';
+type Phase = 'battle' | 'results' | 'shop' | 'purchase' | 'intro' | 'scout' | 'other' | 'battleError';
 
 interface ShopItem {
 	name: string;
@@ -157,6 +157,9 @@ function saveRoguelikeData() {
 	for (const player in JSONobj) {
 		const playerData = JSONobj[player];
 		if (playerData.gamePhase === 'battle') {
+			// in case of a restart, battles might get lost
+			// and players might get softlocked, so this
+			// state can help players restart their battles
 			playerData.gamePhase = 'battleError';
 		}
 	}
@@ -214,6 +217,7 @@ export const pages: Chat.PageTable = {
 		case 'results':
 			subtitle = 'Current Run Info';
 			break;
+		case 'scout':
 		case 'shop':
 			subtitle = 'Shop';
 			buf += `<b>BP:</bp> ${userGameData.battlePoints}<br />`;
