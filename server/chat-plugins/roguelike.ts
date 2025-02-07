@@ -193,15 +193,31 @@ try {
 }
 
 export const commands: Chat.ChatCommands = {
-	roguelike(target, room, user) {
-		let userData = getUserRoguelikeData(user.id);
-		if (!userData || userData.runEnded) {
-			userData = createSaveData(user);
-		}
-		const newFoe = userData.createAITrainer();
-		createAIBattle(userData.user, newFoe);
-		return this.parse(`/join view-roguelike`);
-	},
+	roguelike: {
+		start(target, room, user) {
+			// TODO: Refactor this
+			let userData = getUserRoguelikeData(user.id);
+			if (!userData || userData.runEnded) {
+				userData = createSaveData(user);
+			}
+			const newFoe = userData.createAITrainer();
+			createAIBattle(userData.user, newFoe);
+			return this.parse(`/join view-roguelike`);
+		},
+		shop(target, room, user) {
+			let userData = getUserRoguelikeData(user.id);
+			if (!userData) return this.errorReply(`No data found.`);
+			if (userData.gamePhase !== 'results') return this.errorReply(`Can't go to shop yet`);
+			userData.goToPhase('shop');
+		},
+		next(target, room, user) {
+			let userData = getUserRoguelikeData(user.id);
+			if (!userData) return this.errorReply(`No data found.`);
+			if (userData.gamePhase !== 'shop') return this.errorReply(`Can't battle yet`);
+			const newFoe = userData.createAITrainer();
+			createAIBattle(userData.user, newFoe);
+		},
+	}
 };
 
 export const pages: Chat.PageTable = {
@@ -215,13 +231,25 @@ export const pages: Chat.PageTable = {
 			this.title = '[Roguelike] Currently in battle';
 			return this.errorReply('You are currently in battle!');
 		case 'results':
-			subtitle = 'Current Run Info';
+			if (userGameData.runEnded) {
+				subtitle = 'Game Over';
+				buf += `<center><h3>Too bad!</h3><br />`;
+				buf += `<b>Matches won:</b> ${userGameData.battle - 1}<br /><b>Streaks Won:</b> ${userGameData.streak}<br /><b>BP:</b> ${userGameData.battlePoints}`;
+				buf += `<br /><button class="button" name="send" value="/roguelike start">Start a new run</button></center>`;
+
+			} else {
+				subtitle = 'Current Run Info';
+				buf += `<center><h3>Nice win!</h3><br />`;
+				buf += `<b>Current match:</b> ${userGameData.battle}<br /><b>Streaks won:</b> ${userGameData.streak}<br /><b>BP:</b> ${userGameData.battlePoints}`;
+				buf += `<br /><button class="button" name="send" value="/roguelike shop">Go to shop</button></center>`;
+			}
 			break;
 		case 'scout':
 		case 'shop':
 			subtitle = 'Shop';
 			buf += `<b>BP:</bp> ${userGameData.battlePoints}<br />`;
 			buf += userGameData.genShopHTML();
+			buf += `<br /><button class="button" name="send" value="/roguelike next">Start the next battle!</button>`;
 			break;
 		case 'purchase':
 			subtitle = 'Complete Purchase';
@@ -233,13 +261,12 @@ export const pages: Chat.PageTable = {
 			break;
 		case 'other':
 			// TODO: ????
-			buf += `<b>Current Match:</b> ${userGameData.battle} | <b>Streaks Won:</b> ${userGameData.streak} | <b>BP:</b> ${userGameData.battlePoints}<hr>`;
-			buf += `</div>`;
 			break;
 		case 'battleError':
 			subtitle = 'Error';
 			break;
 		}
+		buf += `</div>`;
 		this.title = '[Roguelike]' + subtitle;
 		return buf;
 	},
