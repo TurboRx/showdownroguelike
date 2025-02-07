@@ -105,9 +105,9 @@ export class Roguelike {
 			this.streak++;
 		}
 		this.battle++;
-		this.refreshPage();
-		const newFoe = this.createAITrainer();
-		createAIBattle(this.user, newFoe);
+		// this.refreshPage();
+		// const newFoe = this.createAITrainer();
+		// createAIBattle(this.user, newFoe);
 	}
 
 	lose() {
@@ -190,7 +190,7 @@ try {
 }
 
 export const commands: Chat.ChatCommands = {
-	uwu(target, room, user) {
+	roguelike(target, room, user) {
 		let userData = getUserRoguelikeData(user.id);
 		if (!userData || userData.runEnded) {
 			userData = createSaveData(user);
@@ -203,7 +203,6 @@ export const commands: Chat.ChatCommands = {
 
 export const pages: Chat.PageTable = {
 	roguelike(args, user) {
-		console.log(args);
 		const userGameData = getUserRoguelikeData(user.id);
 		if (!userGameData || !user.named) return Rooms.RETRY_AFTER_LOGIN;
 		let subtitle = '';
