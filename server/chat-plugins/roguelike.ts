@@ -12,14 +12,8 @@ interface shopItem {
 
 const SHOP_ITEMS: {[k: string]: shopItem} = {
 	debug: {name: 'Debug', type: 'debug', desc: 'Bans HoeenHero from this server.', cost: 1, minStreak: 0},
-	debug2: {name: 'Debug 2', type: 'debug', desc: 'Bans HoeenHero from this server twice.', cost: 2, minStreak: 1},
+	debug2: {name: 'Debug 2', type: 'debug', desc: 'Bans HoeenHero from this server twice.', cost: 999, minStreak: 1},
 };
-
-function genShopHTML() {
-	let buf;
-	
-	return buf;
-}
 
 interface AITrainer {
 	name: string;
@@ -125,6 +119,22 @@ export class Roguelike {
 			Chat.parse(`/join view-roguelike`, null, realUser, realUser.connections[0]);
 		}
 	}
+	genShopHTML() {
+		let buf = `<table style="width:100%"><tr><th>Item</th><th>Description</th><th>Price</th></tr>`;
+		for (const key in SHOP_ITEMS) {
+			const item = SHOP_ITEMS[key];
+			if (item.minStreak > this.streak) continue;
+			buf += `<tr><td>${item.name}</td><td>${item.desc}</td><td>${item.cost} BP</td>`;
+			if (item.cost > this.battlePoints) {
+				buf += `<td><button class="button disabled">Not enough BP!</button>`;
+			} else {
+				buf += `<td><button class="button">Purchase</button>`;
+			}
+			buf += `</tr>`
+		}
+		buf += `</table>`;
+		return buf;
+	}
 }
 
 function saveRoguelikeData() {
@@ -175,7 +185,8 @@ export const pages: Chat.PageTable = {
 		if (!userGameData || !user.named) return Rooms.RETRY_AFTER_LOGIN;
 		this.title = '[Roguelike] Current Run Info';
 		let buf = `<div class = "pad">`;
-		buf += `Current Match: ${userGameData.battle}<br />Streaks Won: ${userGameData.streak}`;
+		buf += `<b>Current Match:</b> ${userGameData.battle} | <b>Streaks Won:</b> ${userGameData.streak} | <b>BP:</b> ${userGameData.battlePoints}<hr>`;
+		buf += userGameData.genShopHTML();
 		buf += `</div>`;
 		return buf;
 	},
