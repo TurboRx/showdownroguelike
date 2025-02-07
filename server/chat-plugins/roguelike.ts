@@ -1,3 +1,8 @@
+/**
+* HiZo's Untitled Roguelike
+* @author HiZo
+*/
+
 import {FS/* , Utils*/} from '../../lib';
 const SAVE_DATA = 'config/roguelike.json';
 const roguelikeGames = new Map<ID, Roguelike>();
