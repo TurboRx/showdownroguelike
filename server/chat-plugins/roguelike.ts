@@ -114,6 +114,10 @@ export class Roguelike {
 		this.runEnded = true;
 	}
 	goToPhase(direction: Phase) {
+		if (this.flags.purchasedItem && this.gamePhase === 'purchase') {
+			// Sorry, no refunds
+			delete this.flags.purchasedItem;
+		}
 		this.gamePhase = direction;
 		this.refreshPage();
 		if (direction !== 'battle') {
@@ -143,11 +147,37 @@ export class Roguelike {
 			if (item.cost > this.battlePoints) {
 				buf += `<td><button class="button disabled">Not enough BP!</button>`;
 			} else {
-				buf += `<td><button class="button">Purchase</button>`;
+				buf += `<td><button class="button" name="send" value="/roguelike buy ${key}">Purchase</button>`;
 			}
 			buf += `</tr>`;
 		}
 		buf += `</table>`;
+		return buf;
+	}
+	genPurchaseHTML(failure?: boolean) {
+		let buf = ``;
+		let exitButtonText = 'Leave and go back to shop.'
+		switch ((this.flags.purchasedItem as ShopItem)?.type) {
+			case 'pokemon':
+				break;
+			case 'healHP':
+				break;
+			case 'healPP':
+				break;
+			case 'TM':
+				break;
+			case 'key':
+				break;
+			case 'scout':
+				break;
+			case 'debug':
+				buf += 'Hoeen is now banned from this server.<br />Good job!';
+				break;
+			default:
+				buf += 'Something went wrong, contact HiZo.';
+				break;
+		}
+		buf += `<br /><button class="button" name="send" value="/roguelike shop">${exitButtonText}</button>`;
 		return buf;
 	}
 }
@@ -207,13 +237,28 @@ export const commands: Chat.ChatCommands = {
 		shop(target, room, user) {
 			const userData = getUserRoguelikeData(user.id);
 			if (!userData) return this.errorReply(`No data found.`);
-			if (userData.gamePhase !== 'results') return this.errorReply(`Can't go to shop yet`);
+			if (userData.gamePhase !== 'results' && userData.gamePhase !== 'purchase') return this.errorReply(`Can't go to shop yet!`);
 			userData.goToPhase('shop');
+		},
+		buy(target, room, user) {
+			const userData = getUserRoguelikeData(user.id);
+			if (!userData) return this.errorReply(`No data found.`);
+			if (userData.gamePhase !== 'shop') return this.errorReply(`Can't buy stuff yet!`);
+			let item = SHOP_ITEMS[target] || false;
+			if (!item) return this.errorReply('Does that item even exist?');
+			if (item.cost > userData.battlePoints) return this.popupReply(`You don't have enough BP to buy this!`);
+			// Check if item is useable
+			// if (false) {
+			// 	return this.popupReply(`You don't need this right now!`);
+			// }
+			userData.flags.purchasedItem = item;
+			userData.battlePoints -= item.cost;
+			userData.goToPhase('purchase');
 		},
 		next(target, room, user) {
 			const userData = getUserRoguelikeData(user.id);
 			if (!userData) return this.errorReply(`No data found.`);
-			if (userData.gamePhase !== 'shop') return this.errorReply(`Can't battle yet`);
+			if (userData.gamePhase !== 'shop') return this.errorReply(`Can't battle yet!`);
 			const newFoe = userData.createAITrainer();
 			createAIBattle(userData.user, newFoe);
 		},
@@ -246,13 +291,18 @@ export const pages: Chat.PageTable = {
 		case 'scout':
 		case 'shop':
 			subtitle = 'Shop';
-			buf += `<b>BP:</bp> ${userGameData.battlePoints}<br />`;
+			buf += `<b>BP:</b> ${userGameData.battlePoints}<br />`;
 			buf += userGameData.genShopHTML();
 			buf += `<br /><button class="button" name="send" value="/roguelike next">Start the next battle!</button>`;
 			break;
 		case 'purchase':
+			if (!userGameData.flags.purchasedItem) {
+				this.title = '[Roguelike] Purchase Error';
+				return this.errorReply('If you tried to purchased something and reached this error, contact HiZo.');
+			}
 			subtitle = 'Complete Purchase';
 			// TODO: Be able to buy things
+			buf += userGameData.genPurchaseHTML();
 			break;
 		case 'intro':
 			subtitle = 'Pick a Starter';
