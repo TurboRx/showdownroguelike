@@ -3,7 +3,8 @@
 * @author HiZo
 */
 
-import {FS/* , Utils*/} from '../../lib';
+import {FS, Utils} from '../../lib';
+import {TeamValidator} from '../../sim/team-validator';
 const SAVE_DATA = 'config/roguelike.json';
 const roguelikeGames = new Map<ID, Roguelike>();
 
@@ -62,6 +63,99 @@ function createAIBattle(userID: ID, ai: AITrainer) {
 			isAI: true,
 		}],
 	});
+}
+
+function genPokemon(quantity: number, level: number | number[], starter?: boolean) {
+	let minLevel;
+	let maxLevel;
+	if (typeof level === 'number') {
+		minLevel = level;
+		maxLevel = level;
+	} else {
+		minLevel = level[0];
+		maxLevel = level[1] ? level[1] : level[0];
+	}
+	const validate = new TeamValidator('gen9roguelikebattle');
+	let gennedMons: PokemonSet[] = [];
+	let all = Dex.species.all().filter(s => !s.battleOnly && !s.requiredItems && s.forme !== 'Gmax' && !s.isNonstandard);
+	if (starter) {
+		all.filter(s => !s.prevo);
+	}
+	let depth = 0;
+	while (gennedMons.length < quantity) {
+		let specie = Utils.shuffle(all).shift();
+		if (!specie) {
+			throw new Error('Somehow there is no Pokemon');
+		}
+		let setAbil;
+		if (specie.abilities.S && Math.floor(Math.random() * 100) === 1) {
+			setAbil = specie.abilities.S;
+		} else if (specie.abilities.H && Math.floor(Math.random() * 50) === 1) {
+			setAbil = specie.abilities.H;
+		} else {
+			if (specie.abilities[1] && Math.floor(Math.random() * 2) === 1) {
+				setAbil = specie.abilities[1];
+			} else {
+				setAbil = specie.abilities[0];
+			}
+		}
+		const natures: string[] = [];
+		Dex.natures.all().forEach(n => natures.push(n.name));
+		let set: PokemonSet = {
+			name: specie.baseSpecies,
+			species: specie.name,
+			gender: specie.gender || Utils.randomElement(['M', 'F']),
+			shiny: (Math.floor(Math.random() * 1024) === 69),
+			item: '',
+			ability: setAbil,
+			moves: [],
+			nature: Utils.randomElement(natures),
+			evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
+			ivs: {hp: Math.floor(Math.random() * 32), atk: Math.floor(Math.random() * 32), def: Math.floor(Math.random() * 32), spa: Math.floor(Math.random() * 32), spd: Math.floor(Math.random() * 32), spe: Math.floor(Math.random() * 32)},
+			level: minLevel,
+		};
+		if (depth >= 999999999999) {
+			set.level = Math.floor(Math.random() * (maxLevel - minLevel)) + minLevel;
+			gennedMons.push(set);
+		} else {
+			for (let curLevel = minLevel; curLevel <= maxLevel; curLevel++) {
+				// what the fuck
+				if (!validate.validateTeam([set])?.some(err => err.includes('must be at least level'))) {
+					gennedMons.push(set);
+					break;
+				}
+				set.level++;
+			}
+		}
+		depth++;
+	}
+	for (let x = 0; x < gennedMons.length; x++) {
+		let moveless = gennedMons[x];
+		let viableMoves: string[] = [];
+		let fullLearn = Dex.species.getFullLearnset(toID(moveless.species));
+		for (let f = 0; f < fullLearn.length; f++) {
+			let learnset = fullLearn[f].learnset;
+			for (const move in learnset) {
+				// console.log(learnset[move]);
+				// console.log('9L1'.endsWith('L1'));
+				for (let lvl = 1; lvl < moveless.level; lvl++) {
+					if (learnset[move].some(source => source.substring(1) === `L${lvl}`)) {
+						if (!viableMoves.includes(move)) viableMoves.push(move);
+					}
+				}
+			}
+		}
+		if (!viableMoves.length) {
+			throw new Error(`${moveless.species} somehow has no moves at level ${moveless.level}!`);
+		}
+		viableMoves = Utils.shuffle(viableMoves);
+		for (let x = 0; x < Utils.clampIntRange(viableMoves.length, 1, 4); x++) {
+			let m = Dex.moves.get(viableMoves[x]).name;
+			if (m) moveless.moves.push(m);
+		}
+	}
+	console.log(gennedMons);
+	return gennedMons;
 }
 
 export function roguelikeAI() {
@@ -223,6 +317,9 @@ try {
 }
 
 export const commands: Chat.ChatCommands = {
+	uwu(target, room, user) {
+		return Teams.export(genPokemon(3, 5, true));
+	},
 	roguelike: {
 		start(target, room, user) {
 			// TODO: Refactor this
