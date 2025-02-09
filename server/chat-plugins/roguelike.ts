@@ -76,14 +76,14 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 		maxLevel = level[1] ? level[1] : level[0];
 	}
 	const validate = new TeamValidator('gen9roguelikebattle');
-	let gennedMons: PokemonSet[] = [];
-	let all = Dex.species.all().filter(s => !s.battleOnly && !s.requiredItems && s.forme !== 'Gmax' && !s.isNonstandard);
+	const gennedMons: PokemonSet[] = [];
+	const all = Dex.species.all().filter(s => !s.battleOnly && !s.requiredItems && s.forme !== 'Gmax' && !s.isNonstandard);
 	if (starter) {
 		all.filter(s => !s.prevo);
 	}
 	let depth = 0;
 	while (gennedMons.length < quantity) {
-		let specie = Utils.shuffle(all).shift();
+		const specie = Utils.shuffle(all).shift();
 		if (!specie) {
 			throw new Error('Somehow there is no Pokemon');
 		}
@@ -101,7 +101,7 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 		}
 		const natures: string[] = [];
 		Dex.natures.all().forEach(n => natures.push(n.name));
-		let set: PokemonSet = {
+		const set: PokemonSet = {
 			name: specie.baseSpecies,
 			species: specie.name,
 			gender: specie.gender || Utils.randomElement(['M', 'F']),
@@ -111,6 +111,7 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 			moves: [],
 			nature: Utils.randomElement(natures),
 			evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
+			// eslint-disable-next-line max-len
 			ivs: {hp: Math.floor(Math.random() * 32), atk: Math.floor(Math.random() * 32), def: Math.floor(Math.random() * 32), spa: Math.floor(Math.random() * 32), spd: Math.floor(Math.random() * 32), spe: Math.floor(Math.random() * 32)},
 			level: minLevel,
 		};
@@ -129,12 +130,11 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 		}
 		depth++;
 	}
-	for (let x = 0; x < gennedMons.length; x++) {
-		let moveless = gennedMons[x];
+	for (const moveless of gennedMons) {
 		let viableMoves: string[] = [];
-		let fullLearn = Dex.species.getFullLearnset(toID(moveless.species));
-		for (let f = 0; f < fullLearn.length; f++) {
-			let learnset = fullLearn[f].learnset;
+		const fullLearn = Dex.species.getFullLearnset(toID(moveless.species));
+		for (const learnsetIndex of fullLearn) {
+			const learnset = learnsetIndex.learnset;
 			for (const move in learnset) {
 				// console.log(learnset[move]);
 				// console.log('9L1'.endsWith('L1'));
@@ -150,7 +150,7 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 		}
 		viableMoves = Utils.shuffle(viableMoves);
 		for (let x = 0; x < Utils.clampIntRange(viableMoves.length, 1, 4); x++) {
-			let m = Dex.moves.get(viableMoves[x]).name;
+			const m = Dex.moves.get(viableMoves[x]).name;
 			if (m) moveless.moves.push(m);
 		}
 	}
@@ -250,26 +250,26 @@ export class Roguelike {
 	}
 	genPurchaseHTML(failure?: boolean) {
 		let buf = ``;
-		let exitButtonText = 'Leave and go back to shop.'
+		const exitButtonText = 'Leave and go back to shop.';
 		switch ((this.flags.purchasedItem as ShopItem)?.type) {
-			case 'pokemon':
-				break;
-			case 'healHP':
-				break;
-			case 'healPP':
-				break;
-			case 'TM':
-				break;
-			case 'key':
-				break;
-			case 'scout':
-				break;
-			case 'debug':
-				buf += 'Hoeen is now banned from this server.<br />Good job!';
-				break;
-			default:
-				buf += 'Something went wrong, contact HiZo.';
-				break;
+		case 'pokemon':
+			break;
+		case 'healHP':
+			break;
+		case 'healPP':
+			break;
+		case 'TM':
+			break;
+		case 'key':
+			break;
+		case 'scout':
+			break;
+		case 'debug':
+			buf += 'Hoeen is now banned from this server.<br />Good job!';
+			break;
+		default:
+			buf += 'Something went wrong, contact HiZo.';
+			break;
 		}
 		buf += `<br /><button class="button" name="send" value="/roguelike shop">${exitButtonText}</button>`;
 		return buf;
@@ -334,14 +334,15 @@ export const commands: Chat.ChatCommands = {
 		shop(target, room, user) {
 			const userData = getUserRoguelikeData(user.id);
 			if (!userData) return this.errorReply(`No data found.`);
-			if (userData.gamePhase !== 'results' && userData.gamePhase !== 'purchase') return this.errorReply(`Can't go to shop yet!`);
+			if (userData.gamePhase !== 'results' &&
+				userData.gamePhase !== 'purchase') return this.errorReply(`Can't go to shop yet!`);
 			userData.goToPhase('shop');
 		},
 		buy(target, room, user) {
 			const userData = getUserRoguelikeData(user.id);
 			if (!userData) return this.errorReply(`No data found.`);
 			if (userData.gamePhase !== 'shop') return this.errorReply(`Can't buy stuff yet!`);
-			let item = SHOP_ITEMS[target] || false;
+			const item = SHOP_ITEMS[target] || false;
 			if (!item) return this.errorReply('Does that item even exist?');
 			if (item.cost > userData.battlePoints) return this.popupReply(`You don't have enough BP to buy this!`);
 			// Check if item is useable
