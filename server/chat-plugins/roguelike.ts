@@ -77,9 +77,11 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 	}
 	const validate = new TeamValidator('gen9roguelikebattle');
 	const gennedMons: PokemonSet[] = [];
-	const all = Dex.species.all().filter(s => !s.battleOnly && !s.requiredItems && s.forme !== 'Gmax' && !s.isNonstandard);
+	let all = Dex.species.all().filter(s => !s.battleOnly && !s.requiredItems && s.forme !== 'Gmax' && !s.isNonstandard);
 	if (starter) {
-		all.filter(s => !s.prevo);
+		all = all.filter(s => !s.prevo);
+		all = all.filter(s => !(s.tags.includes('Mythical') || s.tags.includes('Restricted Legendary') || s.tags.includes('Sub-Legendary')));
+		all = all.filter(s => !(s.tags.includes('Paradox') ||  ['Gouging Fire', 'Raging Bolt', 'Iron Crown', 'Iron Boulder'].includes(s.baseSpecies)));
 	}
 	let depth = 0;
 	while (gennedMons.length < quantity) {
@@ -115,7 +117,7 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 			ivs: {hp: Math.floor(Math.random() * 32), atk: Math.floor(Math.random() * 32), def: Math.floor(Math.random() * 32), spa: Math.floor(Math.random() * 32), spd: Math.floor(Math.random() * 32), spe: Math.floor(Math.random() * 32)},
 			level: minLevel,
 		};
-		if (depth >= 999999999999) {
+		if (depth > 500) {
 			set.level = Math.floor(Math.random() * (maxLevel - minLevel)) + minLevel;
 			gennedMons.push(set);
 		} else {
@@ -138,7 +140,7 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 			for (const move in learnset) {
 				// console.log(learnset[move]);
 				// console.log('9L1'.endsWith('L1'));
-				for (let lvl = 1; lvl < moveless.level; lvl++) {
+				for (let lvl = 1; lvl <= moveless.level; lvl++) {
 					if (learnset[move].some(source => source.substring(1) === `L${lvl}`)) {
 						if (!viableMoves.includes(move)) viableMoves.push(move);
 					}
@@ -352,6 +354,9 @@ export const commands: Chat.ChatCommands = {
 			userData.flags.purchasedItem = item;
 			userData.battlePoints -= item.cost;
 			userData.goToPhase('purchase');
+		},
+		addpoke(target, room, user) {
+
 		},
 		next(target, room, user) {
 			const userData = getUserRoguelikeData(user.id);
