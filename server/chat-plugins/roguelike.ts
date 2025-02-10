@@ -77,11 +77,15 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 	}
 	const validate = new TeamValidator('gen9roguelikebattle');
 	const gennedMons: PokemonSet[] = [];
+	// eslint-disable-next-line max-len
 	let all = Dex.species.all().filter(s => !s.battleOnly && !s.requiredItems && s.forme !== 'Gmax' && !(s.isNonstandard && s.isNonstandard !== 'Past'));
 	if (starter) {
 		all = all.filter(s => !s.prevo);
+		// eslint-disable-next-line max-len
 		all = all.filter(s => !(s.tags.includes('Mythical') || s.tags.includes('Restricted Legendary') || s.tags.includes('Sub-Legendary')));
-		all = all.filter(s => !(s.tags.includes('Paradox') ||  ['Gouging Fire', 'Raging Bolt', 'Iron Crown', 'Iron Boulder'].includes(s.baseSpecies)));
+		// eslint-disable-next-line max-len
+		all = all.filter(s => !(s.tags.includes('Paradox') || ['Gouging Fire', 'Raging Bolt', 'Iron Crown', 'Iron Boulder'].includes(s.baseSpecies)));
+		all = all.filter(s => !s.tags.includes('Ultra Beast') || s.name === 'Poipole');
 	}
 	let depth = 0;
 	while (gennedMons.length < quantity) {
