@@ -88,6 +88,7 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 		// eslint-disable-next-line max-len
 		all = all.filter(s => !(s.tags.includes('Paradox') || ['Gouging Fire', 'Raging Bolt', 'Iron Crown', 'Iron Boulder'].includes(s.baseSpecies)));
 		all = all.filter(s => !s.tags.includes('Ultra Beast') || s.name === 'Poipole');
+		all = all.filter(s => !['Ursaluna-Bloodmoon', 'Floette-Eternal'].includes(s.name));
 	}
 	let depth = 0;
 	while (gennedMons.length < quantity) {
@@ -96,6 +97,7 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 			throw new Error('Somehow there is no Pokemon');
 		}
 		let setAbil;
+		// TODO: Assess the Pupitar problem
 		if (specie.abilities.S && Math.floor(Math.random() * 100) === 1) {
 			setAbil = specie.abilities.S;
 		} else if (specie.abilities.H && Math.floor(Math.random() * 50) === 1) {
@@ -136,6 +138,7 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 				set.level++;
 			}
 		}
+		all = all.filter(s => !(s.baseSpecies === specie.baseSpecies));
 		depth++;
 	}
 	// TODO: Refactor this to own function for TMs
