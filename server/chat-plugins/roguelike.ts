@@ -50,12 +50,14 @@ interface BackupData {
 
 function createAIBattle(userID: ID, ai: AITrainer) {
 	const user = Users.get(userID);
-	if (!user) return;
+	const gameData = getUserRoguelikeData(userID);
+	if (!user || !gameData) return;
 	Rooms.createBattle({
 		format: 'gen9roguelikebattle',
 		isRoguelikeBattle: true,
 		players: [{
 			user: user,
+			team: Teams.pack(gameData.team) || '',
 			// @ts-ignore AI has no user data
 		}, {
 			username: ai.name,
@@ -136,6 +138,7 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 		}
 		depth++;
 	}
+	// TODO: Refactor this to own function for TMs
 	for (const moveless of gennedMons) {
 		let viableMoves: string[] = [];
 		const fullLearn = Dex.species.getFullLearnset(toID(moveless.species));
@@ -160,7 +163,6 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 			if (m) moveless.moves.push(m);
 		}
 	}
-	console.log(gennedMons);
 	return gennedMons;
 }
 
@@ -181,6 +183,7 @@ export class Roguelike {
 		exp: number,
 	}[];
 	flags: {
+		pokemonOptions?: PokemonSet[],
 		[k: string]: any,
 	};
 	opponentTeam: PokemonSet[];
@@ -283,6 +286,7 @@ export class Roguelike {
 }
 
 function saveRoguelikeData() {
+	// Next: Rewrite so flags get saved
 	const JSONobj = Object.fromEntries(roguelikeGames);
 	for (const player in JSONobj) {
 		const playerData = JSONobj[player];
@@ -302,6 +306,8 @@ function getUserRoguelikeData(userID: ID) {
 
 function createSaveData(user: User) {
 	const rl = new Roguelike(user.id);
+	// Gen starters here
+	rl.flags.pokemonOptions = genPokemon(3, 5, true);
 	roguelikeGames.set(user.id, rl);
 	saveRoguelikeData();
 	return rl;
@@ -328,13 +334,9 @@ export const commands: Chat.ChatCommands = {
 	},
 	roguelike: {
 		start(target, room, user) {
-			// TODO: Refactor this
-			let userData = getUserRoguelikeData(user.id);
-			if (!userData || userData.runEnded) {
-				userData = createSaveData(user);
-			}
-			const newFoe = userData.createAITrainer();
-			createAIBattle(userData.user, newFoe);
+			createSaveData(user);
+			// const newFoe = userData.createAITrainer();
+			// createAIBattle(userData.user, newFoe);
 			return this.parse(`/join view-roguelike`);
 		},
 		shop(target, room, user) {
@@ -360,7 +362,19 @@ export const commands: Chat.ChatCommands = {
 			userData.goToPhase('purchase');
 		},
 		addpoke(target, room, user) {
-
+			const userData = getUserRoguelikeData(user.id);
+			if (!userData) return this.errorReply(`No data found.`);
+			if (!userData.flags.pokemonOptions) return this.errorReply(`No Pokemon to add.`);
+			let pokes = userData.flags.pokemonOptions;
+			let poke = pokes.find(p => toID(p.species) === toID(target));
+			if (!poke) return this.errorReply(`You can't choose that pokemon.`);
+			if (userData.team.length > 6) {
+				// TODO: Figure out releasing pokemon.
+			} else {
+				userData.team.push(poke);
+			}
+			delete userData.flags.pokemonOptions;
+			userData.goToPhase('shop');
 		},
 		next(target, room, user) {
 			const userData = getUserRoguelikeData(user.id);
@@ -413,7 +427,16 @@ export const pages: Chat.PageTable = {
 			break;
 		case 'intro':
 			subtitle = 'Pick a Starter';
-			// TODO: Be able to add Pokemon
+			if (!userGameData.flags.pokemonOptions) {
+				this.title = '[Roguelike] Error';
+				return this.errorReply('If you reached this error, you either already picked a starter or should contact HiZo.');
+			}
+			buf += `<center><h3>Choose a starter!</h3><br />`;
+			buf += `<div style="width:100%;">`;
+			for (const poke of userGameData.flags.pokemonOptions) {
+				buf += `<button class="button" name="send" value="/roguelike addpoke ${toID(poke.species)}"><img src="https://play.pokemonshowdown.com/sprites/gen5/${Dex.species.get(poke.species).spriteid}.png" /></button>`;
+			}
+			buf += `</div>`;
 			break;
 		case 'other':
 			// TODO: ????
