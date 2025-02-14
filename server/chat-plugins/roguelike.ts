@@ -6,7 +6,7 @@
 import {FS, Utils} from '../../lib';
 import {TeamValidator} from '../../sim/team-validator';
 const SAVE_DATA = 'config/roguelike.json';
-const roguelikeGames = new Map<ID, Roguelike>();
+export const roguelikeGames = new Map<ID, Roguelike>();
 
 type Phase = 'battle' | 'results' | 'shop' | 'purchase' | 'intro' | 'scout' | 'other' | 'battleError';
 
@@ -50,7 +50,7 @@ interface BackupData {
 
 function createAIBattle(userID: ID, ai: AITrainer) {
 	const user = Users.get(userID);
-	const gameData = getUserRoguelikeData(userID);
+	const gameData = roguelikeGames.get(userID);
 	if (!user || !gameData) return;
 	Rooms.createBattle({
 		format: 'gen9roguelikebattle',
@@ -322,10 +322,6 @@ function saveRoguelikeData() {
 	FS(SAVE_DATA).writeUpdate(() => JSON.stringify(JSONobj));
 }
 
-function getUserRoguelikeData(userID: ID) {
-	return roguelikeGames.get(userID) || false;
-}
-
 function createSaveData(user: User) {
 	const rl = new Roguelike(user.id);
 	// Gen starters here
@@ -362,14 +358,14 @@ export const commands: Chat.ChatCommands = {
 			return this.parse(`/join view-roguelike`);
 		},
 		shop(target, room, user) {
-			const userData = getUserRoguelikeData(user.id);
+			const userData = roguelikeGames.get(user.id);
 			if (!userData) return this.errorReply(`No data found.`);
 			if (userData.gamePhase !== 'results' &&
 				userData.gamePhase !== 'purchase') return this.errorReply(`Can't go to shop yet!`);
 			userData.goToPhase('shop');
 		},
 		buy(target, room, user) {
-			const userData = getUserRoguelikeData(user.id);
+			const userData = roguelikeGames.get(user.id);
 			if (!userData) return this.errorReply(`No data found.`);
 			if (userData.gamePhase !== 'shop') return this.errorReply(`Can't buy stuff yet!`);
 			const item = SHOP_ITEMS[target] || false;
@@ -384,7 +380,7 @@ export const commands: Chat.ChatCommands = {
 			userData.goToPhase('purchase');
 		},
 		addpoke(target, room, user) {
-			const userData = getUserRoguelikeData(user.id);
+			const userData = roguelikeGames.get(user.id);
 			if (!userData) return this.errorReply(`No data found.`);
 			if (!userData.flags.pokemonOptions) return this.errorReply(`No Pokemon to add.`);
 			let pokes = userData.flags.pokemonOptions;
@@ -399,7 +395,7 @@ export const commands: Chat.ChatCommands = {
 			userData.goToPhase('shop');
 		},
 		next(target, room, user) {
-			const userData = getUserRoguelikeData(user.id);
+			const userData = roguelikeGames.get(user.id);
 			if (!userData) return this.errorReply(`No data found.`);
 			if (userData.gamePhase !== 'shop') return this.errorReply(`Can't battle yet!`);
 			const newFoe = userData.createAITrainer();
@@ -410,7 +406,7 @@ export const commands: Chat.ChatCommands = {
 
 export const pages: Chat.PageTable = {
 	roguelike(args, user) {
-		const userGameData = getUserRoguelikeData(user.id);
+		const userGameData = roguelikeGames.get(user.id);
 		if (!userGameData || !user.named) return Rooms.RETRY_AFTER_LOGIN;
 		let subtitle = '';
 		let buf = `<div class = "pad">`;
@@ -476,7 +472,7 @@ export const pages: Chat.PageTable = {
 export const handlers: Chat.Handlers = {
 	onBattleStart(user, room) {
 		if (room.battle?.options.isRoguelikeBattle && user) {
-			const roguelikePlayer = getUserRoguelikeData(user.id);
+			const roguelikePlayer = roguelikeGames.get(user.id);
 			if (roguelikePlayer) roguelikePlayer.goToPhase('battle');
 		}
 	},
@@ -485,7 +481,7 @@ export const handlers: Chat.Handlers = {
 		if (!battle.options.isRoguelikeBattle) return;
 		// Player 1 is the always the human
 		const human = players[0];
-		const humanGameData = getUserRoguelikeData(human);
+		const humanGameData = roguelikeGames.get(human);
 		if (!humanGameData) return;
 		if (human === winner) {
 			humanGameData.win();
