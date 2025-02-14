@@ -289,17 +289,31 @@ export class Roguelike {
 }
 
 function saveRoguelikeData() {
-	// Next: Rewrite so flags get saved
-	const JSONobj = Object.fromEntries(roguelikeGames);
-	for (const player in JSONobj) {
-		const playerData = JSONobj[player];
-		if (playerData.gamePhase === 'battle') {
-			// in case of a restart, battles might get lost
-			// and players might get softlocked, so this
-			// state can help players restart their battles
-			playerData.gamePhase = 'battleError';
+	const JSONobj = Object.create(null);
+	roguelikeGames.forEach((value, key) => {
+		let okey = key as string;
+		JSONobj[okey] = {};
+		for (const prop in value) {
+			if (prop === 'flags') {
+				JSONobj[okey][prop] = {};
+				for (const deepProp in value[prop]) {
+					JSONobj[okey][prop][deepProp] = value[prop][deepProp];
+				}
+			} else {
+				// @ts-ignore
+				JSONobj[okey][prop] = value[prop];
+			}
 		}
-	}
+	});
+	// for (const player in JSONobj) {
+	// 	const playerData = JSONobj[player];
+	// 	if (playerData.gamePhase === 'battle') {
+	// 		// in case of a restart, battles might get lost
+	// 		// and players might get softlocked, so this
+	// 		// state can help players restart their battles
+	// 		playerData.gamePhase = 'battleError';
+	// 	}
+	// }
 	FS(SAVE_DATA).writeUpdate(() => JSON.stringify(JSONobj));
 }
 
