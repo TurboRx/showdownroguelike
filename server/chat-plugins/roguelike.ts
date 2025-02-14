@@ -147,24 +147,29 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 		const fullLearn = Dex.species.getFullLearnset(toID(moveless.species));
 		for (const learnsetIndex of fullLearn) {
 			const learnset = learnsetIndex.learnset;
-			for (const move in learnset) {
-				// console.log(learnset[move]);
-				// console.log('9L1'.endsWith('L1'));
-				for (let lvl = 1; lvl <= moveless.level; lvl++) {
+			for (let lvl = 1; lvl <= moveless.level; lvl++) {
+				let movesAtlevel: string[] = [];
+				for (const move in learnset) {
 					if (learnset[move].some(source => source.substring(1) === `L${lvl}`)) {
-						if (!viableMoves.includes(move)) viableMoves.push(move);
+						if (!viableMoves.includes(move) && !movesAtlevel.includes(move)) {
+							movesAtlevel.push(move);
+						}
 					}
 				}
+				// randomize moves at equal level
+				Utils.shuffle(movesAtlevel);
+				viableMoves = viableMoves.concat(movesAtlevel);
 			}
 		}
 		if (!viableMoves.length) {
 			throw new Error(`${moveless.species} somehow has no moves at level ${moveless.level}!`);
 		}
-		viableMoves = Utils.shuffle(viableMoves);
+		viableMoves = viableMoves.reverse();
 		for (let x = 0; x < Utils.clampIntRange(viableMoves.length, 1, 4); x++) {
 			const m = Dex.moves.get(viableMoves[x]).name;
 			if (m) moveless.moves.push(m);
 		}
+		moveless.moves.reverse();
 	}
 	return gennedMons;
 }
