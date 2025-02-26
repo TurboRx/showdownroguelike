@@ -137,7 +137,7 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 			for (let curLevel = minLevel; curLevel <= maxLevel; curLevel++) {
 				// what the fuck
 				if (!validate.validateTeam([set])?.some(err => err.includes('must be at least level'))) {
-					gennedMons.push(set);
+					if (Math.floor(Math.random() * (maxLevel - curLevel)) === 0) gennedMons.push(set);
 					break;
 				}
 				set.level++;
@@ -219,13 +219,17 @@ export class Roguelike {
 	}
 
 	win() {
+		const RECOMMENDED_TEAM_LENGTH = [2, 3, 3, 4, 4, 5, 6];
+		const RECOMMENDED_LEVEL_SCALE = [5, 10];
 		if (this.battle % 7 === 0) {
 			this.streak++;
 		}
 		this.battle++;
-		// this.refreshPage();
-		// const newFoe = this.createAITrainer();
-		// createAIBattle(this.user, newFoe);
+		this.battlePoints += 10;
+		const min = Utils.clampIntRange(RECOMMENDED_LEVEL_SCALE[0] * (this.streak + 1), 1, 100);
+		const max = Utils.clampIntRange(RECOMMENDED_LEVEL_SCALE[1] * (this.streak + 1), 1, 100);
+		const num = RECOMMENDED_TEAM_LENGTH[Utils.clampIntRange(this.streak, 0, 6)];
+		this.opponentTeam = genPokemon(num, [min, max]);
 	}
 
 	lose() {
@@ -360,8 +364,9 @@ function checkSequence(before: string, after: string) {
 
 export const commands: Chat.ChatCommands = {
 	uwu(target, room, user) {
-		return Teams.export(genPokemon(3, 5, true));
+		return Teams.export(genPokemon(3, [5, 10]));
 	},
+	game: 'roguelike',
 	roguelike: {
 		start(target, room, user) {
 			createSaveData(user);
@@ -390,6 +395,24 @@ export const commands: Chat.ChatCommands = {
 			userData.flags.purchasedItem = item;
 			userData.battlePoints -= item.cost;
 			userData.goToPage('purchase');
+		},
+		addstarter(target, room, user) {
+			const userData = roguelikeGames.get(user.id);
+			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
+			if (!userData.flags.pokemonOptions) return this.errorReply(`No Pokemon to add.`);
+			if (userData.curRoom !== 'intro') return this.errorReply(`You already have a starter.`);
+			const pokes = userData.flags.pokemonOptions;
+			const poke = pokes.find(p => toID(p.species) === toID(target));
+			if (!poke) return this.errorReply(`You can't choose that pokemon.`);
+			if (userData.team.length > 6) {
+				// TODO: Figure out releasing pokemon.
+			} else {
+				userData.team.push(poke);
+			}
+			delete userData.flags.pokemonOptions;
+			userData.opponentTeam = genPokemon(1, 5, true);
+			const newFoe = userData.createAITrainer();
+			createAIBattle(userData.user, newFoe);
 		},
 		addpoke(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
@@ -466,7 +489,7 @@ export const pages: Chat.PageTable = {
 			buf += `<center><h3>Choose a starter!</h3><br />`;
 			buf += `<div style="width:100%;">`;
 			for (const poke of userGameData.flags.pokemonOptions) {
-				buf += `<button class="button" name="send" value="/roguelike addpoke ${toID(poke.species)}"><img src="https://play.pokemonshowdown.com/sprites/gen5/${Dex.species.get(poke.species).spriteid}.png" /></button>`;
+				buf += `<button class="button" name="send" value="/roguelike addstarter ${toID(poke.species)}"><img src="https://play.pokemonshowdown.com/sprites/gen5/${Dex.species.get(poke.species).spriteid}.png" /></button>`;
 			}
 			buf += `</div>`;
 			break;
