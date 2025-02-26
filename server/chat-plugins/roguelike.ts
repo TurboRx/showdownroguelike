@@ -8,12 +8,12 @@ import {TeamValidator} from '../../sim/team-validator';
 const SAVE_DATA = 'config/roguelike.json';
 export const roguelikeGames = new Map<ID, Roguelike>();
 
-const SEQUENCE_CHECK: {[k:string]: string[]} = {
+const SEQUENCE_CHECK: {[k: string]: string[]} = {
 	battle: ['results'],
 	results: ['shop'],
 	shop: ['battle', 'purchase'],
 	purchase: ['shop'],
-}
+};
 
 interface ShopItem {
 	name: string;
@@ -153,7 +153,7 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 		for (const learnsetIndex of fullLearn) {
 			const learnset = learnsetIndex.learnset;
 			for (let lvl = 1; lvl <= moveless.level; lvl++) {
-				let movesAtlevel: string[] = [];
+				const movesAtlevel: string[] = [];
 				for (const move in learnset) {
 					if (learnset[move].some(source => source.substring(1) === `L${lvl}`)) {
 						if (!viableMoves.includes(move) && !movesAtlevel.includes(move)) {
@@ -302,7 +302,7 @@ export class Roguelike {
 function saveRoguelikeData() {
 	const JSONobj = Object.create(null);
 	roguelikeGames.forEach((value, key) => {
-		let okey = key as string;
+		const okey = key as string;
 		JSONobj[okey] = {};
 		for (const prop in value) {
 			if (prop === 'flags') {
@@ -395,8 +395,8 @@ export const commands: Chat.ChatCommands = {
 			const userData = roguelikeGames.get(user.id);
 			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
 			if (!userData.flags.pokemonOptions) return this.errorReply(`No Pokemon to add.`);
-			let pokes = userData.flags.pokemonOptions;
-			let poke = pokes.find(p => toID(p.species) === toID(target));
+			const pokes = userData.flags.pokemonOptions;
+			const poke = pokes.find(p => toID(p.species) === toID(target));
 			if (!poke) return this.errorReply(`You can't choose that pokemon.`);
 			if (userData.team.length > 6) {
 				// TODO: Figure out releasing pokemon.
