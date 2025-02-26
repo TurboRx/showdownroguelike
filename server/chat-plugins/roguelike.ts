@@ -8,8 +8,6 @@ import {TeamValidator} from '../../sim/team-validator';
 const SAVE_DATA = 'config/roguelike.json';
 export const roguelikeGames = new Map<ID, Roguelike>();
 
-type Phase = 'battle' | 'results' | 'shop' | 'purchase' | 'intro' | 'scout' | 'other' | 'battleError';
-
 interface ShopItem {
 	name: string;
 	type: 'pokemon' | 'healHP' | 'healPP' | 'TM' | 'key' | 'scout' | 'debug';
@@ -44,7 +42,7 @@ interface BackupData {
 		[k: string]: any,
 	};
 	opponentTeam: PokemonSet[];
-	gamePhase: Phase;
+	curRoom: string;
 	runEnded: boolean;
 }
 
@@ -195,8 +193,9 @@ export class Roguelike {
 		[k: string]: any,
 	};
 	opponentTeam: PokemonSet[];
-	gamePhase: Phase;
+	curRoom: string;
 	runEnded: boolean;
+	inBattle: boolean;
 
 	constructor(userID: ID, backup?: BackupData) {
 		this.user = userID;
@@ -207,8 +206,9 @@ export class Roguelike {
 		this.teamData = backup?.teamData || [];
 		this.flags = backup?.flags || [];
 		this.opponentTeam = backup?.opponentTeam || [];
-		this.gamePhase = backup?.gamePhase || 'intro';
+		this.curRoom = backup?.curRoom || 'intro';
 		this.runEnded = backup?.runEnded || false;
+		this.inBattle = false;
 	}
 
 	win() {
@@ -224,17 +224,6 @@ export class Roguelike {
 	lose() {
 		this.runEnded = true;
 	}
-	goToPhase(direction: Phase) {
-		if (this.flags.purchasedItem && this.gamePhase === 'purchase') {
-			// Sorry, no refunds
-			delete this.flags.purchasedItem;
-		}
-		this.gamePhase = direction;
-		this.refreshPage();
-		if (direction !== 'battle') {
-			saveRoguelikeData();
-		}
-	}
 	createAITrainer() {
 		// TODO: name generation
 		const ai = {} as AITrainer;
@@ -242,12 +231,21 @@ export class Roguelike {
 		ai.team = this.opponentTeam;
 		return ai;
 	}
+
 	refreshPage() {
 		const realUser = Users.get(this.user);
 		if (realUser) {
-			Chat.parse(`/join view-roguelike`, null, realUser, realUser.connections[0]);
+			for (const conn of realUser.connections) {
+				void Chat.parse(`/join view-roguelike`, null, realUser, conn);
+			}
 		}
 	}
+	goToPage(target: string) {
+		this.curRoom = target;
+		this.refreshPage();
+		saveRoguelikeData();
+	}
+
 	genShopHTML() {
 		let buf = `<center><h3>SHOP</h3></center><br />`;
 		buf += `<table style="width:100%; border-collapse: collapse;"border="1"><tr><th>Item</th><th>Description</th><th>Price</th></tr>`;
@@ -312,11 +310,11 @@ function saveRoguelikeData() {
 	});
 	// for (const player in JSONobj) {
 	// 	const playerData = JSONobj[player];
-	// 	if (playerData.gamePhase === 'battle') {
+	// 	if (playerData.curRoom === 'battle') {
 	// 		// in case of a restart, battles might get lost
 	// 		// and players might get softlocked, so this
 	// 		// state can help players restart their battles
-	// 		playerData.gamePhase = 'battleError';
+	// 		playerData.curRoom = 'battleError';
 	// 	}
 	// }
 	FS(SAVE_DATA).writeUpdate(() => JSON.stringify(JSONobj));
@@ -360,14 +358,14 @@ export const commands: Chat.ChatCommands = {
 		shop(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
 			if (!userData) return this.errorReply(`No data found.`);
-			if (userData.gamePhase !== 'results' &&
-				userData.gamePhase !== 'purchase') return this.errorReply(`Can't go to shop yet!`);
-			userData.goToPhase('shop');
+			if (userData.curRoom !== 'results' &&
+				userData.curRoom !== 'purchase') return this.errorReply(`Can't go to shop yet!`);
+			userData.goToPage('shop');
 		},
 		buy(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
 			if (!userData) return this.errorReply(`No data found.`);
-			if (userData.gamePhase !== 'shop') return this.errorReply(`Can't buy stuff yet!`);
+			if (userData.curRoom !== 'shop') return this.errorReply(`Can't buy stuff yet!`);
 			const item = SHOP_ITEMS[target] || false;
 			if (!item) return this.errorReply('Does that item even exist?');
 			if (item.cost > userData.battlePoints) return this.popupReply(`You don't have enough BP to buy this!`);
@@ -377,7 +375,7 @@ export const commands: Chat.ChatCommands = {
 			// }
 			userData.flags.purchasedItem = item;
 			userData.battlePoints -= item.cost;
-			userData.goToPhase('purchase');
+			userData.goToPage('purchase');
 		},
 		addpoke(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
@@ -392,12 +390,12 @@ export const commands: Chat.ChatCommands = {
 				userData.team.push(poke);
 			}
 			delete userData.flags.pokemonOptions;
-			userData.goToPhase('shop');
+			userData.goToPage('shop');
 		},
 		next(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
 			if (!userData) return this.errorReply(`No data found.`);
-			if (userData.gamePhase !== 'shop') return this.errorReply(`Can't battle yet!`);
+			if (userData.curRoom !== 'shop') return this.errorReply(`Can't battle yet!`);
 			const newFoe = userData.createAITrainer();
 			createAIBattle(userData.user, newFoe);
 		},
@@ -410,7 +408,7 @@ export const pages: Chat.PageTable = {
 		if (!userGameData || !user.named) return Rooms.RETRY_AFTER_LOGIN;
 		let subtitle = '';
 		let buf = `<div class = "pad">`;
-		switch (userGameData.gamePhase) {
+		switch (userGameData.curRoom) {
 		case 'battle':
 			this.title = '[Roguelike] Currently in battle';
 			return this.errorReply('You are currently in battle!');
@@ -473,7 +471,10 @@ export const handlers: Chat.Handlers = {
 	onBattleStart(user, room) {
 		if (room.battle?.options.isRoguelikeBattle && user) {
 			const roguelikePlayer = roguelikeGames.get(user.id);
-			if (roguelikePlayer) roguelikePlayer.goToPhase('battle');
+			if (roguelikePlayer) {
+				roguelikePlayer.goToPage('battle');
+				roguelikePlayer.inBattle = true;
+			}
 		}
 	},
 
@@ -483,11 +484,12 @@ export const handlers: Chat.Handlers = {
 		const human = players[0];
 		const humanGameData = roguelikeGames.get(human);
 		if (!humanGameData) return;
+		humanGameData.inBattle = false;
 		if (human === winner) {
 			humanGameData.win();
 		} else {
 			humanGameData.lose();
 		}
-		humanGameData.goToPhase('results');
+		humanGameData.goToPage('results');
 	},
 };
