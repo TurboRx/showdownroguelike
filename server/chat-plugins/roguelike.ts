@@ -8,6 +8,13 @@ import {TeamValidator} from '../../sim/team-validator';
 const SAVE_DATA = 'config/roguelike.json';
 export const roguelikeGames = new Map<ID, Roguelike>();
 
+const SEQUENCE_CHECK: {[k:string]: string[]} = {
+	battle: ['results'],
+	results: ['shop'],
+	shop: ['battle', 'purchase'],
+	purchase: ['shop'],
+}
+
 interface ShopItem {
 	name: string;
 	type: 'pokemon' | 'healHP' | 'healPP' | 'TM' | 'key' | 'scout' | 'debug';
@@ -240,6 +247,7 @@ export class Roguelike {
 			}
 		}
 	}
+
 	goToPage(target: string) {
 		this.curRoom = target;
 		this.refreshPage();
@@ -344,6 +352,12 @@ try {
 	FS(SAVE_DATA).safeWriteSync(JSON.stringify(roguelikeGames));
 }
 
+function checkSequence(before: string, after: string) {
+	const currentMainRoom = before.split('-')[0];
+	if (SEQUENCE_CHECK[currentMainRoom].includes(after)) return true;
+	return false;
+}
+
 export const commands: Chat.ChatCommands = {
 	uwu(target, room, user) {
 		return Teams.export(genPokemon(3, 5, true));
@@ -357,14 +371,14 @@ export const commands: Chat.ChatCommands = {
 		},
 		shop(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
-			if (!userData) return this.errorReply(`No data found.`);
-			if (userData.curRoom !== 'results' &&
-				userData.curRoom !== 'purchase') return this.errorReply(`Can't go to shop yet!`);
+			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
+			if (!checkSequence(userData.curRoom, 'shop')) return this.errorReply(`Can't go to shop yet!`);
+			if (userData.flags.purchasedItem) delete userData.flags.purchasedItem;
 			userData.goToPage('shop');
 		},
 		buy(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
-			if (!userData) return this.errorReply(`No data found.`);
+			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
 			if (userData.curRoom !== 'shop') return this.errorReply(`Can't buy stuff yet!`);
 			const item = SHOP_ITEMS[target] || false;
 			if (!item) return this.errorReply('Does that item even exist?');
@@ -379,7 +393,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		addpoke(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
-			if (!userData) return this.errorReply(`No data found.`);
+			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
 			if (!userData.flags.pokemonOptions) return this.errorReply(`No Pokemon to add.`);
 			let pokes = userData.flags.pokemonOptions;
 			let poke = pokes.find(p => toID(p.species) === toID(target));
@@ -394,7 +408,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		next(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
-			if (!userData) return this.errorReply(`No data found.`);
+			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
 			if (userData.curRoom !== 'shop') return this.errorReply(`Can't battle yet!`);
 			const newFoe = userData.createAITrainer();
 			createAIBattle(userData.user, newFoe);
@@ -406,9 +420,11 @@ export const pages: Chat.PageTable = {
 	roguelike(args, user) {
 		const userGameData = roguelikeGames.get(user.id);
 		if (!userGameData || !user.named) return Rooms.RETRY_AFTER_LOGIN;
+		const gameArgs = userGameData.curRoom.split('-');
+		const mainRoomArg = gameArgs.shift();
 		let subtitle = '';
 		let buf = `<div class = "pad">`;
-		switch (userGameData.curRoom) {
+		switch (mainRoomArg) {
 		case 'battle':
 			this.title = '[Roguelike] Currently in battle';
 			return this.errorReply('You are currently in battle!');
