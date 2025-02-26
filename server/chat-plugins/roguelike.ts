@@ -220,16 +220,15 @@ export class Roguelike {
 
 	win() {
 		const RECOMMENDED_TEAM_LENGTH = [2, 3, 3, 4, 4, 5, 6];
-		const RECOMMENDED_LEVEL_SCALE = [5, 10];
+		let scale = [5, 10];
 		if (this.battle % 7 === 0) {
 			this.streak++;
 		}
 		this.battle++;
 		this.battlePoints += 10;
-		const min = Utils.clampIntRange(RECOMMENDED_LEVEL_SCALE[0] * (this.streak + 1), 1, 100);
-		const max = Utils.clampIntRange(RECOMMENDED_LEVEL_SCALE[1] * (this.streak + 1), 1, 100);
+		scale.forEach((e, i) => scale[i] = e + (this.streak * 5));
 		const num = RECOMMENDED_TEAM_LENGTH[Utils.clampIntRange(this.streak, 0, 6)];
-		this.opponentTeam = genPokemon(num, [min, max]);
+		this.opponentTeam = genPokemon(num, scale);
 	}
 
 	lose() {
