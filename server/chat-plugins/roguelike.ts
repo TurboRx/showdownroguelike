@@ -348,8 +348,10 @@ function convertJSONData(key: ID, backup: BackupData) {
 try {
 	const saveDataObj = JSON.parse(FS(SAVE_DATA).readSync());
 	for (const key in saveDataObj) {
-		const newData = convertJSONData(key as ID, saveDataObj[key] as BackupData);
-		roguelikeGames.set(key as ID, newData);
+		if (!roguelikeGames.get(key as ID)) {
+			const newData = convertJSONData(key as ID, saveDataObj[key] as BackupData);
+			roguelikeGames.set(key as ID, newData);
+		}
 	}
 } catch {
 	FS(SAVE_DATA).safeWriteSync(JSON.stringify(roguelikeGames));
