@@ -234,7 +234,7 @@ export class Roguelike {
 	createAITrainer() {
 		// TODO: name generation
 		const ai = {} as AITrainer;
-		ai.name = 'debug';
+		ai.name = 'Roguelike AI';
 		ai.team = this.opponentTeam;
 		return ai;
 	}
