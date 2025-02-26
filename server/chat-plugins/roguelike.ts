@@ -17,6 +17,7 @@ const SEQUENCE_CHECK: {[k: string]: string[]} = {
 
 interface ShopItem {
 	name: string;
+	icon: string;
 	type: 'pokemon' | 'healHP' | 'healPP' | 'TM' | 'key' | 'scout' | 'debug';
 	desc: string;
 	cost: number;
@@ -24,8 +25,8 @@ interface ShopItem {
 }
 
 const SHOP_ITEMS: {[k: string]: ShopItem} = {
-	debug: {name: 'Debug', type: 'debug', desc: 'Bans HoeenHero from this server.', cost: 1, minStreak: 0},
-	debug2: {name: 'Debug 2', type: 'debug', desc: 'Bans HoeenHero from this server twice.', cost: 999, minStreak: 1},
+	debug: {name: 'Debug', icon: 'berserk gene', type: 'debug', desc: 'Bans HoeenHero from this server.', cost: 1, minStreak: 0},
+	debug2: {name: 'Debug 2', icon: 'berserk gene', type: 'debug', desc: 'Bans HoeenHero from this server twice.', cost: 999, minStreak: 1},
 };
 
 interface AITrainer {
@@ -263,7 +264,7 @@ export class Roguelike {
 		for (const key in SHOP_ITEMS) {
 			const item = SHOP_ITEMS[key];
 			if (item.minStreak > this.streak) continue;
-			buf += `<tr><td>${item.name}</td><td>${item.desc}</td><td>${item.cost} BP</td>`;
+			buf += `<tr><td><psicon item ="${item.icon}"> ${item.name}</td><td>${item.desc}</td><td>${item.cost} BP</td>`;
 			if (item.cost > this.battlePoints) {
 				buf += `<td><button class="button disabled">Not enough BP!</button>`;
 			} else {
