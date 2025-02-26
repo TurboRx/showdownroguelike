@@ -226,7 +226,7 @@ export class Roguelike {
 		}
 		this.battle++;
 		this.battlePoints += 10;
-		scale.forEach((e, i) => scale[i] = e + (this.streak * 5));
+		scale.forEach((e, i) => scale[i] = Utils.clampIntRange(e + (this.streak * 5), 1, 100));
 		const num = RECOMMENDED_TEAM_LENGTH[Utils.clampIntRange(this.streak, 0, 6)];
 		this.opponentTeam = genPokemon(num, scale);
 	}
@@ -237,7 +237,7 @@ export class Roguelike {
 	createAITrainer() {
 		// TODO: name generation
 		const ai = {} as AITrainer;
-		ai.name = 'Roguelike AI';
+		ai.name = 'Roguelike Trainer';
 		ai.team = this.opponentTeam;
 		return ai;
 	}
