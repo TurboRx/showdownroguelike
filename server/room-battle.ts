@@ -11,14 +11,14 @@
  * @license MIT
  */
 
-import {execSync} from "child_process";
-import {Repl, ProcessManager, type Streams} from '../lib';
-import {BattleStream} from "../sim/battle-stream";
-import {RoomGamePlayer, RoomGame} from "./room-game";
-import type {Tournament} from './tournaments/index';
-import type {RoomSettings} from './rooms';
-import type {BestOfGame} from './room-battle-bestof';
-import type {GameTimerSettings} from '../sim/dex-formats';
+import { execSync } from "child_process";
+import { Repl, ProcessManager, type Streams } from '../lib';
+import { BattleStream } from "../sim/battle-stream";
+import { RoomGamePlayer, RoomGame } from "./room-game";
+import type { Tournament } from './tournaments/index';
+import type { RoomSettings } from './rooms';
+import type { BestOfGame } from './room-battle-bestof';
+import type { GameTimerSettings } from '../sim/dex-formats';
 
 type ChannelIndex = 0 | 1 | 2 | 3 | 4;
 export type PlayerIndex = 1 | 2 | 3 | 4;
@@ -121,7 +121,7 @@ export class RoomBattlePlayer extends RoomGamePlayer<RoomBattle> {
 		this.slot = `p${num}` as SideID;
 		this.channelIndex = (game.gameType === 'multi' && num > 2 ? num - 2 : num) as ChannelIndex;
 
-		this.request = {rqid: 0, request: '', isWait: 'cantUndo', choice: ''};
+		this.request = { rqid: 0, request: '', isWait: 'cantUndo', choice: '' };
 		this.wantsTie = false;
 		this.wantsOpenTeamSheets = null;
 		this.isAI = false;
@@ -164,7 +164,7 @@ export class RoomBattlePlayer extends RoomGamePlayer<RoomBattle> {
 export class RoomBattleTimer {
 	readonly battle: RoomBattle;
 	readonly timerRequesters: Set<ID>;
-	timer: NodeJS.Timer | null;
+	timer: NodeJS.Timeout | null;
 	isFirstTurn: boolean;
 	/**
 	 * Last tick, as milliseconds since UNIX epoch.
@@ -198,7 +198,7 @@ export class RoomBattleTimer {
 
 		// so that Object.assign doesn't overwrite anything with `undefined`
 		for (const k in timerSettings) {
-			// @ts-ignore
+			// @ts-expect-error prop access
 			if (timerSettings[k] === undefined) delete timerSettings[k];
 		}
 
@@ -519,13 +519,13 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	/**
 	 * userid that requested extraction -> playerids that accepted the extraction
 	 */
-	readonly allowExtraction: {[k: string]: Set<ID>} = {};
+	readonly allowExtraction: { [k: string]: Set<ID> } = {};
 	readonly stream: Streams.ObjectReadWriteStream<string>;
 	override readonly timer: RoomBattleTimer;
 	started = false;
 	active = false;
 	replaySaved: boolean | 'auto' = false;
-	forcedSettings: {modchat?: string | null, privacy?: string | null} = {};
+	forcedSettings: { modchat?: string | null, privacy?: string | null } = {};
 	p1: RoomBattlePlayer = null!;
 	p2: RoomBattlePlayer = null!;
 	p3: RoomBattlePlayer = null!;
@@ -634,7 +634,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		}
 		const allPlayersWait = this.players.every(p => !!p.request.isWait);
 		if (allPlayersWait || // too late
-			(rqid && rqid !== '' + request.rqid)) { // WAY too late
+			(rqid && rqid !== `${request.rqid}`)) { // WAY too late
 			player.sendRoom(`|error|[Invalid choice] Sorry, too late to make a different move; the next turn has already started`);
 			return;
 		}
@@ -654,7 +654,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		}
 		const allPlayersWait = this.players.every(p => !!p.request.isWait);
 		if (allPlayersWait || // too late
-			(rqid && rqid !== '' + request.rqid)) { // WAY too late
+			(rqid && rqid !== `${request.rqid}`)) { // WAY too late
 			player.sendRoom(`|error|[Invalid choice] Sorry, too late to cancel; the next turn has already started`);
 			return;
 		}
@@ -662,7 +662,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 
 		void this.stream.write(`>${player.slot} undo`);
 	}
-	override joinGame(user: User, slot?: SideID, playerOpts?: {team?: string}) {
+	override joinGame(user: User, slot?: SideID, playerOpts?: { team?: string }) {
 		if (user.id in this.playerTable) {
 			user.popup(`You have already joined this battle.`);
 			return false;
@@ -700,7 +700,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			// onCreateBattleRoom crashes if some users are unavailable at start of battle
 			// what do we do??? no clue but I guess just exclude them from the array for now
 			const users = this.players.map(player => player.getUser()).filter(Boolean) as User[];
-			Rooms.global.onCreateBattleRoom(users, this.room, {rated: this.rated});
+			Rooms.global.onCreateBattleRoom(users, this.room, { rated: this.rated });
 			this.started = true;
 			this.room.add(`|uhtmlchange|invites|`);
 		} else if (!this.started && this.invitesFull()) {
@@ -915,7 +915,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		logData.endType = this.endType;
 		if (!p1rating) logData.ladderError = true;
 		const date = new Date();
-		logData.timestamp = '' + date;
+		logData.timestamp = `${date}`;
 		logData.roomid = this.room.roomid;
 		logData.format = this.room.format;
 
@@ -1062,7 +1062,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		if (playerOpts) {
 			const options = {
 				name: player.name,
-				avatar: user ? '' + user.avatar : '',
+				avatar: user ? `${user.avatar}` : '',
 				team: playerOpts.team || undefined,
 				rating: Math.round(playerOpts.rating || 0),
 				isAI: !!playerOpts.isAI || false,
@@ -1133,7 +1133,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			delete Config.forcedpublicprefixes;
 		}
 		if (!Config.forcedprefixes) return null;
-		for (const {type, prefix} of Config.forcedprefixes) {
+		for (const { type, prefix } of Config.forcedprefixes) {
 			if (user.id.startsWith(toID(prefix)) && type === key) return prefix;
 		}
 		return null;
@@ -1144,7 +1144,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		return new RoomBattlePlayer(user, this, num);
 	}
 
-	override setPlayerUser(player: RoomBattlePlayer, user: User | null, playerOpts?: {team?: string}) {
+	override setPlayerUser(player: RoomBattlePlayer, user: User | null, playerOpts?: { team?: string }) {
 		if (user === null && this.room.auth.get(player.id) === Users.PLAYER_SYMBOL) {
 			this.room.auth.set(player.id, '+');
 		}
@@ -1212,7 +1212,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			return user;
 		});
 		if (!delayStart) {
-			Rooms.global.onCreateBattleRoom(users as User[], this.room, {rated: this.rated});
+			Rooms.global.onCreateBattleRoom(users as User[], this.room, { rated: this.rated });
 			this.started = true;
 		} else if (delayStart === 'multi') {
 			this.room.add(`|uhtml|invites|<div class="broadcast broadcast-blue"><strong>This is a 4-player challenge battle</strong><br />The players will need to add more players before the battle can start.</div>`);
@@ -1317,7 +1317,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 export class RoomBattleStream extends BattleStream {
 	override readonly battle: Battle;
 	constructor() {
-		super({keepAlive: true});
+		super({ keepAlive: true });
 		this.battle = null!;
 	}
 
@@ -1379,7 +1379,7 @@ if (!PM.isParentProcess) {
 			process.send!(`CALLBACK\nSLOW\n${text}`);
 		},
 	};
-	global.__version = {head: ''};
+	global.__version = { head: '' };
 	try {
 		const head = execSync('git rev-parse HEAD', {
 			stdio: ['ignore', 'pipe', 'ignore'],
@@ -1387,8 +1387,8 @@ if (!PM.isParentProcess) {
 		const merge = execSync('git merge-base origin/master HEAD', {
 			stdio: ['ignore', 'pipe', 'ignore'],
 		});
-		global.__version.head = ('' + head).trim();
-		const origin = ('' + merge).trim();
+		global.__version.head = `${head}`.trim();
+		const origin = `${merge}`.trim();
 		if (origin !== global.__version.head) global.__version.origin = origin;
 	} catch {}
 
