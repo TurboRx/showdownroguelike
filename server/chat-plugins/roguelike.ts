@@ -209,7 +209,7 @@ export class Roguelike {
 		this.user = userID;
 		this.battle = backup?.battle || 1;
 		this.streak = backup?.streak || 0;
-		this.battlePoints = backup?.battlePoints || 10;
+		this.battlePoints = backup?.battlePoints || 5;
 		this.team = backup?.team || [];
 		this.teamData = backup?.teamData || [];
 		this.flags = backup?.flags || [];
@@ -226,7 +226,7 @@ export class Roguelike {
 			this.streak++;
 		}
 		this.battle++;
-		this.battlePoints += 10;
+		this.battlePoints += 5;
 		scale.forEach((e, i) => scale[i] = Utils.clampIntRange(e + (this.streak * 5), 1, 100));
 		const num = RECOMMENDED_TEAM_LENGTH[Utils.clampIntRange(this.streak, 0, 6)];
 		this.opponentTeam = genPokemon(num, scale);
