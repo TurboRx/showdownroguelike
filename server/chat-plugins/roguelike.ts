@@ -360,7 +360,9 @@ try {
 
 function checkSequence(before: string, after: string) {
 	const currentMainRoom = before.split('-')[0];
+	const targetMainRoom = after.split('-')[0];
 	if (SEQUENCE_CHECK[currentMainRoom].includes(after)) return true;
+	if (currentMainRoom === targetMainRoom) return true;
 	return false;
 }
 
