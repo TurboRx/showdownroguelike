@@ -3246,17 +3246,17 @@ export class Battle {
 			}
 			if (this.isRoguelikeBattle) {
 				const roguelikeData = [];
-        // p1 is always the human
+				// p1 is always the human
 				for (const mon of this.p1.pokemon) {
 					const monData = {};
-          // @ts-ignore shut up
+					// @ts-ignore shut up
 					monData.curHP = mon.hp;
-          // @ts-ignore
+					// @ts-ignore
 					monData.status = mon.status.length ? mon.status : false;
-          // @ts-ignore
-					monData.ppLeft = []
+					// @ts-ignore
+					monData.ppLeft = [];
 					for (const move of mon.moveSlots) {
-            // @ts-ignore
+						// @ts-ignore
 						monData.ppLeft.push(move.pp);
 					}
 					roguelikeData.push(monData);
