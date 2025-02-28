@@ -224,8 +224,11 @@ export class Roguelike {
 		let index = 0;
 		for (const mon of this.teamData) {
 			const newMon = newData[index];
+			// @ts-ignore
 			mon.curHP = newMon.curHP;
+			// @ts-ignore
 			mon.status = newMon.status;
+			// @ts-ignore
 			mon.ppLeft = newMon.ppLeft;
 			index++;
 		}
