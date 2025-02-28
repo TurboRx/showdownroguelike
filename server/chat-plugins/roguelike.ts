@@ -569,7 +569,7 @@ export const handlers: Chat.Handlers = {
 		if (!humanGameData) return;
 		humanGameData.inBattle = false;
 		if (human === winner) {
-			humanGameData.syncAfterMatch(battle.currentData);
+			if (battle.currentData) humanGameData.syncAfterMatch(battle.currentData);
 			humanGameData.win();
 		} else {
 			humanGameData.lose();
