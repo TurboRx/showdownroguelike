@@ -545,6 +545,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	options: RoomBattleOptions;
 	frozen?: boolean;
 	isRoguelikeBattle?: boolean;
+	currentData?: Object[];
 	dataResolvers?: [((args: string[]) => void), ((error: Error) => void)][];
 	constructor(room: GameRoom, options: RoomBattleOptions) {
 		super(room);
@@ -765,6 +766,12 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 			lines = lines.slice(1);
 			const [resolver] = this.dataResolvers!.shift()!;
 			resolver(lines);
+			break;
+
+		case 'sendroguelikedata':
+			lines = lines.slice(1);
+			let teamDataRoguelike = JSON.parse(lines[0]);
+			this.currentData = teamDataRoguelike;
 			break;
 
 		case 'update':

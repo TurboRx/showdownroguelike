@@ -4422,7 +4422,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						// @ts-ignore trust me bro
 						pokemon.hp = persist.curHP;
 						// @ts-ignore
-						if (persist.status) pokemon.status = persist.status as ID;
+						if (persist.status) pokemon.setStatus(persist.status as ID);
 						let moveIndex = 0;
 						for (const move of pokemon.moveSlots) {
 							// @ts-ignore
@@ -4433,50 +4433,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					}
 				}
 			}
-		},
-		battle: {
-			win(side?: SideID | '' | Side | null) {
-				if (this.ended) return false;
-				if (side && typeof side === 'string') {
-					side = this.getSide(side);
-				} else if (!side || !this.sides.includes(side)) {
-					side = null;
-				}
-				this.winner = side ? side.name : '';
-
-				this.add('');
-				if (side?.allySide) {
-					this.add('win', side.name + ' & ' + side.allySide.name);
-				} else if (side) {
-					this.add('win', side.name);
-				} else {
-					this.add('tie');
-				}
-				if (side && !side.isAI) {
-					let index = 0;
-					const newData = [];
-					for (const pokemon of side.pokemon) {
-						let newInfo = Object.create(null);
-						newInfo.curHP = pokemon.hp;
-						if (pokemon.status) {
-							newInfo.status = pokemon.status
-						} else {
-							newInfo.status = false;
-						}
-						newInfo.ppLeft = []
-						for (const move of pokemon.moveSlots) {
-							newInfo.ppLeft.push(move.pp);
-						}
-						newData.push(newInfo);
-					}
-				}
-				this.ended = true;
-				this.requestState = '';
-				for (const s of this.sides) {
-					if (s) s.activeRequest = null;
-				}
-				return true;
-			},
 		},
 	},
 ];

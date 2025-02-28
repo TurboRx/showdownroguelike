@@ -3244,6 +3244,20 @@ export class Battle {
 				delete log.p4;
 				delete log.p4team;
 			}
+			if (this.isRoguelikeBattle) {
+				const roguelikeData = [];
+				for (const mon of this.p1.pokemon) {
+					const monData = {};
+					monData.curHP = mon.hp;
+					monData.status = mon.status.length ? mon.status : false;
+					monData.ppLeft = []
+					for (const move of mon.moveSlots) {
+						monData.ppLeft.push(move.pp);
+					}
+					roguelikeData.push(monData);
+				}
+				this.send('sendroguelikedata', JSON.stringify(roguelikeData));
+			}
 			this.send('end', JSON.stringify(log));
 			this.sentEnd = true;
 		}

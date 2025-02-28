@@ -58,7 +58,6 @@ function createAIBattle(userID: ID, ai: AITrainer) {
 	const user = Users.get(userID);
 	const gameData = roguelikeGames.get(userID);
 	if (!user || !gameData) return;
-	console.log(gameData.teamData);
 	Rooms.createBattle({
 		format: 'gen9roguelikebattle',
 		isRoguelikeBattle: true,
@@ -219,6 +218,17 @@ export class Roguelike {
 		this.curRoom = backup?.curRoom || 'intro';
 		this.runEnded = backup?.runEnded || false;
 		this.inBattle = false;
+	}
+
+	syncAfterMatch(newData: Object[]) {
+		let index = 0;
+		for (const mon of this.teamData) {
+			const newMon = newData[index];
+			mon.curHP = newMon.curHP;
+			mon.status = newMon.status;
+			mon.ppLeft = newMon.ppLeft;
+			index++;
+		}
 	}
 
 	win() {
@@ -553,13 +563,13 @@ export const handlers: Chat.Handlers = {
 
 	onBattleEnd(battle, winner, players) {
 		if (!battle.options.isRoguelikeBattle) return;
-		console.log(battle)
 		// Player 1 is the always the human
 		const human = players[0];
 		const humanGameData = roguelikeGames.get(human);
 		if (!humanGameData) return;
 		humanGameData.inBattle = false;
 		if (human === winner) {
+			humanGameData.syncAfterMatch(battle.currentData);
 			humanGameData.win();
 		} else {
 			humanGameData.lose();
