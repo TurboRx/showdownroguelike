@@ -6,7 +6,7 @@
 import {FS, Utils} from '../../lib';
 import {TeamValidator} from '../../sim/team-validator';
 const SAVE_DATA = 'config/roguelike.json';
-export const roguelikeGames = new Map<ID, Roguelike>();
+const roguelikeGames = new Map<ID, Roguelike>();
 
 const SEQUENCE_CHECK: {[k: string]: string[]} = {
 	battle: ['results'],
@@ -58,12 +58,14 @@ function createAIBattle(userID: ID, ai: AITrainer) {
 	const user = Users.get(userID);
 	const gameData = roguelikeGames.get(userID);
 	if (!user || !gameData) return;
+	console.log(gameData.teamData);
 	Rooms.createBattle({
 		format: 'gen9roguelikebattle',
 		isRoguelikeBattle: true,
 		players: [{
 			user: user,
 			team: Teams.pack(gameData.team) || '',
+			roguelikeTeamData: gameData.teamData,
 			// @ts-ignore AI has no user data
 		}, {
 			username: ai.name,
@@ -192,7 +194,7 @@ export class Roguelike {
 	team: PokemonSet[];
 	teamData: {
 		curHP: number,
-		status: string,
+		status: string | false,
 		ppLeft: number[],
 		exp: number,
 	}[];
@@ -235,6 +237,34 @@ export class Roguelike {
 	lose() {
 		this.runEnded = true;
 	}
+
+	addPokemon(pokemon: PokemonSet, index?: number) {
+		if (index) {
+			// TODO: RELEASING POKEMON
+		} else {
+			let newHpData;
+			this.team.push(pokemon);
+			const species = Dex.species.get(pokemon.species);
+			if (species.maxHP) {
+				newHpData = species.maxHP;
+			} else {
+				const hpStat = species.baseStats.hp;
+				newHpData = Math.floor(((pokemon.ivs.hp + (2 * hpStat) + Math.floor(pokemon.evs.hp / 4) + 100) * pokemon.level) / 100) + 10;
+			}
+			let ppArr = [];
+			for (const move of pokemon.moves) {
+				const movePP = Dex.moves.get(move).pp * (8/5);
+				ppArr.push(movePP);
+			}
+			this.teamData.push({
+				curHP: newHpData,
+				status: false,
+				ppLeft: ppArr,
+				exp: 0,
+			});
+		}
+	}
+
 	createAITrainer() {
 		// TODO: name generation
 		const ai = {} as AITrainer;
@@ -411,7 +441,7 @@ export const commands: Chat.ChatCommands = {
 			if (userData.team.length > 6) {
 				// TODO: Figure out releasing pokemon.
 			} else {
-				userData.team.push(poke);
+				userData.addPokemon(poke);
 			}
 			delete userData.flags.pokemonOptions;
 			userData.opponentTeam = genPokemon(1, 5, true);
@@ -428,7 +458,7 @@ export const commands: Chat.ChatCommands = {
 			if (userData.team.length > 6) {
 				// TODO: Figure out releasing pokemon.
 			} else {
-				userData.team.push(poke);
+
 			}
 			delete userData.flags.pokemonOptions;
 			userData.goToPage('shop');
@@ -523,6 +553,7 @@ export const handlers: Chat.Handlers = {
 
 	onBattleEnd(battle, winner, players) {
 		if (!battle.options.isRoguelikeBattle) return;
+		console.log(battle)
 		// Player 1 is the always the human
 		const human = players[0];
 		const humanGameData = roguelikeGames.get(human);

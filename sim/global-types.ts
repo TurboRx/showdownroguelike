@@ -381,6 +381,7 @@ interface PlayerOptions {
 	team?: PokemonSet[] | string | null;
 	seed?: PRNGSeed;
 	isAI?: boolean;
+	roguelikeTeamData?: Object[];
 }
 
 interface BasicTextData {

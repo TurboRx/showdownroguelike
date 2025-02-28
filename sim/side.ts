@@ -157,6 +157,7 @@ export class Side {
 	name: string;
 	avatar: string;
 	isAI: boolean | false;
+	roguelikeTeamData: Object[] | false;
 	foe: Side = null!; // set in battle.start()
 	/** Only exists in multi battle, for the allied side */
 	allySide: Side | null = null; // set in battle.start()
@@ -206,6 +207,7 @@ export class Side {
 		this.name = name;
 		this.avatar = '';
 		this.isAI = false;
+		this.roguelikeTeamData = false;
 
 		this.team = team;
 		this.pokemon = [];

@@ -3193,6 +3193,10 @@ export class Battle {
 			side.isAI = options.isAI;
 			didSomething = true;
 		}
+		if (options.roguelikeTeamData) {
+			side.roguelikeTeamData = options.roguelikeTeamData;
+			didSomething = true;
+		}
 		if (!didSomething) return;
 		this.inputLog.push(`>player ${slot} ` + JSON.stringify(options));
 		this.add('player', side.id, side.name, side.avatar, options.rating || '');

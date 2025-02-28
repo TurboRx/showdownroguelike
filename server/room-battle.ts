@@ -468,6 +468,7 @@ export interface RoomBattlePlayerOptions {
 	inviteOnly?: boolean;
 	hidden?: boolean;
 	isAI?: boolean;
+	roguelikeTeamData?: Object[];
 }
 
 export interface RoomBattleOptions {
@@ -1066,6 +1067,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 				team: playerOpts.team || undefined,
 				rating: Math.round(playerOpts.rating || 0),
 				isAI: !!playerOpts.isAI || false,
+				roguelikeTeamData: playerOpts.roguelikeTeamData || false,
 			};
 			// console.log(options);
 			void this.stream.write(`>player ${slot} ${JSON.stringify(options)}`);
