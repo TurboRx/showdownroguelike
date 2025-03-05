@@ -196,6 +196,7 @@ export class Roguelike {
 		status: string | false,
 		ppLeft: number[],
 		exp: number,
+		[k: string]: any,
 	}[];
 	flags: {
 		pokemonOptions?: PokemonSet[],
@@ -271,6 +272,7 @@ export class Roguelike {
 			}
 			this.teamData.push({
 				curHP: newHpData,
+				maxHP: newHpData,
 				status: false,
 				ppLeft: ppArr,
 				exp: 0,
@@ -299,6 +301,30 @@ export class Roguelike {
 		this.curRoom = target;
 		this.refreshPage();
 		saveRoguelikeData();
+	}
+
+	genPokemonHTML() {
+		let buf = `<center><h3>Team</h3></center><br />`;
+		buf += `<table style="width:100%; border-collapse: collapse;"border="1"><tr><th>Status</th><th>Set</th><th>Moves</th></tr>`;
+		let linkedIndex = 0;
+		for (const mon of this.team) {
+			const monData = this.teamData[linkedIndex];
+			buf += `<tr><td><img src="https://play.pokemonshowdown.com/sprites/gen5/${Dex.species.get(mon.species).spriteid}.png" /><br />HP: ${monData.curHP}/${monData.maxHP}<br />Status: ${monData.status || 'Fine'}</td>`;
+			// @ts-ignore ?????
+			buf += `<td>${Teams.exportSet(mon).replaceAll('\n', '<br />')}</td>`;
+			buf += `<td>`;
+			let linkedMoveIndex = 0;
+			for (const move of mon.moves) {
+				if (linkedMoveIndex > 0) buf += '<br />';
+				let dexMove = Dex.moves.get(move);
+				buf += `${dexMove.name}: ${monData.ppLeft[linkedMoveIndex]}/${dexMove.pp * (8/5)}`;
+				linkedMoveIndex++;
+			}
+			buf += `</td></tr>`;
+			linkedIndex++;
+		}
+		buf += `</table>`;
+		return buf;
 	}
 
 	genShopHTML() {
@@ -461,19 +487,29 @@ export const commands: Chat.ChatCommands = {
 			const newFoe = userData.createAITrainer();
 			createAIBattle(userData.user, newFoe);
 		},
-		addpoke(target, room, user) {
+		redeem(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
 			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
-			if (!userData.flags.pokemonOptions) return this.errorReply(`No Pokemon to add.`);
-			const pokes = userData.flags.pokemonOptions;
-			const poke = pokes.find(p => toID(p.species) === toID(target));
-			if (!poke) return this.errorReply(`You can't choose that pokemon.`);
-			if (userData.team.length > 6) {
-				// TODO: Figure out releasing pokemon.
-			} else {
+			const args = target.split(',');
+			let arg = args.shift();
+			switch(arg) {
+				case 'pokemon':
+					if (!userData.flags.pokemonOptions) return this.errorReply(`No Pokemon to add.`);
+					arg = args.shift();
+					if (!arg) return this.errorReply(`You need to specify a pokemon.`);
+					const pokes = userData.flags.pokemonOptions;
+					const poke = pokes.find(p => toID(p.species) === toID(arg));
+					if (!poke) return this.errorReply(`You can't choose that pokemon.`);
+					if (userData.team.length > 6) {
+						// TODO: Figure out releasing pokemon.
+					} else {
 
+					}
+					delete userData.flags.pokemonOptions;
+					break;
+				default:
+					return this.errorReply(`Your command is too vague.`);
 			}
-			delete userData.flags.pokemonOptions;
 			userData.goToPage('shop');
 		},
 		next(target, room, user) {
@@ -515,7 +551,8 @@ export const pages: Chat.PageTable = {
 		case 'shop':
 			subtitle = 'Shop';
 			buf += `<b>BP:</b> ${userGameData.battlePoints}<br />`;
-			buf += userGameData.genShopHTML();
+			// buf += userGameData.genShopHTML();
+			buf += userGameData.genPokemonHTML();
 			buf += `<br /><button class="button" name="send" value="/roguelike next">Start the next battle!</button>`;
 			break;
 		case 'purchase':
