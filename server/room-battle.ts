@@ -468,7 +468,7 @@ export interface RoomBattlePlayerOptions {
 	inviteOnly?: boolean;
 	hidden?: boolean;
 	isAI?: boolean;
-	roguelikeTeamData?: Object[];
+	roguelikeTeamData?: object[];
 }
 
 export interface RoomBattleOptions {
@@ -545,7 +545,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	options: RoomBattleOptions;
 	frozen?: boolean;
 	isRoguelikeBattle?: boolean;
-	currentData?: Object[];
+	currentData?: object[];
 	dataResolvers?: [((args: string[]) => void), ((error: Error) => void)][];
 	constructor(room: GameRoom, options: RoomBattleOptions) {
 		super(room);
@@ -770,7 +770,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 
 		case 'sendroguelikedata':
 			lines = lines.slice(1);
-			let teamDataRoguelike = JSON.parse(lines[0]);
+			const teamDataRoguelike = JSON.parse(lines[0]);
 			this.currentData = teamDataRoguelike;
 			break;
 

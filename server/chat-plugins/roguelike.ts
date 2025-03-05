@@ -3,12 +3,12 @@
 * @author HiZo
 */
 
-import {FS, Utils} from '../../lib';
-import {TeamValidator} from '../../sim/team-validator';
+import { FS, Utils } from '../../lib';
+import { TeamValidator } from '../../sim/team-validator';
 const SAVE_DATA = 'config/roguelike.json';
 const roguelikeGames = new Map<ID, Roguelike>();
 
-const SEQUENCE_CHECK: {[k: string]: string[]} = {
+const SEQUENCE_CHECK: { [k: string]: string[] } = {
 	battle: ['results'],
 	results: ['shop'],
 	shop: ['battle', 'purchase'],
@@ -24,9 +24,9 @@ interface ShopItem {
 	minStreak: number;
 }
 
-const SHOP_ITEMS: {[k: string]: ShopItem} = {
-	debug: {name: 'Debug', icon: 'berserk gene', type: 'debug', desc: 'Bans HoeenHero from this server.', cost: 1, minStreak: 0},
-	debug2: {name: 'Debug 2', icon: 'berserk gene', type: 'debug', desc: 'Bans HoeenHero from this server twice.', cost: 999, minStreak: 1},
+const SHOP_ITEMS: { [k: string]: ShopItem } = {
+	debug: { name: 'Debug', icon: 'berserk gene', type: 'debug', desc: 'Bans HoeenHero from this server.', cost: 1, minStreak: 0 },
+	debug2: { name: 'Debug 2', icon: 'berserk gene', type: 'debug', desc: 'Bans HoeenHero from this server twice.', cost: 999, minStreak: 1 },
 };
 
 interface AITrainer {
@@ -62,7 +62,7 @@ function createAIBattle(userID: ID, ai: AITrainer) {
 		format: 'gen9roguelikebattle',
 		isRoguelikeBattle: true,
 		players: [{
-			user: user,
+			user,
 			team: Teams.pack(gameData.team) || '',
 			roguelikeTeamData: gameData.teamData,
 			// @ts-ignore AI has no user data
@@ -86,13 +86,13 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 	}
 	const validate = new TeamValidator('gen9roguelikebattle');
 	const gennedMons: PokemonSet[] = [];
-	// eslint-disable-next-line max-len
+
 	let all = Dex.species.all().filter(s => !s.battleOnly && !s.requiredItems && s.forme !== 'Gmax' && !(s.isNonstandard && s.isNonstandard !== 'Past'));
 	if (starter) {
 		all = all.filter(s => !s.prevo);
-		// eslint-disable-next-line max-len
+
 		all = all.filter(s => !(s.tags.includes('Mythical') || s.tags.includes('Restricted Legendary') || s.tags.includes('Sub-Legendary')));
-		// eslint-disable-next-line max-len
+
 		all = all.filter(s => !(s.tags.includes('Paradox') || ['Gouging Fire', 'Raging Bolt', 'Iron Crown', 'Iron Boulder'].includes(s.baseSpecies)));
 		all = all.filter(s => !s.tags.includes('Ultra Beast') || s.name === 'Poipole');
 		all = all.filter(s => !['Ursaluna-Bloodmoon', 'Floette-Eternal'].includes(s.name));
@@ -127,9 +127,9 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 			ability: setAbil,
 			moves: [],
 			nature: Utils.randomElement(natures),
-			evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
-			// eslint-disable-next-line max-len
-			ivs: {hp: Math.floor(Math.random() * 32), atk: Math.floor(Math.random() * 32), def: Math.floor(Math.random() * 32), spa: Math.floor(Math.random() * 32), spd: Math.floor(Math.random() * 32), spe: Math.floor(Math.random() * 32)},
+			evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
+
+			ivs: { hp: Math.floor(Math.random() * 32), atk: Math.floor(Math.random() * 32), def: Math.floor(Math.random() * 32), spa: Math.floor(Math.random() * 32), spd: Math.floor(Math.random() * 32), spe: Math.floor(Math.random() * 32) },
 			level: minLevel,
 		};
 		if (depth > 500) {
@@ -221,7 +221,7 @@ export class Roguelike {
 		this.inBattle = false;
 	}
 
-	syncAfterMatch(newData: Object[]) {
+	syncAfterMatch(newData: object[]) {
 		let index = 0;
 		for (const mon of this.teamData) {
 			const newMon = newData[index];
@@ -237,7 +237,7 @@ export class Roguelike {
 
 	win() {
 		const RECOMMENDED_TEAM_LENGTH = [2, 3, 3, 4, 4, 5, 6];
-		let scale = [5, 10];
+		const scale = [5, 10];
 		if (this.battle % 7 === 0) {
 			this.streak++;
 		}
@@ -265,9 +265,9 @@ export class Roguelike {
 				const hpStat = species.baseStats.hp;
 				newHpData = Math.floor(((pokemon.ivs.hp + (2 * hpStat) + Math.floor(pokemon.evs.hp / 4) + 100) * pokemon.level) / 100) + 10;
 			}
-			let ppArr = [];
+			const ppArr = [];
 			for (const move of pokemon.moves) {
-				const movePP = Dex.moves.get(move).pp * (8/5);
+				const movePP = Dex.moves.get(move).pp * (8 / 5);
 				ppArr.push(movePP);
 			}
 			this.teamData.push({
@@ -316,8 +316,8 @@ export class Roguelike {
 			let linkedMoveIndex = 0;
 			for (const move of mon.moves) {
 				if (linkedMoveIndex > 0) buf += '<br />';
-				let dexMove = Dex.moves.get(move);
-				buf += `${dexMove.name}: ${monData.ppLeft[linkedMoveIndex]}/${dexMove.pp * (8/5)}`;
+				const dexMove = Dex.moves.get(move);
+				buf += `${dexMove.name}: ${monData.ppLeft[linkedMoveIndex]}/${dexMove.pp * (8 / 5)}`;
 				linkedMoveIndex++;
 			}
 			buf += `</td></tr>`;
@@ -492,23 +492,23 @@ export const commands: Chat.ChatCommands = {
 			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
 			const args = target.split(',');
 			let arg = args.shift();
-			switch(arg) {
-				case 'pokemon':
-					if (!userData.flags.pokemonOptions) return this.errorReply(`No Pokemon to add.`);
-					arg = args.shift();
-					if (!arg) return this.errorReply(`You need to specify a pokemon.`);
-					const pokes = userData.flags.pokemonOptions;
-					const poke = pokes.find(p => toID(p.species) === toID(arg));
-					if (!poke) return this.errorReply(`You can't choose that pokemon.`);
-					if (userData.team.length > 6) {
-						// TODO: Figure out releasing pokemon.
-					} else {
+			switch (arg) {
+			case 'pokemon':
+				if (!userData.flags.pokemonOptions) return this.errorReply(`No Pokemon to add.`);
+				arg = args.shift();
+				if (!arg) return this.errorReply(`You need to specify a pokemon.`);
+				const pokes = userData.flags.pokemonOptions;
+				const poke = pokes.find(p => toID(p.species) === toID(arg));
+				if (!poke) return this.errorReply(`You can't choose that pokemon.`);
+				if (userData.team.length > 6) {
+					// TODO: Figure out releasing pokemon.
+				} else {
 
-					}
-					delete userData.flags.pokemonOptions;
-					break;
-				default:
-					return this.errorReply(`Your command is too vague.`);
+				}
+				delete userData.flags.pokemonOptions;
+				break;
+			default:
+				return this.errorReply(`Your command is too vague.`);
 			}
 			userData.goToPage('shop');
 		},
