@@ -311,7 +311,7 @@ export class Roguelike {
 		for (const mon of this.team) {
 			const monData = this.teamData[linkedIndex];
 			const dexSpecies = Dex.species.get(mon.species);
-			buf += `<tr><td><img src="https://play.pokemonshowdown.com/sprites/gen5/${dexSpecies.spriteid}.png" /><br />${mon.species} ${mon.gender !== 'N' ? '(' + mon.gender  + ')' : ''}<br />HP: ${monData.curHP}/${monData.maxHP}<br />Status: ${monData.status ? monData.status.toUpperCase() : 'Healthy'}<br />Level: ${mon.level ? mon.level : 100}<br />Item: ${mon.item === '' ? 'None' : mon.item}</td>`;
+			buf += `<tr><td><img src="https://play.pokemonshowdown.com/sprites/gen5/${dexSpecies.spriteid}.png" /><br />${mon.species} ${mon.gender !== 'N' ? '(' + mon.gender + ')' : ''}<br />HP: ${monData.curHP}/${monData.maxHP}<br />Status: ${monData.status ? monData.status.toUpperCase() : 'Healthy'}<br />Level: ${mon.level ? mon.level : 100}<br />Item: ${mon.item === '' ? 'None' : mon.item}</td>`;
 			// @ts-ignore ?????
 			buf += `<td>`;
 			buf += `Ability: ${mon.ability}<br />`;
@@ -493,16 +493,16 @@ export const commands: Chat.ChatCommands = {
 			if (!item) return this.errorReply('Does that item even exist?');
 			if (item.cost > userData.battlePoints) return this.popupReply(`You don't have enough BP to buy this!`);
 			switch (item.type) {
-				case 'pokemon':
-					const scale = [5, 10];
-					scale.forEach((e, i) => scale[i] = Utils.clampIntRange(e + (userData.streak * 5), 1, 100));
-					userData.flags.pokemonOptions = genPokemon(3, scale);
-				case 'healHP':
-				case 'healPP':
-				case 'TM':
-				case 'key':
-				case 'scout':
-				case 'debug':
+			case 'pokemon':
+				const scale = [5, 10];
+				scale.forEach((e, i) => scale[i] = Utils.clampIntRange(e + (userData.streak * 5), 1, 100));
+				userData.flags.pokemonOptions = genPokemon(3, scale);
+			case 'healHP':
+			case 'healPP':
+			case 'TM':
+			case 'key':
+			case 'scout':
+			case 'debug':
 			}
 			userData.flags.purchasedItem = item;
 			userData.battlePoints -= item.cost;
@@ -592,14 +592,14 @@ export const pages: Chat.PageTable = {
 			subtitle = 'Shop';
 			buf += `<b>BP:</b> ${userGameData.battlePoints}<br />`;
 			switch (gameArgs.shift()) {
-				case 'team':
-					buf += `<button class="button" name="send" value="/roguelike shop">Go back to shop</button>`;
-					buf += userGameData.genUserTeamHTML();
-					break;
-				default:
-					buf += `<button class="button" name="send" value="/roguelike checkteam">Check your team</button>`;
-					buf += userGameData.genShopHTML();
-					buf += `<br /><button class="button" name="send" value="/roguelike next">Start the next battle!</button>`;
+			case 'team':
+				buf += `<button class="button" name="send" value="/roguelike shop">Go back to shop</button>`;
+				buf += userGameData.genUserTeamHTML();
+				break;
+			default:
+				buf += `<button class="button" name="send" value="/roguelike checkteam">Check your team</button>`;
+				buf += userGameData.genShopHTML();
+				buf += `<br /><button class="button" name="send" value="/roguelike next">Start the next battle!</button>`;
 			}
 			break;
 		case 'purchase':
