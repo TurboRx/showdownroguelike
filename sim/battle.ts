@@ -3253,7 +3253,7 @@ export class Battle {
 					monData.curHP = mon.hp;
 					// @ts-ignore
 					monData.status = mon.status.length ? mon.status : false;
-          // @ts-ignore
+					// @ts-ignore
 					if (mon.hp < 1) monData.status = 'fnt';
 					// @ts-ignore
 					monData.ppLeft = [];
