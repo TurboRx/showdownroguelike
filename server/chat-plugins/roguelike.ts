@@ -337,6 +337,8 @@ export class Roguelike {
 				buf += `${dexMove.name}: ${monData.ppLeft[linkedMoveIndex]}/${dexMove.pp * (8 / 5)}`;
 				linkedMoveIndex++;
 			}
+			buf += `</td><td>`;
+			buf += `<button class="button">Heal HP</button><br /><br /><button class="button">Cure Status</button><br /><br /><button class="button">Restore PP</button>`; // name="send" value="/roguelike buy ${key}"
 			buf += `</td></tr>`;
 			linkedIndex++;
 		}
