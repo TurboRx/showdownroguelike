@@ -303,14 +303,14 @@ export class Roguelike {
 		saveRoguelikeData();
 	}
 
-	genPokemonHTML() {
+	genUserTeamHTML() {
 		let buf = `<center><h3>Team</h3></center><br />`;
 		buf += `<table style="width:100%; border-collapse: collapse;"border="1"><tr><th>Status</th><th>Info</th><th>Moves</th></tr>`;
 		let linkedIndex = 0;
 		for (const mon of this.team) {
 			const monData = this.teamData[linkedIndex];
 			const dexSpecies = Dex.species.get(mon.species);
-			buf += `<tr><td><img src="https://play.pokemonshowdown.com/sprites/gen5/${dexSpecies.spriteid}.png" /><br />${mon.species} ${mon.gender !== 'N' ? '(' + mon.gender  + ')' : ''}<br />HP: ${monData.curHP}/${monData.maxHP}<br />Status: ${monData.status ? monData.status.toUpperCase() : 'OK'}<br />Level: ${mon.level ? mon.level : 100}<br />Item: ${mon.item === '' ? 'None' : mon.item}</td>`;
+			buf += `<tr><td><img src="https://play.pokemonshowdown.com/sprites/gen5/${dexSpecies.spriteid}.png" /><br />${mon.species} ${mon.gender !== 'N' ? '(' + mon.gender  + ')' : ''}<br />HP: ${monData.curHP}/${monData.maxHP}<br />Status: ${monData.status ? monData.status.toUpperCase() : 'Healthy'}<br />Level: ${mon.level ? mon.level : 100}<br />Item: ${mon.item === '' ? 'None' : mon.item}</td>`;
 			// @ts-ignore ?????
 			buf += `<td>`;
 			buf += `Ability: ${mon.ability}<br />`;
@@ -320,13 +320,12 @@ export class Roguelike {
 				const statNumber = dexSpecies.baseStats[stat as StatID];
 				let calcStat;
 				if (stat === 'hp') {
-					//calcStat = Math.floor((((mon.ivs[stat] + (2 * statNumber) + Math.floor(mon.evs[stat] / 4) + 100) * mon.level) / 100) + 10);
-					continue;
+					calcStat = Math.floor((((mon.ivs[stat] + (2 * statNumber) + Math.floor(mon.evs[stat] / 4) + 100) * mon.level) / 100) + 10);
 				} else {
 					const mult = (stat === dexNature.plus) ? 1.1 : (stat === dexNature.minus) ? 0.9 : 1;
 					calcStat = Math.floor(mult * Math.floor((((mon.ivs[stat as StatID] + (2 * statNumber) + Math.floor(mon.evs[stat as StatID] / 4)) * mon.level) / 100) + 5));
 				}
-				buf += `${stat.toUpperCase()}: ${calcStat}<br />`;
+				buf += `${stat.toUpperCase()}: ${calcStat} (EVs: ${mon.evs[stat as StatID]} | IVs: ${mon.ivs[stat as StatID]})<br />`;
 			}
 			buf += `${mon.nature} Nature<br />`;
 			buf += `</td>`;
@@ -570,7 +569,7 @@ export const pages: Chat.PageTable = {
 			subtitle = 'Shop';
 			buf += `<b>BP:</b> ${userGameData.battlePoints}<br />`;
 			// buf += userGameData.genShopHTML();
-			buf += userGameData.genPokemonHTML();
+			buf += userGameData.genUserTeamHTML();
 			buf += `<br /><button class="button" name="send" value="/roguelike next">Start the next battle!</button>`;
 			break;
 		case 'purchase':
