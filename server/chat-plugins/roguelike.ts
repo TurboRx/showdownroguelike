@@ -25,8 +25,8 @@ interface ShopItem {
 }
 
 const SHOP_ITEMS: { [k: string]: ShopItem } = {
-	debug: { name: 'Debug', icon: 'berserk gene', type: 'debug', desc: 'Bans HoeenHero from this server.', cost: 1, minStreak: 0 },
-	debug2: { name: 'Debug 2', icon: 'berserk gene', type: 'debug', desc: 'Bans HoeenHero from this server twice.', cost: 999, minStreak: 1 },
+	pokeballpack: { name: 'Poke Ball Pack', icon: 'Poke Ball', type: 'pokemon', desc: 'Pick 1 of 3 random Pokemon.', cost: 1, minStreak: 0 },
+	// debug2: { name: 'Debug 2', icon: 'berserk gene', type: 'debug', desc: 'Bans HoeenHero from this server twice.', cost: 999, minStreak: 1 },
 };
 
 interface AITrainer {
@@ -337,8 +337,6 @@ export class Roguelike {
 				buf += `${dexMove.name}: ${monData.ppLeft[linkedMoveIndex]}/${dexMove.pp * (8 / 5)}`;
 				linkedMoveIndex++;
 			}
-			buf += `</td><td>`;
-			buf += `<button class="button">Heal HP</button><br /><br /><button class="button">Cure Status</button><br /><br /><button class="button">Restore PP</button>`; // name="send" value="/roguelike buy ${key}"
 			buf += `</td></tr>`;
 			linkedIndex++;
 		}
@@ -365,9 +363,16 @@ export class Roguelike {
 	}
 	genPurchaseHTML(failure?: boolean) {
 		let buf = ``;
-		const exitButtonText = 'Leave and go back to shop.';
+		let exitButtonText = 'Leave and go back to shop.';
 		switch ((this.flags.purchasedItem as ShopItem)?.type) {
 		case 'pokemon':
+			exitButtonText = 'Skip';
+			buf += `<center><h3>Add a Pokemon!</h3><br />`;
+			buf += `<div style="width:100%;">`;
+			for (const poke of this.flags.pokemonOptions) {
+				buf += `<button class="button" name="send" value="/roguelike redeem pokemon, ${toID(poke.species)}"><img src="https://play.pokemonshowdown.com/sprites/gen5/${Dex.species.get(poke.species).spriteid}.png" /></button>`;
+			}
+			buf += `</div>`;
 			break;
 		case 'healHP':
 			break;
@@ -473,6 +478,12 @@ export const commands: Chat.ChatCommands = {
 			if (userData.flags.purchasedItem) delete userData.flags.purchasedItem;
 			userData.goToPage('shop');
 		},
+		checkteam(target, room, user) {
+			const userData = roguelikeGames.get(user.id);
+			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
+			if (!checkSequence(userData.curRoom, 'shop')) return this.errorReply(`Can't go here yet!`);
+			userData.goToPage('shop-team');
+		},
 		buy(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
 			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
@@ -480,10 +491,18 @@ export const commands: Chat.ChatCommands = {
 			const item = SHOP_ITEMS[target] || false;
 			if (!item) return this.errorReply('Does that item even exist?');
 			if (item.cost > userData.battlePoints) return this.popupReply(`You don't have enough BP to buy this!`);
-			// Check if item is useable
-			// if (false) {
-			// 	return this.popupReply(`You don't need this right now!`);
-			// }
+			switch (item.type) {
+				case 'pokemon':
+					const scale = [5, 10];
+					scale.forEach((e, i) => scale[i] = Utils.clampIntRange(e + (userData.streak * 5), 1, 100));
+					userData.flags.pokemonOptions = genPokemon(3, scale);
+				case 'healHP':
+				case 'healPP':
+				case 'TM':
+				case 'key':
+				case 'scout':
+				case 'debug':
+			}
 			userData.flags.purchasedItem = item;
 			userData.battlePoints -= item.cost;
 			userData.goToPage('purchase');
@@ -509,6 +528,7 @@ export const commands: Chat.ChatCommands = {
 		redeem(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
 			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
+			if (!userData.flags.purchasedItem) return this.errorReply(`You need to purchase something first.`);
 			const args = target.split(',');
 			let arg = args.shift();
 			switch (arg) {
@@ -522,7 +542,7 @@ export const commands: Chat.ChatCommands = {
 				if (userData.team.length > 6) {
 					// TODO: Figure out releasing pokemon.
 				} else {
-
+					userData.addPokemon(poke);
 				}
 				delete userData.flags.pokemonOptions;
 				break;
@@ -570,9 +590,16 @@ export const pages: Chat.PageTable = {
 		case 'shop':
 			subtitle = 'Shop';
 			buf += `<b>BP:</b> ${userGameData.battlePoints}<br />`;
-			// buf += userGameData.genShopHTML();
-			buf += userGameData.genUserTeamHTML();
-			buf += `<br /><button class="button" name="send" value="/roguelike next">Start the next battle!</button>`;
+			switch (gameArgs.shift()) {
+				case 'team':
+					buf += `<button class="button" name="send" value="/roguelike shop">Go back to shop</button>`;
+					buf += userGameData.genUserTeamHTML();
+					break;
+				default:
+					buf += `<button class="button" name="send" value="/roguelike checkteam">Check your team</button>`;
+					buf += userGameData.genShopHTML();
+					buf += `<br /><button class="button" name="send" value="/roguelike next">Start the next battle!</button>`;
+			}
 			break;
 		case 'purchase':
 			if (!userGameData.flags.purchasedItem) {
