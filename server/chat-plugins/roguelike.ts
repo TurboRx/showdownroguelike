@@ -305,13 +305,31 @@ export class Roguelike {
 
 	genPokemonHTML() {
 		let buf = `<center><h3>Team</h3></center><br />`;
-		buf += `<table style="width:100%; border-collapse: collapse;"border="1"><tr><th>Status</th><th>Set</th><th>Moves</th></tr>`;
+		buf += `<table style="width:100%; border-collapse: collapse;"border="1"><tr><th>Status</th><th>Info</th><th>Moves</th></tr>`;
 		let linkedIndex = 0;
 		for (const mon of this.team) {
 			const monData = this.teamData[linkedIndex];
-			buf += `<tr><td><img src="https://play.pokemonshowdown.com/sprites/gen5/${Dex.species.get(mon.species).spriteid}.png" /><br />HP: ${monData.curHP}/${monData.maxHP}<br />Status: ${monData.status || 'Fine'}</td>`;
+			const dexSpecies = Dex.species.get(mon.species);
+			buf += `<tr><td><img src="https://play.pokemonshowdown.com/sprites/gen5/${dexSpecies.spriteid}.png" /><br />${mon.species} ${mon.gender !== 'N' ? '(' + mon.gender  + ')' : ''}<br />HP: ${monData.curHP}/${monData.maxHP}<br />Status: ${monData.status ? monData.status.toUpperCase() : 'OK'}<br />Level: ${mon.level ? mon.level : 100}<br />Item: ${mon.item === '' ? 'None' : mon.item}</td>`;
 			// @ts-ignore ?????
-			buf += `<td>${Teams.exportSet(mon).replaceAll('\n', '<br />')}</td>`;
+			buf += `<td>`;
+			buf += `Ability: ${mon.ability}<br />`;
+			buf += `Tera Type: ${mon.teraType}<br />`;
+			const dexNature = Dex.natures.get(mon.nature);
+			for (const stat of Object.keys(dexSpecies.baseStats)) {
+				const statNumber = dexSpecies.baseStats[stat as StatID];
+				let calcStat;
+				if (stat === 'hp') {
+					//calcStat = Math.floor((((mon.ivs[stat] + (2 * statNumber) + Math.floor(mon.evs[stat] / 4) + 100) * mon.level) / 100) + 10);
+					continue;
+				} else {
+					const mult = (stat === dexNature.plus) ? 1.1 : (stat === dexNature.minus) ? 0.9 : 1;
+					calcStat = Math.floor(mult * Math.floor((((mon.ivs[stat as StatID] + (2 * statNumber) + Math.floor(mon.evs[stat as StatID] / 4)) * mon.level) / 100) + 5));
+				}
+				buf += `${stat.toUpperCase()}: ${calcStat}<br />`;
+			}
+			buf += `${mon.nature} Nature<br />`;
+			buf += `</td>`;
 			buf += `<td>`;
 			let linkedMoveIndex = 0;
 			for (const move of mon.moves) {
