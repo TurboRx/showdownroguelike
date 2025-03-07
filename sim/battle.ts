@@ -3259,8 +3259,12 @@ export class Battle {
 						// @ts-ignore
 						monData.ppLeft.push(move.pp);
 					}
+					// @ts-ignore
+					monData.linkedTeamIndex = mon.m.roguelikeIndex;
 					roguelikeData.push(monData);
 				}
+				// @ts-ignore
+				roguelikeData.sort((a, b) => a.linkedTeamIndex - b.linkedTeamIndex);
 				this.send('sendroguelikedata', JSON.stringify(roguelikeData));
 			}
 			this.send('end', JSON.stringify(log));

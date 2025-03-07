@@ -271,6 +271,7 @@ export class Roguelike {
 				ppArr.push(movePP);
 			}
 			this.teamData.push({
+				linkedTeamIndex: this.team.length - 1,
 				curHP: newHpData,
 				maxHP: newHpData,
 				status: false,

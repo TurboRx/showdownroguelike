@@ -4421,13 +4421,20 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						// @ts-ignore trust me bro
 						pokemon.hp = persist.curHP;
 						// @ts-ignore
-						if (persist.status) pokemon.setStatus(persist.status as ID);
+						if (persist.status) {
+							if (persist.status === 'fnt') {
+								pokemon.faint();
+							} else {
+								pokemon.setStatus(persist.status as ID);
+							}
+						}
 						let moveIndex = 0;
 						for (const move of pokemon.moveSlots) {
 							// @ts-ignore
 							move.pp = persist.ppLeft[moveIndex];
 							moveIndex++;
 						}
+						pokemon.m.roguelikeIndex = persist.linkedTeamIndex;
 						index++;
 					}
 				}
