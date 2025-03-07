@@ -370,6 +370,7 @@ export class Roguelike {
 			exitButtonText = 'Skip';
 			buf += `<center><h3>Add a Pokemon!</h3><br />`;
 			buf += `<div style="width:100%;">`;
+			// @ts-ignore
 			for (const poke of this.flags.pokemonOptions) {
 				buf += `<button class="button" name="send" value="/roguelike redeem pokemon, ${toID(poke.species)}"><img src="https://play.pokemonshowdown.com/sprites/gen5/${Dex.species.get(poke.species).spriteid}.png" /></button>`;
 			}
@@ -497,6 +498,7 @@ export const commands: Chat.ChatCommands = {
 				const scale = [5, 10];
 				scale.forEach((e, i) => scale[i] = Utils.clampIntRange(e + (userData.streak * 5), 1, 100));
 				userData.flags.pokemonOptions = genPokemon(3, scale);
+				break;
 			case 'healHP':
 			case 'healPP':
 			case 'TM':
