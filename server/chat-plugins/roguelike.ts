@@ -77,7 +77,11 @@ interface UserTeamData {
 }
 
 const SHOP_ITEMS: { [k: string]: ShopItem } = {
-	pokeballpack: { name: 'Poke Ball Pack', icon: 'Poke Ball', type: 'pokemon', desc: 'Pick 1 of 3 random Pokemon.', cost: 1, minStreak: 0 },
+	pokeballpack: { name: 'Poke Ball Pack', icon: 'Poke Ball', type: 'pokemon', desc: 'Pick 1 of 3 random Pokemon.', cost: 7, minStreak: 0 },
+	maxpotion: { name: 'Max Potion', icon: 'Electirizer', type: 'healHP', desc: 'Heals a pokemon\'s HP fully.', cost: 5, minStreak: 0 },
+	maxelixer: { name: 'Max Elixer', icon: 'Magmarizer', type: 'healPP', desc: 'Heals a pokemon\'s moves fully.', cost: 3, minStreak: 0 },
+	fullheal: { name: 'Full Heal', icon: 'Flower Sweet', type: 'cureStatus', desc: 'Cures a pokemon\'s status.', cost: 3, minStreak: 0 },
+	revive: { name: 'Revive', icon: 'Star Sweet', type: 'revive', desc: 'Revives a Pokemon to half its maximum HP.', cost: 5, minStreak: 1 },
 	// debug2: { name: 'Debug 2', icon: 'berserk gene', type: 'debug', desc: 'Bans HoeenHero from this server twice.', cost: 999, minStreak: 1 },
 };
 
@@ -281,6 +285,7 @@ export class Roguelike {
 			if (teamSet.level !== newMon.level) {
 				teamSet.level = newMon.level;
 				mon.expAtNextLevel = getMinExpForMonAtLevel(teamSet.species, teamSet.level + 1);
+				mon.maxHP = newMon.maxHP;
 			}
 			index++;
 		}
@@ -434,9 +439,21 @@ export class Roguelike {
 					skip = 'replacepoke skip';
 					break;
 				case 'healHP':
-					failureCondition = (this.teamData[index - 1].curHP >= this.teamData[index - 1].maxHP);
+					failureCondition = this.teamData[index - 1].curHP >= this.teamData[index - 1].maxHP || this.teamData[index - 1].status === 'fnt';
+					cmd = 'redeem healhp, ' + index;
 					break;
 				case 'healPP':
+					failureCondition = this.teamData[index - 1].ppLeft.every((v, i) => Dex.moves.get(this.team[index - 1].moves[i]).pp * (8 / 5) === v);
+					cmd = 'redeem healpp, ' + index;
+					break;
+				case 'cureStatus':
+					failureCondition = !(this.teamData[index - 1].status && this.teamData[index - 1].status !== 'fnt');
+					cmd = 'redeem curestatus, ' + index;
+					break;
+				case 'revive':
+					failureCondition = this.teamData[index - 1].status !== 'fnt';
+					cmd = 'redeem revive, ' + index;
+					break;
 				case 'TM':
 				case 'key':
 				case 'scout':
@@ -492,7 +509,9 @@ export class Roguelike {
 		case 'healPP':
 		case 'revive':
 		case 'cureStatus':
-			break;
+			buf = `<center>Use this on who?</h3></center><br />`;
+			buf += this.genQuickSelectHTML((this.flags.purchasedItem as ShopItem)?.type);
+			return buf;
 		case 'TM':
 			break;
 		case 'key':
@@ -578,8 +597,17 @@ export const commands: Chat.ChatCommands = {
 	uwu(target, room, user) {
 		return Teams.export(genPokemon(3, [5, 10]));
 	},
-	game: 'roguelike',
+	game: {
+		'': 'getpage',
+		getpage(target, room, user) {
+			return this.parse(`/join view-roguelike`);
+		}
+	},
 	roguelike: {
+		'': 'getpage',
+		getpage(target, room, user) {
+			return this.parse(`/join view-roguelike`);
+		},
 		start(target, room, user) {
 			createSaveData(user);
 			// const newFoe = userData.createAITrainer();
@@ -616,7 +644,6 @@ export const commands: Chat.ChatCommands = {
 			case 'healPP':
 			case 'revive':
 			case 'cureStatus':
-				break;
 			case 'TM':
 			case 'key':
 			case 'scout':
@@ -645,6 +672,7 @@ export const commands: Chat.ChatCommands = {
 			createAIBattle(userData.user, newFoe);
 		},
 		redeem(target, room, user) {
+			let index: number;
 			const userData = roguelikeGames.get(user.id);
 			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
 			if (!userData.flags.purchasedItem) return this.errorReply(`You need to purchase something first.`);
@@ -668,6 +696,47 @@ export const commands: Chat.ChatCommands = {
 				}
 				delete userData.flags.pokemonOptions;
 				break;
+				case 'healhp':
+					arg = args.shift();
+					if (!arg) return this.errorReply(`You need to specify a pokemon.`);
+					index = parseInt(arg);
+					index--;
+					if (!userData.team[index]) return this.errorReply(`You need to specify a pokemon on your team.`);
+					if (userData.teamData[index].curHP === userData.teamData[index].maxHP) return this.errorReply(`You can't use this on that pokemon.`);
+					userData.teamData[index].curHP = userData.teamData[index].maxHP;
+					// TODO: More items
+					break;
+				case 'healpp':
+					arg = args.shift();
+					if (!arg) return this.errorReply(`You need to specify a pokemon.`);
+					index = parseInt(arg);
+					index--;
+					if (!userData.team[index]) return this.errorReply(`You need to specify a pokemon on your team.`);
+					if (userData.teamData[index].ppLeft.every((v, i) => Dex.moves.get(userData.team[index].moves[i]).pp * (8 / 5) === v)) return this.errorReply(`You can't use this on that pokemon.`);
+					userData.teamData[index].ppLeft.forEach((v, i) => userData.teamData[index].ppLeft[i] = Dex.moves.get(userData.team[index].moves[i]).pp * (8 / 5));
+					// TODO: More items
+					break;
+				case 'curestatus':
+					arg = args.shift();
+					if (!arg) return this.errorReply(`You need to specify a pokemon.`);
+					index = parseInt(arg);
+					index--;
+					if (!userData.team[index]) return this.errorReply(`You need to specify a pokemon on your team.`);
+					if (!userData.teamData[index].status || userData.teamData[index].status === 'fnt') return this.errorReply(`You can't use this on that pokemon.`);
+					userData.teamData[index].status = false;
+					// TODO: More items
+					break;
+				case 'revive':
+					arg = args.shift();
+					if (!arg) return this.errorReply(`You need to specify a pokemon.`);
+					index = parseInt(arg);
+					index--;
+					if (!userData.team[index]) return this.errorReply(`You need to specify a pokemon on your team.`);
+					if (userData.teamData[index].status !== 'fnt') return this.errorReply(`You can't use this on that pokemon.`);
+					userData.teamData[index].curHP = Math.floor(userData.teamData[index].maxHP / 2);
+					userData.teamData[index].status = false;
+					// TODO: More items
+					break;
 			default:
 				return this.errorReply(`Your command is too vague.`);
 			}
@@ -695,7 +764,7 @@ export const commands: Chat.ChatCommands = {
 		next(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
 			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
-			if (userData.curRoom !== 'shop') return this.errorReply(`Can't battle yet!`);
+			if (!checkSequence(userData.curRoom, 'battle') || userData.inBattle) return this.errorReply(`Can't battle yet!`);
 			const newFoe = userData.createAITrainer();
 			createAIBattle(userData.user, newFoe);
 		},
@@ -705,15 +774,28 @@ export const commands: Chat.ChatCommands = {
 export const pages: Chat.PageTable = {
 	roguelike(args, user) {
 		const userGameData = roguelikeGames.get(user.id);
-		if (!userGameData || !user.named) return Rooms.RETRY_AFTER_LOGIN;
+		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
+		if (!userGameData) {
+			let buf = `<div class = "pad">`;
+			buf += `Hello and welcome to my roguelike. This was a project I made at the start of the year and maybe it'll be fun. Please report all bugs to me, HiZo (that is my username on Pokemon Showdown/Smogon. My username is 'hisuianzoroark' on Discord).`;
+			buf += `<br /><button class="button" name="send" value="/roguelike start">Start a run</button></center>`;
+			buf += `</div>`;
+			return buf;
+		}
 		const gameArgs = userGameData.curRoom.split('-');
 		const mainRoomArg = gameArgs.shift();
 		let subtitle = '';
 		let buf = `<div class = "pad">`;
 		switch (mainRoomArg) {
 		case 'battle':
-			this.title = '[Roguelike] Currently in battle';
-			return this.errorReply('You are currently in battle!');
+			if (userGameData.inBattle) {
+				this.title = '[Roguelike] Currently in battle';
+				return this.errorReply('You are currently in battle!');
+			} else {
+				buf += `Something went wrong, please try again.`;
+				buf += `<br /><button class="button" name="send" value="/roguelike next">Redo Battle</button></center>`;
+			}
+			break;
 		case 'results':
 			if (userGameData.runEnded) {
 				subtitle = 'Game Over';
@@ -788,8 +870,8 @@ export const handlers: Chat.Handlers = {
 		if (room.battle?.options.isRoguelikeBattle && user) {
 			const roguelikePlayer = roguelikeGames.get(user.id);
 			if (roguelikePlayer) {
-				roguelikePlayer.goToPage('battle');
 				roguelikePlayer.inBattle = true;
+				roguelikePlayer.goToPage('battle');
 			}
 		}
 	},

@@ -4413,27 +4413,33 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			return [`This format cannot be battled via challenge or ladder.`];
 		},
 		onFaint(target, source, effect) {
-			if (source.side.isAI) return;
-			let species = this.toID(target.species.name);
-			let speciesData = EXP_TABLE[species] || EXP_TABLE[this.toID(Dex.species.get(species).baseSpecies)];
-			for (const stat of Object.keys(speciesData['evYield'])) {
-				if (Object.values(source.set.evs).reduce((a, b) => a + b, 0) <= 512) {
-					source.set.evs[stat as StatID] += speciesData['evYield'][stat];
-					source.set.evs[stat as StatID] = this.clampIntRange(source.set.evs[stat as StatID], 0, 255);
+			if (target.side.isAI) {
+				if (source.side.isAI) return;
+				let species = this.toID(target.species.name);
+				let speciesData = EXP_TABLE[species] || EXP_TABLE[this.toID(Dex.species.get(species).baseSpecies)];
+				for (const stat of Object.keys(speciesData['evYield'])) {
+					if (Object.values(source.set.evs).reduce((a, b) => a + b, 0) <= 512) {
+						source.set.evs[stat as StatID] += speciesData['evYield'][stat];
+						source.set.evs[stat as StatID] = this.clampIntRange(source.set.evs[stat as StatID], 0, 255);
+					}
 				}
-			}
-			if (source.level < 100) {
-				let newEXP = Math.floor(((speciesData['expYield'] * target.level) / 7) * 1.5);
-				this.add('-message', `${source.name}'s gained ${newEXP} EXP!`);
-				source.m.exp += newEXP;
-				if (source.m.exp >= source.m.expAtNextLevel) {
-					source.level++;
-					source.set.level++;
-					source.details = source.getUpdatedDetails();
-					this.add('detailschange', source, source.details);
-					this.add('-formechange', source, source.species.name);
-					this.add('-message', `${source.name}'s leveled up!`);
-					source.m.expAtNextLevel = source.getMinExpForMonAtLevel(species, source.set.level + 1);
+				if (source.level < 100) {
+					let newEXP = Math.floor(((speciesData['expYield'] * target.level) / 7) * 1.5);
+					this.add('-message', `${source.name}'s gained ${newEXP} EXP!`);
+					source.m.exp += newEXP;
+					if (source.m.exp >= source.m.expAtNextLevel) {
+						source.level++;
+						source.set.level++;
+						source.baseMaxhp = Math.floor(Math.floor(
+							2 * source.species.baseStats['hp'] + source.set.ivs['hp'] + Math.floor(source.set.evs['hp'] / 4) + 100
+						) * source.level / 100 + 10);
+						source.maxhp = source.baseMaxhp;
+						source.details = source.getUpdatedDetails();
+						this.add('detailschange', source, source.details);
+						this.add('-formechange', source, source.species.name);
+						this.add('-message', `${source.name}'s leveled up!`);
+						source.m.expAtNextLevel = source.getMinExpForMonAtLevel(species, source.set.level + 1);
+					}
 				}
 			}
 		},
