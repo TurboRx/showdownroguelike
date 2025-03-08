@@ -26,6 +26,15 @@ interface ShopItem {
 	minStreak: number;
 }
 
+interface UserTeamData {
+	linkedTeamIndex: number;
+	curHP: number,
+	status: string | false,
+	ppLeft: number[],
+	exp: number,
+	maxHP: number,
+}
+
 const SHOP_ITEMS: { [k: string]: ShopItem } = {
 	pokeballpack: { name: 'Poke Ball Pack', icon: 'Poke Ball', type: 'pokemon', desc: 'Pick 1 of 3 random Pokemon.', cost: 1, minStreak: 0 },
 	// debug2: { name: 'Debug 2', icon: 'berserk gene', type: 'debug', desc: 'Bans HoeenHero from this server twice.', cost: 999, minStreak: 1 },
@@ -42,12 +51,7 @@ interface BackupData {
 	streak: number;
 	battlePoints: number;
 	team: PokemonSet[];
-	teamData: {
-		curHP: number,
-		status: string,
-		ppLeft: number[],
-		exp: number,
-	}[];
+	teamData: UserTeamData[];
 	flags: {
 		[k: string]: any,
 	};
@@ -196,13 +200,7 @@ export class Roguelike {
 	streak: number;
 	battlePoints: number;
 	team: PokemonSet[];
-	teamData: {
-		curHP: number,
-		status: string | false,
-		ppLeft: number[],
-		exp: number,
-		maxHP: number,
-	}[];
+	teamData: UserTeamData[];
 	flags: {
 		pokemonOptions?: PokemonSet[],
 		[k: string]: any,
