@@ -552,6 +552,7 @@ export const commands: Chat.ChatCommands = {
 			default:
 				return this.errorReply(`Your command is too vague.`);
 			}
+			if (userData.flags.purchasedItem) delete userData.flags.purchasedItem;
 			userData.goToPage('shop');
 		},
 		next(target, room, user) {
