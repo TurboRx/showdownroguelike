@@ -8,6 +8,8 @@ import { TeamValidator } from '../../sim/team-validator';
 const SAVE_DATA = 'config/roguelike.json';
 const roguelikeGames = new Map<ID, Roguelike>();
 
+type ItemType = 'pokemon' | 'healHP' | 'healPP' | 'TM' | 'key' | 'scout' | 'debug';
+
 const SEQUENCE_CHECK: { [k: string]: string[] } = {
 	battle: ['results'],
 	results: ['shop'],
@@ -18,7 +20,7 @@ const SEQUENCE_CHECK: { [k: string]: string[] } = {
 interface ShopItem {
 	name: string;
 	icon: string;
-	type: 'pokemon' | 'healHP' | 'healPP' | 'TM' | 'key' | 'scout' | 'debug';
+	type: ItemType;
 	desc: string;
 	cost: number;
 	minStreak: number;
@@ -137,12 +139,15 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 			gennedMons.push(set);
 		} else {
 			for (let curLevel = minLevel; curLevel <= maxLevel; curLevel++) {
+				set.level = curLevel;
 				// what the fuck
 				if (!validate.validateTeam([set])?.some(err => err.includes('must be at least level'))) {
-					if (Math.floor(Math.random() * (maxLevel - curLevel)) === 0) gennedMons.push(set);
-					break;
+					let randomNo = Math.floor(Math.random() * (maxLevel - curLevel));
+					if (randomNo === 0) {
+						gennedMons.push(set);
+						break;
+					}
 				}
-				set.level++;
 			}
 		}
 		all = all.filter(s => !(s.baseSpecies === specie.baseSpecies));
@@ -196,7 +201,7 @@ export class Roguelike {
 		status: string | false,
 		ppLeft: number[],
 		exp: number,
-		[k: string]: any,
+		maxHP: number,
 	}[];
 	flags: {
 		pokemonOptions?: PokemonSet[],
@@ -254,7 +259,28 @@ export class Roguelike {
 
 	addPokemon(pokemon: PokemonSet, index?: number) {
 		if (index) {
-			// TODO: RELEASING POKEMON
+			let newHpData;
+			this.team[index] = pokemon;
+			const species = Dex.species.get(pokemon.species);
+			if (species.maxHP) {
+				newHpData = species.maxHP;
+			} else {
+				const hpStat = species.baseStats.hp;
+				newHpData = Math.floor(((pokemon.ivs.hp + (2 * hpStat) + Math.floor(pokemon.evs.hp / 4) + 100) * pokemon.level) / 100) + 10;
+			}
+			const ppArr = [];
+			for (const move of pokemon.moves) {
+				const movePP = Dex.moves.get(move).pp * (8 / 5);
+				ppArr.push(movePP);
+			}
+			this.teamData[index] = {
+				linkedTeamIndex: index,
+				curHP: newHpData,
+				maxHP: newHpData,
+				status: false,
+				ppLeft: ppArr,
+				exp: 0,
+			};
 		} else {
 			let newHpData;
 			this.team.push(pokemon);
@@ -345,8 +371,45 @@ export class Roguelike {
 		return buf;
 	}
 
+	genQuickSelectHTML(checkItem: ItemType) {
+		let buf = `<div style="width:100%;"><center>`;
+		let cmd;
+		let skip = 'shop';
+		let failureCondition;
+		let index = 1;
+		for (const mon of this.team) {
+			switch (checkItem) {
+				case 'pokemon':
+					failureCondition = false;
+					cmd = 'replacepoke ' + index;
+					skip = 'replacepoke skip';
+					break;
+				case 'healHP':
+					failureCondition = (this.teamData[index - 1].curHP >= this.teamData[index - 1].maxHP);
+					break;
+				case 'healPP':
+				case 'TM':
+				case 'key':
+				case 'scout':
+				case 'debug':
+			}
+			if (failureCondition) {
+				buf += `<button class="button disabled"><psicon pokemon ="${mon.species}"> ${mon.name}</button>`;
+			} else {
+				buf += `<button class="button" name="send" value="/roguelike ${cmd}"><psicon pokemon ="${mon.species}" /> ${mon.name}</button>`;
+			}
+			if (index < this.team.length) {
+				buf += `&nbsp;&nbsp;&nbsp;&nbsp;`
+			}
+			index++;
+		}
+		buf += `<br /><br /><button class="button" name="send" value="/roguelike ${skip}">Skip</button>`;
+		buf += `</center></div>`;
+		return buf;
+	}
+
 	genShopHTML() {
-		let buf = `<center><h3>SHOP</h3></center><br />`;
+		let buf = `<center><h3>Shop</h3></center><br />`;
 		buf += `<table style="width:100%; border-collapse: collapse;"border="1"><tr><th>Item</th><th>Description</th><th>Price</th></tr>`;
 		for (const key in SHOP_ITEMS) {
 			const item = SHOP_ITEMS[key];
@@ -518,7 +581,7 @@ export const commands: Chat.ChatCommands = {
 			const pokes = userData.flags.pokemonOptions;
 			const poke = pokes.find(p => toID(p.species) === toID(target));
 			if (!poke) return this.errorReply(`You can't choose that pokemon.`);
-			if (userData.team.length > 6) {
+			if (userData.team.length >= 6) {
 				// TODO: Figure out releasing pokemon.
 			} else {
 				userData.addPokemon(poke);
@@ -542,8 +605,11 @@ export const commands: Chat.ChatCommands = {
 				const pokes = userData.flags.pokemonOptions;
 				const poke = pokes.find(p => toID(p.species) === toID(arg));
 				if (!poke) return this.errorReply(`You can't choose that pokemon.`);
-				if (userData.team.length > 6) {
-					// TODO: Figure out releasing pokemon.
+				if (userData.team.length >= 6) {
+					userData.flags.replacingWith = poke;
+					userData.goToPage('purchase-release');
+					delete userData.flags.pokemonOptions;
+					return;
 				} else {
 					userData.addPokemon(poke);
 				}
@@ -553,6 +619,24 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`Your command is too vague.`);
 			}
 			if (userData.flags.purchasedItem) delete userData.flags.purchasedItem;
+			userData.goToPage('shop');
+		},
+		replacepoke(target, room, user) {
+			const userData = roguelikeGames.get(user.id);
+			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
+			if (!userData.flags.replacingWith) return this.errorReply(`You need to purchase something first.`);
+			if (target === 'skip') {
+				delete userData.flags.replacingWith;
+				if (userData.flags.purchasedItem) delete userData.flags.purchasedItem;
+				userData.goToPage('shop');
+				return;
+			}
+			let index = parseInt(target);
+			if (index && index <= 6) {
+				userData.addPokemon(userData.flags.replacingWith, index - 1);
+				delete userData.flags.replacingWith;
+				if (userData.flags.purchasedItem) delete userData.flags.purchasedItem;
+			}
 			userData.goToPage('shop');
 		},
 		next(target, room, user) {
@@ -611,8 +695,14 @@ export const pages: Chat.PageTable = {
 				return this.errorReply('If you tried to purchased something and reached this error, contact HiZo.');
 			}
 			subtitle = 'Complete Purchase';
-			// TODO: Be able to buy things
-			buf += userGameData.genPurchaseHTML();
+			switch (gameArgs.shift()) {
+				case 'release':
+					buf = `<center>Choose a pokemon to replace!</center><br />`;
+					buf += userGameData.genQuickSelectHTML('pokemon');
+					break;
+				default:
+				buf += userGameData.genPurchaseHTML();
+			}
 			break;
 		case 'intro':
 			subtitle = 'Pick a Starter';
