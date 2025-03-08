@@ -256,7 +256,7 @@ export class Roguelike {
 	}
 
 	addPokemon(pokemon: PokemonSet, index?: number) {
-		if (index) {
+		if (index !== undefined) {
 			let newHpData;
 			this.team[index] = pokemon;
 			const species = Dex.species.get(pokemon.species);
