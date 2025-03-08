@@ -4451,7 +4451,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						side.pokemon.unshift(unfainted);
 						// @ts-ignore
 						side.pokemon[newIndex] = carry;
-						side.pokemon[newIndex].position = newIndex - 1;
+						side.pokemon[newIndex].position = newIndex;
 						side.pokemon[0].position = 0;
 					}
 				}
