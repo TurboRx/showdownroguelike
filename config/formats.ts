@@ -4422,9 +4422,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						pokemon.hp = persist.curHP;
 						// @ts-ignore
 						if (persist.status) {
+							// @ts-ignore
 							if (persist.status === 'fnt') {
 								pokemon.faint();
+								pokemon.m.willFaint = true;
 							} else {
+								// @ts-ignore
 								pokemon.setStatus(persist.status as ID);
 							}
 						}
@@ -4434,8 +4437,22 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 							move.pp = persist.ppLeft[moveIndex];
 							moveIndex++;
 						}
+						// @ts-ignore
 						pokemon.m.roguelikeIndex = persist.linkedTeamIndex;
 						index++;
+					}
+				}
+				// Don't implode if 1st mon gonna die
+				if (side.pokemon[0].m.willFaint) {
+					const unfainted = side.pokemon.find(newPoke => !newPoke.m.willFaint);
+					if (unfainted) {
+						const newIndex = side.pokemon.indexOf(unfainted);
+						const carry = side.pokemon.shift();
+						side.pokemon.unshift(unfainted);
+						// @ts-ignore
+						side.pokemon[newIndex] = carry;
+						side.pokemon[newIndex].position = newIndex - 1;
+						side.pokemon[0].position = 0;
 					}
 				}
 			}
