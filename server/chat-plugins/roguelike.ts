@@ -8,6 +8,46 @@ import { TeamValidator } from '../../sim/team-validator';
 const SAVE_DATA = 'config/roguelike.json';
 const roguelikeGames = new Map<ID, Roguelike>();
 
+export const EXP_TABLE = JSON.parse(FS('data/roguelike/exp.json').readSync());
+
+export function getMinExpForMonAtLevel(species: string, level: number) {
+	let nextlevel = level + 1;
+	species = toID(species);
+	let speciesData = EXP_TABLE[species] || EXP_TABLE[toID(Dex.species.get(species).baseSpecies)];
+	if (level === 1) return 0;
+	switch (speciesData['expType']) {
+		case 'Erratic':
+			if (level < 50) {
+				return Math.floor((Math.pow(level, 3) * (100 - level)) / 50);
+			} else if (level < 68) {
+				return Math.floor((Math.pow(level, 3) * (150 - level)) / 100);
+			} if (level < 90) {
+				return Math.floor((Math.pow(level, 3) * ((1911 - (10 * level))/3)) / 500);
+			} else {
+				return Math.floor((Math.pow(level, 3) * (160 - level)) / 100);
+			}
+		case 'Fast':
+			return Math.floor((4 * Math.pow(level, 3)) / 5);
+		case 'Medium Fast':
+			return Math.floor(Math.pow(level, 3));
+		case 'Medium Slow':
+			let a = (6/5) * Math.pow(level, 3);
+			let b = 15 * Math.pow(level, 2);
+			let c = 100 * level;
+			return Math.floor(a - b + c - 140);
+		case 'Slow':
+			return Math.floor((5 * Math.pow(level, 3)) / 4);
+		case 'Fluctuating':
+			if (level < 15) {
+				return Math.floor((Math.pow(level, 3) * (((level + 1)/3) + 24)) / 50);
+			} else if (level < 36) {
+				return Math.floor((Math.pow(level, 3) * (level + 14)) / 50);
+			} else {
+				return Math.floor((Math.pow(level, 3) * ((level/2) + 32)) / 50);
+			}
+	}
+}
+
 type ItemType = 'pokemon' | 'healHP' | 'healPP' | 'TM' | 'key' | 'scout' | 'debug' | 'revive' | 'cureStatus';
 
 const SEQUENCE_CHECK: { [k: string]: string[] } = {
@@ -32,6 +72,7 @@ interface UserTeamData {
 	status: string | false,
 	ppLeft: number[],
 	exp: number,
+	expAtNextLevel: number;
 	maxHP: number,
 }
 
@@ -227,6 +268,7 @@ export class Roguelike {
 	syncAfterMatch(newData: object[]) {
 		let index = 0;
 		for (const mon of this.teamData) {
+			const teamSet = this.team[index]
 			const newMon = newData[index];
 			// @ts-ignore
 			mon.curHP = newMon.curHP;
@@ -234,6 +276,12 @@ export class Roguelike {
 			mon.status = newMon.status;
 			// @ts-ignore
 			mon.ppLeft = newMon.ppLeft;
+			mon.exp = newMon.exp;
+			teamSet.evs = newMon.evs;
+			if (teamSet.level !== newMon.level) {
+				teamSet.level = newMon.level;
+				mon.expAtNextLevel = getMinExpForMonAtLevel(teamSet.species, teamSet.level + 1);
+			}
 			index++;
 		}
 	}
@@ -277,7 +325,8 @@ export class Roguelike {
 				maxHP: newHpData,
 				status: false,
 				ppLeft: ppArr,
-				exp: 0,
+				exp: getMinExpForMonAtLevel(species.name, pokemon.level),
+				expAtNextLevel: getMinExpForMonAtLevel(species.name, pokemon.level + 1),
 			};
 		} else {
 			let newHpData;
@@ -300,7 +349,8 @@ export class Roguelike {
 				maxHP: newHpData,
 				status: false,
 				ppLeft: ppArr,
-				exp: 0,
+				exp: getMinExpForMonAtLevel(species.name, pokemon.level),
+				expAtNextLevel: getMinExpForMonAtLevel(species.name, pokemon.level + 1),
 			});
 		}
 	}
@@ -335,7 +385,8 @@ export class Roguelike {
 		for (const mon of this.team) {
 			const monData = this.teamData[linkedIndex];
 			const dexSpecies = Dex.species.get(mon.species);
-			buf += `<tr><td><img src="https://play.pokemonshowdown.com/sprites/gen5/${dexSpecies.spriteid}.png" /><br />${mon.species} ${mon.gender !== 'N' ? '(' + mon.gender + ')' : ''}<br />HP: ${monData.curHP}/${monData.maxHP}<br />Status: ${monData.status ? monData.status.toUpperCase() : 'Healthy'}<br />Level: ${mon.level ? mon.level : 100}<br />Item: ${mon.item === '' ? 'None' : mon.item}</td>`;
+			buf += `<tr><td><img src="https://play.pokemonshowdown.com/sprites/gen5/${dexSpecies.spriteid}.png" /><br />${mon.species} ${mon.gender !== 'N' ? '(' + mon.gender + ')' : ''}<br />HP: ${monData.curHP}/${monData.maxHP}<br />Status: ${monData.status ? monData.status.toUpperCase() : 'Healthy'}<br />Level: ${mon.level ? mon.level : 100}<br />Item: ${mon.item === '' ? 'None' : mon.item}`;
+			buf += `<br />EXP: ${monData.exp}/${monData.expAtNextLevel}</td>`;
 			// @ts-ignore ?????
 			buf += `<td>`;
 			buf += `Ability: ${mon.ability}<br />`;

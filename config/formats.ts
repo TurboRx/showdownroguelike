@@ -17,6 +17,8 @@ New sections will be added to the bottom of the specified column.
 The column value will be ignored for repeat sections.
 */
 
+import { EXP_TABLE, getMinExpForMonAtLevel } from '../server/chat-plugins/roguelike';
+
 export const Formats: import('../sim/dex-formats').FormatList = [
 
 	// S/V Singles
@@ -4410,6 +4412,31 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		onValidateTeam() {
 			return [`This format cannot be battled via challenge or ladder.`];
 		},
+		onSourceAfterFaint(length, target, source, effect) {
+			if (source.side.isAI) return;
+			let species = target.species.name;
+			let speciesData = EXP_TABLE[species] || EXP_TABLE[toID(Dex.species.get(species).baseSpecies)];
+			for (const stat of speciesData['evYield']) {
+				if (Object.values(source.set.evs).reduce((a, b) => a + b, 0) <= 512) {
+					source.set.evs[stat as StatID] += speciesData['evYield'][stat];
+					source.set.evs[stat as StatID] = this.clampIntRange(source.set.evs[stat as StatID], 0, 255);
+				}
+			}
+			if (source.level < 100) {
+				let newEXP = Math.floor(((speciesData['expYield'] * target.level) / 7) * 1.5);
+				this.add('-message', `${source.name}'s gained ${newEXP} EXP!`);
+				source.m.exp += newEXP;
+				if (source.m.exp >= source.m.expAtNextLevel) {
+					source.level++;
+					source.set.level++;
+					source.details = source.getUpdatedDetails();
+					this.add('detailschange', source, source.details);
+					this.add('-formechange', source, source.species.name);
+					this.add('-message', `${source.name}'s leveled up!`);
+					source.m.expAtNextLevel = getMinExpForMonAtLevel(species, source.set.level + 1);
+				}
+			}
+		},
 		onBegin() {
 			for (const side of this.sides) {
 				if (side.isAI) continue;
@@ -4418,6 +4445,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					let index = 0;
 					for (const pokemon of side.pokemon) {
 						const persist = data[index];
+						pokemon.m.exp = persist.exp;
+						pokemon.m.expAtNextLevel = persist.expAtNextLevel;
 						// @ts-ignore trust me bro
 						pokemon.hp = persist.curHP;
 						// @ts-ignore

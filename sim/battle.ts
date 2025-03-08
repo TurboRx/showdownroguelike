@@ -3251,6 +3251,7 @@ export class Battle {
 					const monData = {};
 					// @ts-ignore shut up
 					monData.curHP = mon.hp;
+					monData.maxHP = mon.maxhp;
 					// @ts-ignore
 					monData.status = mon.status.length ? mon.status : false;
 					// @ts-ignore
@@ -3261,6 +3262,11 @@ export class Battle {
 						// @ts-ignore
 						monData.ppLeft.push(move.pp);
 					}
+					monData.exp = mon.m.exp;
+					// @ts-ignore
+					monData.evs = mon.set.evs;
+					// @ts-ignore
+					monData.level = mon.set.level;
 					// @ts-ignore
 					monData.linkedTeamIndex = mon.m.roguelikeIndex;
 					roguelikeData.push(monData);

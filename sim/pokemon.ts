@@ -52,7 +52,7 @@ export class Pokemon {
 	readonly name: string;
 	/** `` `${sideid}: ${name}` `` - used to refer to pokemon in the protocol */
 	readonly fullname: string;
-	readonly level: number;
+	level: number;
 	readonly gender: GenderName;
 	readonly happiness: number;
 	readonly pokeball: ID;
