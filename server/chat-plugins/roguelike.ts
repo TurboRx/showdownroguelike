@@ -8,7 +8,7 @@ import { TeamValidator } from '../../sim/team-validator';
 const SAVE_DATA = 'config/roguelike.json';
 const roguelikeGames = new Map<ID, Roguelike>();
 
-type ItemType = 'pokemon' | 'healHP' | 'healPP' | 'TM' | 'key' | 'scout' | 'debug';
+type ItemType = 'pokemon' | 'healHP' | 'healPP' | 'TM' | 'key' | 'scout' | 'debug' | 'revive' | 'cureStatus';
 
 const SEQUENCE_CHECK: { [k: string]: string[] } = {
 	battle: ['results'],
@@ -438,8 +438,9 @@ export class Roguelike {
 			buf += `</div>`;
 			break;
 		case 'healHP':
-			break;
 		case 'healPP':
+		case 'revive':
+		case 'cureStatus':
 			break;
 		case 'TM':
 			break;
@@ -562,6 +563,9 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'healHP':
 			case 'healPP':
+			case 'revive':
+			case 'cureStatus':
+				break;
 			case 'TM':
 			case 'key':
 			case 'scout':
