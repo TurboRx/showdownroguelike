@@ -17,7 +17,7 @@ New sections will be added to the bottom of the specified column.
 The column value will be ignored for repeat sections.
 */
 
-import { EXP_TABLE, getMinExpForMonAtLevel } from '../server/chat-plugins/roguelike';
+import { EXP_TABLE } from '../server/chat-plugins/roguelike';
 
 export const Formats: import('../sim/dex-formats').FormatList = [
 
@@ -4412,11 +4412,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		onValidateTeam() {
 			return [`This format cannot be battled via challenge or ladder.`];
 		},
-		onSourceAfterFaint(length, target, source, effect) {
+		onFaint(target, source, effect) {
 			if (source.side.isAI) return;
-			let species = target.species.name;
-			let speciesData = EXP_TABLE[species] || EXP_TABLE[toID(Dex.species.get(species).baseSpecies)];
-			for (const stat of speciesData['evYield']) {
+			let species = this.toID(target.species.name);
+			let speciesData = EXP_TABLE[species] || EXP_TABLE[this.toID(Dex.species.get(species).baseSpecies)];
+			for (const stat of Object.keys(speciesData['evYield'])) {
 				if (Object.values(source.set.evs).reduce((a, b) => a + b, 0) <= 512) {
 					source.set.evs[stat as StatID] += speciesData['evYield'][stat];
 					source.set.evs[stat as StatID] = this.clampIntRange(source.set.evs[stat as StatID], 0, 255);
@@ -4433,7 +4433,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					this.add('detailschange', source, source.details);
 					this.add('-formechange', source, source.species.name);
 					this.add('-message', `${source.name}'s leveled up!`);
-					source.m.expAtNextLevel = getMinExpForMonAtLevel(species, source.set.level + 1);
+					source.m.expAtNextLevel = source.getMinExpForMonAtLevel(species, source.set.level + 1);
 				}
 			}
 		},

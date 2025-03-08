@@ -8,6 +8,7 @@
 import { State } from './state';
 import { toID } from './dex';
 import type { DynamaxOptions, PokemonMoveRequestData, PokemonSwitchRequestData } from './side';
+import { EXP_TABLE } from '../server/chat-plugins/roguelike';
 
 /** A Pokemon's move slot. */
 interface MoveSlot {
@@ -2182,6 +2183,45 @@ export class Pokemon {
 			return false;
 		}
 		return true;
+	}
+
+	// I Panicked
+	getMinExpForMonAtLevel(species: string, level: number) {
+		let nextlevel = level + 1;
+		species = toID(species);
+		let speciesData = EXP_TABLE[species] || EXP_TABLE[toID(this.battle.dex.species.get(species).baseSpecies)];
+		if (level === 1) return 0;
+		switch (speciesData['expType']) {
+			case 'Erratic':
+				if (level < 50) {
+					return Math.floor((Math.pow(level, 3) * (100 - level)) / 50);
+				} else if (level < 68) {
+					return Math.floor((Math.pow(level, 3) * (150 - level)) / 100);
+				} if (level < 90) {
+					return Math.floor((Math.pow(level, 3) * ((1911 - (10 * level))/3)) / 500);
+				} else {
+					return Math.floor((Math.pow(level, 3) * (160 - level)) / 100);
+				}
+			case 'Fast':
+				return Math.floor((4 * Math.pow(level, 3)) / 5);
+			case 'Medium Fast':
+				return Math.floor(Math.pow(level, 3));
+			case 'Medium Slow':
+				let a = (6/5) * Math.pow(level, 3);
+				let b = 15 * Math.pow(level, 2);
+				let c = 100 * level;
+				return Math.floor(a - b + c - 140);
+			case 'Slow':
+				return Math.floor((5 * Math.pow(level, 3)) / 4);
+			case 'Fluctuating':
+				if (level < 15) {
+					return Math.floor((Math.pow(level, 3) * (((level + 1)/3) + 24)) / 50);
+				} else if (level < 36) {
+					return Math.floor((Math.pow(level, 3) * (level + 14)) / 50);
+				} else {
+					return Math.floor((Math.pow(level, 3) * ((level/2) + 32)) / 50);
+				}
+		}
 	}
 
 	destroy() {

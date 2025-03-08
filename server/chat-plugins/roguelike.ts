@@ -10,7 +10,7 @@ const roguelikeGames = new Map<ID, Roguelike>();
 
 export const EXP_TABLE = JSON.parse(FS('data/roguelike/exp.json').readSync());
 
-export function getMinExpForMonAtLevel(species: string, level: number) {
+function getMinExpForMonAtLevel(species: string, level: number) {
 	let nextlevel = level + 1;
 	species = toID(species);
 	let speciesData = EXP_TABLE[species] || EXP_TABLE[toID(Dex.species.get(species).baseSpecies)];
