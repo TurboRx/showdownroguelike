@@ -4414,11 +4414,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 		onFaint(target, source, effect) {
 			if (target.side.isAI) {
-				if (source.side.isAI) return;
+				if (source?.side.isAI) return;
 				const species = this.toID(target.species.name);
 				const speciesData = EXP_TABLE[species] || EXP_TABLE[this.toID(Dex.species.get(species).baseSpecies)];
 				for (const stat of Object.keys(speciesData['evYield'])) {
-					if (Object.values(source.set.evs).reduce((a, b) => a + b, 0) <= 512) {
+					if (Object.values(source.set.evs).reduce((a, b) => a + b, 0) < 512) {
 						source.set.evs[stat as StatID] += speciesData['evYield'][stat];
 						source.set.evs[stat as StatID] = this.clampIntRange(source.set.evs[stat as StatID], 0, 255);
 					}
