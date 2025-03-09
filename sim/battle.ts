@@ -1326,16 +1326,14 @@ export class Battle {
 		const requests = this.getRequests(type);
 		for (let i = 0; i < this.sides.length; i++) {
 			this.sides[i].emitRequest(requests[i]);
+			if (this.sides[i].isAI) {
+				const decision = roguelikeAI(requests[i]);
+				if (decision) this.choose(this.sides[i].id, decision);
+			}
 		}
 
 		if (this.sides.every(side => side.isChoiceDone())) {
 			throw new Error(`Choices are done immediately after a request`);
-		}
-		for (const side of this.sides) {
-			if (side.isAI) {
-				const decision = roguelikeAI();
-				this.choose(side.id, decision);
-			}
 		}
 	}
 

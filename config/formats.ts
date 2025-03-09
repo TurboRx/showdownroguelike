@@ -4427,7 +4427,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					const newEXP = Math.floor(((speciesData['expYield'] * target.level) / 7) * 1.5);
 					this.add('-message', `${source.name}'s gained ${newEXP} EXP!`);
 					source.m.exp += newEXP;
-					if (source.m.exp >= source.m.expAtNextLevel) {
+					while (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {
 						source.level++;
 						source.set.level++;
 						source.baseMaxhp = Math.floor(Math.floor(
@@ -4437,6 +4437,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						source.details = source.getUpdatedDetails();
 						this.add('detailschange', source, source.details);
 						this.add('-formechange', source, source.species.name);
+						this.add('-heal', source, source.getHealth, '[silent]');
 						this.add('message', `${source.name}'s leveled up!`);
 						source.m.expAtNextLevel = source.getMinExpForMonAtLevel(species, source.set.level + 1);
 					}

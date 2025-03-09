@@ -235,7 +235,16 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 	return gennedMons;
 }
 
-export function roguelikeAI() {
+export function roguelikeAI(request: object) {
+	if (request.wait) return false;
+	if (request.forceSwitch) {
+		const choiceSlot = Math.floor(Math.random() * (request.side.pokemon.length - 1)) + 2;
+		return 'switch ' + choiceSlot;
+	}
+	if (request.active[0]) {
+		const choiceSlot = Math.floor(Math.random() * request.active[0].moves.length) + 1;
+		return 'move ' + choiceSlot;
+	}
 	return 'default';
 }
 
