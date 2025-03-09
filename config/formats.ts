@@ -4437,7 +4437,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						source.details = source.getUpdatedDetails();
 						this.add('detailschange', source, source.details);
 						this.add('-formechange', source, source.species.name);
-						this.add('-message', `${source.name}'s leveled up!`);
+						this.add('message', `${source.name}'s leveled up!`);
 						source.m.expAtNextLevel = source.getMinExpForMonAtLevel(species, source.set.level + 1);
 					}
 				}
