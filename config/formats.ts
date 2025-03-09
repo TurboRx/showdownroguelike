@@ -4415,6 +4415,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		onFaint(target, source, effect) {
 			if (target.side.isAI) {
 				if (source?.side.isAI) return;
+				if (!source) source = target.foes()[0];
 				const species = this.toID(target.species.name);
 				const speciesData = EXP_TABLE[species] || EXP_TABLE[this.toID(Dex.species.get(species).baseSpecies)];
 				for (const stat of Object.keys(speciesData['evYield'])) {
