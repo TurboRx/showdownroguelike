@@ -4415,8 +4415,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		onFaint(target, source, effect) {
 			if (target.side.isAI) {
 				if (source.side.isAI) return;
-				let species = this.toID(target.species.name);
-				let speciesData = EXP_TABLE[species] || EXP_TABLE[this.toID(Dex.species.get(species).baseSpecies)];
+				const species = this.toID(target.species.name);
+				const speciesData = EXP_TABLE[species] || EXP_TABLE[this.toID(Dex.species.get(species).baseSpecies)];
 				for (const stat of Object.keys(speciesData['evYield'])) {
 					if (Object.values(source.set.evs).reduce((a, b) => a + b, 0) <= 512) {
 						source.set.evs[stat as StatID] += speciesData['evYield'][stat];
@@ -4424,7 +4424,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					}
 				}
 				if (source.level < 100) {
-					let newEXP = Math.floor(((speciesData['expYield'] * target.level) / 7) * 1.5);
+					const newEXP = Math.floor(((speciesData['expYield'] * target.level) / 7) * 1.5);
 					this.add('-message', `${source.name}'s gained ${newEXP} EXP!`);
 					source.m.exp += newEXP;
 					if (source.m.exp >= source.m.expAtNextLevel) {

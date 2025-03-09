@@ -11,40 +11,40 @@ const roguelikeGames = new Map<ID, Roguelike>();
 export const EXP_TABLE = JSON.parse(FS('data/roguelike/exp.json').readSync());
 
 function getMinExpForMonAtLevel(species: string, level: number) {
-	let nextlevel = level + 1;
+	const nextlevel = level + 1;
 	species = toID(species);
-	let speciesData = EXP_TABLE[species] || EXP_TABLE[toID(Dex.species.get(species).baseSpecies)];
+	const speciesData = EXP_TABLE[species] || EXP_TABLE[toID(Dex.species.get(species).baseSpecies)];
 	if (level === 1) return 0;
 	switch (speciesData['expType']) {
-		case 'Erratic':
-			if (level < 50) {
-				return Math.floor((Math.pow(level, 3) * (100 - level)) / 50);
-			} else if (level < 68) {
-				return Math.floor((Math.pow(level, 3) * (150 - level)) / 100);
-			} if (level < 90) {
-				return Math.floor((Math.pow(level, 3) * ((1911 - (10 * level))/3)) / 500);
-			} else {
-				return Math.floor((Math.pow(level, 3) * (160 - level)) / 100);
-			}
-		case 'Fast':
-			return Math.floor((4 * Math.pow(level, 3)) / 5);
-		case 'Medium Fast':
-			return Math.floor(Math.pow(level, 3));
-		case 'Medium Slow':
-			let a = (6/5) * Math.pow(level, 3);
-			let b = 15 * Math.pow(level, 2);
-			let c = 100 * level;
-			return Math.floor(a - b + c - 140);
-		case 'Slow':
-			return Math.floor((5 * Math.pow(level, 3)) / 4);
-		case 'Fluctuating':
-			if (level < 15) {
-				return Math.floor((Math.pow(level, 3) * (((level + 1)/3) + 24)) / 50);
-			} else if (level < 36) {
-				return Math.floor((Math.pow(level, 3) * (level + 14)) / 50);
-			} else {
-				return Math.floor((Math.pow(level, 3) * ((level/2) + 32)) / 50);
-			}
+	case 'Erratic':
+		if (level < 50) {
+			return Math.floor((level ** 3 * (100 - level)) / 50);
+		} else if (level < 68) {
+			return Math.floor((level ** 3 * (150 - level)) / 100);
+		} if (level < 90) {
+			return Math.floor((level ** 3 * ((1911 - (10 * level)) / 3)) / 500);
+		} else {
+			return Math.floor((level ** 3 * (160 - level)) / 100);
+		}
+	case 'Fast':
+		return Math.floor((4 * level ** 3) / 5);
+	case 'Medium Fast':
+		return Math.floor(level ** 3);
+	case 'Medium Slow':
+		const a = (6 / 5) * level ** 3;
+		const b = 15 * level ** 2;
+		const c = 100 * level;
+		return Math.floor(a - b + c - 140);
+	case 'Slow':
+		return Math.floor((5 * level ** 3) / 4);
+	case 'Fluctuating':
+		if (level < 15) {
+			return Math.floor((level ** 3 * (((level + 1) / 3) + 24)) / 50);
+		} else if (level < 36) {
+			return Math.floor((level ** 3 * (level + 14)) / 50);
+		} else {
+			return Math.floor((level ** 3 * ((level / 2) + 32)) / 50);
+		}
 	}
 }
 
@@ -68,12 +68,12 @@ interface ShopItem {
 
 interface UserTeamData {
 	linkedTeamIndex: number;
-	curHP: number,
-	status: string | false,
-	ppLeft: number[],
-	exp: number,
+	curHP: number;
+	status: string | false;
+	ppLeft: number[];
+	exp: number;
 	expAtNextLevel: number;
-	maxHP: number,
+	maxHP: number;
 }
 
 const SHOP_ITEMS: { [k: string]: ShopItem } = {
@@ -191,7 +191,7 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 				set.level = curLevel;
 				// what the fuck
 				if (!validate.validateTeam([set])?.some(err => err.includes('must be at least level'))) {
-					let randomNo = Math.floor(Math.random() * (maxLevel - curLevel));
+					const randomNo = Math.floor(Math.random() * (maxLevel - curLevel));
 					if (randomNo === 0) {
 						gennedMons.push(set);
 						break;
@@ -272,7 +272,7 @@ export class Roguelike {
 	syncAfterMatch(newData: object[]) {
 		let index = 0;
 		for (const mon of this.teamData) {
-			const teamSet = this.team[index]
+			const teamSet = this.team[index];
 			const newMon = newData[index];
 			// @ts-ignore
 			mon.curHP = newMon.curHP;
@@ -433,31 +433,31 @@ export class Roguelike {
 		let index = 1;
 		for (const mon of this.team) {
 			switch (checkItem) {
-				case 'pokemon':
-					failureCondition = false;
-					cmd = 'replacepoke ' + index;
-					skip = 'replacepoke skip';
-					break;
-				case 'healHP':
-					failureCondition = this.teamData[index - 1].curHP >= this.teamData[index - 1].maxHP || this.teamData[index - 1].status === 'fnt';
-					cmd = 'redeem healhp, ' + index;
-					break;
-				case 'healPP':
-					failureCondition = this.teamData[index - 1].ppLeft.every((v, i) => Dex.moves.get(this.team[index - 1].moves[i]).pp * (8 / 5) === v);
-					cmd = 'redeem healpp, ' + index;
-					break;
-				case 'cureStatus':
-					failureCondition = !(this.teamData[index - 1].status && this.teamData[index - 1].status !== 'fnt');
-					cmd = 'redeem curestatus, ' + index;
-					break;
-				case 'revive':
-					failureCondition = this.teamData[index - 1].status !== 'fnt';
-					cmd = 'redeem revive, ' + index;
-					break;
-				case 'TM':
-				case 'key':
-				case 'scout':
-				case 'debug':
+			case 'pokemon':
+				failureCondition = false;
+				cmd = 'replacepoke ' + index;
+				skip = 'replacepoke skip';
+				break;
+			case 'healHP':
+				failureCondition = this.teamData[index - 1].curHP >= this.teamData[index - 1].maxHP || this.teamData[index - 1].status === 'fnt';
+				cmd = 'redeem healhp, ' + index;
+				break;
+			case 'healPP':
+				failureCondition = this.teamData[index - 1].ppLeft.every((v, i) => Dex.moves.get(this.team[index - 1].moves[i]).pp * (8 / 5) === v);
+				cmd = 'redeem healpp, ' + index;
+				break;
+			case 'cureStatus':
+				failureCondition = !(this.teamData[index - 1].status && this.teamData[index - 1].status !== 'fnt');
+				cmd = 'redeem curestatus, ' + index;
+				break;
+			case 'revive':
+				failureCondition = this.teamData[index - 1].status !== 'fnt';
+				cmd = 'redeem revive, ' + index;
+				break;
+			case 'TM':
+			case 'key':
+			case 'scout':
+			case 'debug':
 			}
 			if (failureCondition) {
 				buf += `<button class="button disabled"><psicon pokemon ="${mon.species}"> ${mon.name}</button>`;
@@ -465,7 +465,7 @@ export class Roguelike {
 				buf += `<button class="button" name="send" value="/roguelike ${cmd}"><psicon pokemon ="${mon.species}" /> ${mon.name}</button>`;
 			}
 			if (index < this.team.length) {
-				buf += `&nbsp;&nbsp;&nbsp;&nbsp;`
+				buf += `&nbsp;&nbsp;&nbsp;&nbsp;`;
 			}
 			index++;
 		}
@@ -601,7 +601,7 @@ export const commands: Chat.ChatCommands = {
 		'': 'getpage',
 		getpage(target, room, user) {
 			return this.parse(`/join view-roguelike`);
-		}
+		},
 	},
 	roguelike: {
 		'': 'getpage',
@@ -696,47 +696,47 @@ export const commands: Chat.ChatCommands = {
 				}
 				delete userData.flags.pokemonOptions;
 				break;
-				case 'healhp':
-					arg = args.shift();
-					if (!arg) return this.errorReply(`You need to specify a pokemon.`);
-					index = parseInt(arg);
-					index--;
-					if (!userData.team[index]) return this.errorReply(`You need to specify a pokemon on your team.`);
-					if (userData.teamData[index].curHP === userData.teamData[index].maxHP) return this.errorReply(`You can't use this on that pokemon.`);
-					userData.teamData[index].curHP = userData.teamData[index].maxHP;
-					// TODO: More items
-					break;
-				case 'healpp':
-					arg = args.shift();
-					if (!arg) return this.errorReply(`You need to specify a pokemon.`);
-					index = parseInt(arg);
-					index--;
-					if (!userData.team[index]) return this.errorReply(`You need to specify a pokemon on your team.`);
-					if (userData.teamData[index].ppLeft.every((v, i) => Dex.moves.get(userData.team[index].moves[i]).pp * (8 / 5) === v)) return this.errorReply(`You can't use this on that pokemon.`);
-					userData.teamData[index].ppLeft.forEach((v, i) => userData.teamData[index].ppLeft[i] = Dex.moves.get(userData.team[index].moves[i]).pp * (8 / 5));
-					// TODO: More items
-					break;
-				case 'curestatus':
-					arg = args.shift();
-					if (!arg) return this.errorReply(`You need to specify a pokemon.`);
-					index = parseInt(arg);
-					index--;
-					if (!userData.team[index]) return this.errorReply(`You need to specify a pokemon on your team.`);
-					if (!userData.teamData[index].status || userData.teamData[index].status === 'fnt') return this.errorReply(`You can't use this on that pokemon.`);
-					userData.teamData[index].status = false;
-					// TODO: More items
-					break;
-				case 'revive':
-					arg = args.shift();
-					if (!arg) return this.errorReply(`You need to specify a pokemon.`);
-					index = parseInt(arg);
-					index--;
-					if (!userData.team[index]) return this.errorReply(`You need to specify a pokemon on your team.`);
-					if (userData.teamData[index].status !== 'fnt') return this.errorReply(`You can't use this on that pokemon.`);
-					userData.teamData[index].curHP = Math.floor(userData.teamData[index].maxHP / 2);
-					userData.teamData[index].status = false;
-					// TODO: More items
-					break;
+			case 'healhp':
+				arg = args.shift();
+				if (!arg) return this.errorReply(`You need to specify a pokemon.`);
+				index = parseInt(arg);
+				index--;
+				if (!userData.team[index]) return this.errorReply(`You need to specify a pokemon on your team.`);
+				if (userData.teamData[index].curHP === userData.teamData[index].maxHP) return this.errorReply(`You can't use this on that pokemon.`);
+				userData.teamData[index].curHP = userData.teamData[index].maxHP;
+				// TODO: More items
+				break;
+			case 'healpp':
+				arg = args.shift();
+				if (!arg) return this.errorReply(`You need to specify a pokemon.`);
+				index = parseInt(arg);
+				index--;
+				if (!userData.team[index]) return this.errorReply(`You need to specify a pokemon on your team.`);
+				if (userData.teamData[index].ppLeft.every((v, i) => Dex.moves.get(userData.team[index].moves[i]).pp * (8 / 5) === v)) return this.errorReply(`You can't use this on that pokemon.`);
+				userData.teamData[index].ppLeft.forEach((v, i) => userData.teamData[index].ppLeft[i] = Dex.moves.get(userData.team[index].moves[i]).pp * (8 / 5));
+				// TODO: More items
+				break;
+			case 'curestatus':
+				arg = args.shift();
+				if (!arg) return this.errorReply(`You need to specify a pokemon.`);
+				index = parseInt(arg);
+				index--;
+				if (!userData.team[index]) return this.errorReply(`You need to specify a pokemon on your team.`);
+				if (!userData.teamData[index].status || userData.teamData[index].status === 'fnt') return this.errorReply(`You can't use this on that pokemon.`);
+				userData.teamData[index].status = false;
+				// TODO: More items
+				break;
+			case 'revive':
+				arg = args.shift();
+				if (!arg) return this.errorReply(`You need to specify a pokemon.`);
+				index = parseInt(arg);
+				index--;
+				if (!userData.team[index]) return this.errorReply(`You need to specify a pokemon on your team.`);
+				if (userData.teamData[index].status !== 'fnt') return this.errorReply(`You can't use this on that pokemon.`);
+				userData.teamData[index].curHP = Math.floor(userData.teamData[index].maxHP / 2);
+				userData.teamData[index].status = false;
+				// TODO: More items
+				break;
 			default:
 				return this.errorReply(`Your command is too vague.`);
 			}
@@ -753,7 +753,7 @@ export const commands: Chat.ChatCommands = {
 				userData.goToPage('shop');
 				return;
 			}
-			let index = parseInt(target);
+			const index = parseInt(target);
 			if (index && index <= 6) {
 				userData.addPokemon(userData.flags.replacingWith, index - 1);
 				delete userData.flags.replacingWith;
@@ -831,11 +831,11 @@ export const pages: Chat.PageTable = {
 			}
 			subtitle = 'Complete Purchase';
 			switch (gameArgs.shift()) {
-				case 'release':
-					buf = `<center>Choose a pokemon to replace!</center><br />`;
-					buf += userGameData.genQuickSelectHTML('pokemon');
-					break;
-				default:
+			case 'release':
+				buf = `<center>Choose a pokemon to replace!</center><br />`;
+				buf += userGameData.genQuickSelectHTML('pokemon');
+				break;
+			default:
 				buf += userGameData.genPurchaseHTML();
 			}
 			break;
