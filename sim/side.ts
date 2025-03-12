@@ -489,9 +489,7 @@ export class Side {
 		this.battle.send('sideupdate', `${this.id}\n|request|${JSON.stringify(update)}`);
 		this.activeRequest = update;
     if (this.isAI) {
-      const decision = roguelikeAI(update);
-      console.log(decision);
-      this.battle.choose(this.id, decision || 'default');
+      this.battle.choose(this.id, roguelikeAI(update));
     }
 	}
 
@@ -500,6 +498,9 @@ export class Side {
 		const type = `[${unavailable ? 'Unavailable' : 'Invalid'} choice]`;
 		this.battle.send('sideupdate', `${this.id}\n|error|${type} ${message}`);
 		if (this.battle.strictChoices) throw new Error(`${type} ${message}`);
+    if (this.isAI) {
+      this.battle.choose(this.id, 'default');
+    }
 		return false;
 	}
 

@@ -4438,7 +4438,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						this.add('detailschange', source, source.details);
 						this.add('-heal', source, source.getHealth, '[silent]');
 						this.add('message', `${source.name} leveled up!`);
-						source.m.expAtNextLevel = source.getMinExpForMonAtLevel(species, source.set.level + 1);
+						let nextLevel = source.level + 1;
+						source.m.expAtNextLevel = source.getMinExpForMonAtLevel(this.toID(source.species.name), nextLevel);
 					}
 				}
 			}
