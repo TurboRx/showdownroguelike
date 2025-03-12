@@ -24,7 +24,6 @@ import { State } from './state';
 import { BattleQueue, type Action } from './battle-queue';
 import { BattleActions } from './battle-actions';
 import { Utils } from '../lib/utils';
-import { roguelikeAI } from '../server/chat-plugins/roguelike';
 declare const __version: any;
 
 export type ChannelID = 0 | 1 | 2 | 3 | 4;
@@ -1326,13 +1325,9 @@ export class Battle {
 		const requests = this.getRequests(type);
 		for (let i = 0; i < this.sides.length; i++) {
 			this.sides[i].emitRequest(requests[i]);
-			if (this.sides[i].isAI) {
-				const decision = roguelikeAI(requests[i]);
-				if (decision) this.choose(this.sides[i].id, decision);
-			}
 		}
 
-		if (this.sides.every(side => side.isChoiceDone())) {
+		if (!this.sides.some(s => s.isAI) && this.sides.every(side => side.isChoiceDone())) {
 			throw new Error(`Choices are done immediately after a request`);
 		}
 	}

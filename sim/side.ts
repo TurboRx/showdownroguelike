@@ -24,6 +24,7 @@ import type { RequestState } from './battle';
 import { Pokemon, type EffectState } from './pokemon';
 import { State } from './state';
 import { toID } from './dex';
+import { roguelikeAI } from '../server/chat-plugins/roguelike';
 
 /** A single action that can be chosen. Choices will have one Action for each pokemon. */
 export interface ChosenAction {
@@ -487,6 +488,11 @@ export class Side {
 	emitRequest(update: ChoiceRequest) {
 		this.battle.send('sideupdate', `${this.id}\n|request|${JSON.stringify(update)}`);
 		this.activeRequest = update;
+    if (this.isAI) {
+      const decision = roguelikeAI(update);
+      console.log(decision);
+      this.battle.choose(this.id, decision || 'default');
+    }
 	}
 
 	emitChoiceError(message: string, unavailable?: boolean) {
