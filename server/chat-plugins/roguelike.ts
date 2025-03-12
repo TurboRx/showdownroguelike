@@ -127,7 +127,7 @@ function createAIBattle(userID: ID, ai: AITrainer) {
 }
 
 function genItem(quantity: number) {
-	let all = Dex.items.all().filter(s => s.isNonstandard !== 'Past');
+	let all = Dex.items.all().filter(s => !s.isNonstandard);
 	all = Utils.shuffle(all);
 	const items = [];
 	for (let x = 0; x < quantity; x++) {
@@ -183,7 +183,11 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 		Dex.natures.all().forEach(n => natures.push(n.name));
 
 		const rareItems: string[] = [];
-		Dex.items.all().forEach(n => rareItems.push(n.name));
+		Dex.items.all().forEach(n => {
+			if (!n.isNonstandard) {
+				rareItems.push(n.name);
+			}
+		});
 		const set: PokemonSet = {
 			name: specie.baseSpecies,
 			species: specie.name,
