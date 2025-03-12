@@ -129,9 +129,9 @@ function createAIBattle(userID: ID, ai: AITrainer) {
 function genItem(quantity: number) {
 	let all = Dex.items.all().filter(s => s.isNonstandard !== 'Past');
 	all = Utils.shuffle(all);
-	let items = [];
+	const items = [];
 	for (let x = 0; x < quantity; x++) {
-		let plausibleItem = all.shift();
+		const plausibleItem = all.shift();
 		if (plausibleItem) items.push(plausibleItem.name);
 	}
 	return items;
@@ -170,7 +170,7 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 		// TODO: Assess the Pupitar problem
 		if (specie.abilities.S && Math.floor(Math.random() * 100) === 1) {
 			setAbil = specie.abilities.S;
-		} else if (specie.abilities.H && Math.floor(Math.random() * 50) === 1) {
+		} else if (specie.abilities.H && Math.floor(Math.random() * 20) === 1) {
 			setAbil = specie.abilities.H;
 		} else {
 			if (specie.abilities[1] && Math.floor(Math.random() * 2) === 1) {
@@ -181,12 +181,15 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 		}
 		const natures: string[] = [];
 		Dex.natures.all().forEach(n => natures.push(n.name));
+
+		const rareItems: string[] = [];
+		Dex.items.all().forEach(n => rareItems.push(n.name));
 		const set: PokemonSet = {
 			name: specie.baseSpecies,
 			species: specie.name,
 			gender: specie.gender || Utils.randomElement(['M', 'F']),
 			shiny: (Math.floor(Math.random() * 1024) === 69),
-			item: '',
+			item: (Math.floor(Math.random() * 20) === 0) ? Utils.randomElement(rareItems) : '',
 			ability: setAbil,
 			moves: [],
 			nature: Utils.randomElement(natures),
@@ -456,10 +459,10 @@ export class Roguelike {
 		for (const mon of this.team) {
 			switch (checkItem) {
 			case 'item':
-			failureCondition = false;
-			cmd = 'giveitem ' + index;
-			skip = 'replacepoke skip';
-			break;
+				failureCondition = false;
+				cmd = 'giveitem ' + index;
+				skip = 'replacepoke skip';
+				break;
 			case 'pokemon':
 				failureCondition = false;
 				cmd = 'replacepoke ' + index;
@@ -546,15 +549,15 @@ export class Roguelike {
 		case 'scout':
 			break;
 		case 'item':
-		exitButtonText = 'Skip';
-		buf += `<center><h3>Get an item!</h3><br />`;
-		buf += `<div style="width:100%;">`;
-		// @ts-ignore
-		for (const item of this.flags.itemOptions) {
-			buf += `<button class="button" name="send" value="/roguelike redeem item, ${toID(item)}"><psicon item="${item}" />${item}</button>`;
-		}
-		buf += `</div>`;
-		break;
+			exitButtonText = 'Skip';
+			buf += `<center><h3>Get an item!</h3><br />`;
+			buf += `<div style="width:100%;">`;
+			// @ts-ignore
+			for (const item of this.flags.itemOptions) {
+				buf += `<button class="button" name="send" value="/roguelike redeem item, ${toID(item)}"><psicon item="${item}" />${item}</button>`;
+			}
+			buf += `</div>`;
+			break;
 		case 'debug':
 			buf += 'Hoeen is now banned from this server.<br />Good job!';
 			break;
@@ -780,7 +783,7 @@ export const commands: Chat.ChatCommands = {
 			case 'item':
 				arg = args.shift();
 				if (!arg) return this.errorReply(`You need to specify an item.`);
-				let dexItem = Dex.items.get(arg);
+				const dexItem = Dex.items.get(arg);
 				if (!dexItem) return this.errorReply(`You need to specify an item.`);
 				userData.flags.newItem = dexItem.name;
 				userData.goToPage('purchase-item');
