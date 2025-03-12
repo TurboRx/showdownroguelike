@@ -3261,6 +3261,8 @@ export class Battle {
 					// @ts-ignore
 					monData.level = mon.set.level;
 					// @ts-ignore
+					monData.item = mon.item;
+					// @ts-ignore
 					monData.linkedTeamIndex = mon.m.roguelikeIndex;
 					roguelikeData.push(monData);
 				}

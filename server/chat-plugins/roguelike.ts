@@ -48,7 +48,7 @@ function getMinExpForMonAtLevel(species: string, level: number) {
 	}
 }
 
-type ItemType = 'pokemon' | 'healHP' | 'healPP' | 'TM' | 'key' | 'scout' | 'debug' | 'revive' | 'cureStatus';
+type ItemType = 'pokemon' | 'healHP' | 'healPP' | 'TM' | 'key' | 'scout' | 'debug' | 'revive' | 'cureStatus' | 'item';
 
 const SEQUENCE_CHECK: { [k: string]: string[] } = {
 	battle: ['results'],
@@ -78,6 +78,7 @@ interface UserTeamData {
 
 const SHOP_ITEMS: { [k: string]: ShopItem } = {
 	pokeballpack: { name: 'Poke Ball Pack', icon: 'Poke Ball', type: 'pokemon', desc: 'Pick 1 of 3 random Pokemon.', cost: 7, minStreak: 0 },
+	helditempack: { name: 'Held Item Pack', icon: 'Leftovers', type: 'item', desc: 'Pick 1 of 3 held items to put on a Pokemon', cost: 3, minStreak: 0 },
 	maxpotion: { name: 'Max Potion', icon: 'Electirizer', type: 'healHP', desc: 'Heals a pokemon\'s HP fully.', cost: 5, minStreak: 0 },
 	maxelixer: { name: 'Max Elixer', icon: 'Magmarizer', type: 'healPP', desc: 'Heals a pokemon\'s moves fully.', cost: 3, minStreak: 0 },
 	fullheal: { name: 'Full Heal', icon: 'Flower Sweet', type: 'cureStatus', desc: 'Cures a pokemon\'s status.', cost: 3, minStreak: 0 },
@@ -123,6 +124,17 @@ function createAIBattle(userID: ID, ai: AITrainer) {
 			isAI: true,
 		}],
 	});
+}
+
+function genItem(quantity: number) {
+	let all = Dex.items.all().filter(s => s.isNonstandard !== 'Past');
+	all = Utils.shuffle(all);
+	let items = [];
+	for (let x = 0; x < quantity; x++) {
+		let plausibleItem = all.shift();
+		if (plausibleItem) items.push(plausibleItem.name);
+	}
+	return items;
 }
 
 function genPokemon(quantity: number, level: number | number[], starter?: boolean) {
@@ -291,6 +303,7 @@ export class Roguelike {
 			mon.ppLeft = newMon.ppLeft;
 			mon.exp = newMon.exp;
 			teamSet.evs = newMon.evs;
+			teamSet.item = newMon.item;
 			if (teamSet.level !== newMon.level) {
 				teamSet.level = newMon.level;
 				mon.expAtNextLevel = getMinExpForMonAtLevel(teamSet.species, teamSet.level + 1);
@@ -442,6 +455,11 @@ export class Roguelike {
 		let index = 1;
 		for (const mon of this.team) {
 			switch (checkItem) {
+			case 'item':
+			failureCondition = false;
+			cmd = 'giveitem ' + index;
+			skip = 'replacepoke skip';
+			break;
 			case 'pokemon':
 				failureCondition = false;
 				cmd = 'replacepoke ' + index;
@@ -527,6 +545,16 @@ export class Roguelike {
 			break;
 		case 'scout':
 			break;
+		case 'item':
+		exitButtonText = 'Skip';
+		buf += `<center><h3>Get an item!</h3><br />`;
+		buf += `<div style="width:100%;">`;
+		// @ts-ignore
+		for (const item of this.flags.itemOptions) {
+			buf += `<button class="button" name="send" value="/roguelike redeem item, ${toID(item)}"><psicon item="${item}" />${item}</button>`;
+		}
+		buf += `</div>`;
+		break;
 		case 'debug':
 			buf += 'Hoeen is now banned from this server.<br />Good job!';
 			break;
@@ -657,6 +685,9 @@ export const commands: Chat.ChatCommands = {
 			case 'key':
 			case 'scout':
 			case 'debug':
+			case 'item':
+				userData.flags.itemOptions = genItem(3);
+				break;
 			}
 			userData.flags.purchasedItem = item;
 			userData.battlePoints -= item.cost;
@@ -746,6 +777,15 @@ export const commands: Chat.ChatCommands = {
 				userData.teamData[index].status = false;
 				// TODO: More items
 				break;
+			case 'item':
+				arg = args.shift();
+				if (!arg) return this.errorReply(`You need to specify an item.`);
+				let dexItem = Dex.items.get(arg);
+				if (!dexItem) return this.errorReply(`You need to specify an item.`);
+				userData.flags.newItem = dexItem.name;
+				userData.goToPage('purchase-item');
+				delete userData.flags.itemOptions;
+				return;
 			default:
 				return this.errorReply(`Your command is too vague.`);
 			}
@@ -766,6 +806,24 @@ export const commands: Chat.ChatCommands = {
 			if (index && index <= 6) {
 				userData.addPokemon(userData.flags.replacingWith, index - 1);
 				delete userData.flags.replacingWith;
+				if (userData.flags.purchasedItem) delete userData.flags.purchasedItem;
+			}
+			userData.goToPage('shop');
+		},
+		giveitem(target, room, user) {
+			const userData = roguelikeGames.get(user.id);
+			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
+			if (!userData.flags.newItem) return this.errorReply(`You need to purchase something first.`);
+			if (target === 'skip') {
+				delete userData.flags.newItem;
+				if (userData.flags.purchasedItem) delete userData.flags.purchasedItem;
+				userData.goToPage('shop');
+				return;
+			}
+			const index = parseInt(target);
+			if (index && index <= 6) {
+				userData.team[index - 1].item = userData.flags.newItem;
+				delete userData.flags.newItem;
 				if (userData.flags.purchasedItem) delete userData.flags.purchasedItem;
 			}
 			userData.goToPage('shop');
@@ -843,6 +901,10 @@ export const pages: Chat.PageTable = {
 			case 'release':
 				buf = `<center>Choose a pokemon to replace!</center><br />`;
 				buf += userGameData.genQuickSelectHTML('pokemon');
+				break;
+			case 'item':
+				buf = `<center>Give this item to who?</center><br />`;
+				buf += userGameData.genQuickSelectHTML('item');
 				break;
 			default:
 				buf += userGameData.genPurchaseHTML();
