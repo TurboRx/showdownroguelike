@@ -488,9 +488,9 @@ export class Side {
 	emitRequest(update: ChoiceRequest) {
 		this.battle.send('sideupdate', `${this.id}\n|request|${JSON.stringify(update)}`);
 		this.activeRequest = update;
-    if (this.isAI) {
-      this.battle.choose(this.id, roguelikeAI(update));
-    }
+		if (this.isAI) {
+			this.battle.choose(this.id, roguelikeAI(update));
+		}
 	}
 
 	emitChoiceError(message: string, unavailable?: boolean) {
@@ -498,9 +498,9 @@ export class Side {
 		const type = `[${unavailable ? 'Unavailable' : 'Invalid'} choice]`;
 		this.battle.send('sideupdate', `${this.id}\n|error|${type} ${message}`);
 		if (this.battle.strictChoices) throw new Error(`${type} ${message}`);
-    if (this.isAI) {
-      this.battle.choose(this.id, 'default');
-    }
+		if (this.isAI) {
+			this.battle.choose(this.id, 'default');
+		}
 		return false;
 	}
 
