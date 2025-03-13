@@ -255,7 +255,7 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 }
 
 export function roguelikeAI(request: object) {
-	if (request.wait) return 'default';
+	if (request.wait) return false;
 	if (request.forceSwitch) {
 		const choiceSlot = Math.floor(Math.random() * (request.side.pokemon.length - 1)) + 2;
 		return 'switch ' + choiceSlot;

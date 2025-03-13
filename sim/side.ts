@@ -489,7 +489,8 @@ export class Side {
 		this.battle.send('sideupdate', `${this.id}\n|request|${JSON.stringify(update)}`);
 		this.activeRequest = update;
 		if (this.isAI) {
-			this.battle.choose(this.id, roguelikeAI(update));
+			let decision = roguelikeAI(update);
+			if (decision) this.battle.choose(this.id, decision);
 		}
 	}
 
