@@ -1043,7 +1043,7 @@
       "spe": 0
     }
   },
-  "farfetch'd": {
+  "farfetchd": {
     "expYield": 132,
     "expType": "Medium Fast",
     "evYield": {
@@ -10870,7 +10870,7 @@
       "spe": 0
     }
   },
-  "sirfetch'd": {
+  "sirfetchd": {
     "expYield": 177,
     "expType": "Medium Fast",
     "evYield": {
