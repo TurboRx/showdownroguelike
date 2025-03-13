@@ -473,7 +473,7 @@ export class Roguelike {
 			case 'item':
 				failureCondition = false;
 				cmd = 'giveitem ' + index;
-				skip = 'replacepoke skip';
+				skip = 'giveitem skip';
 				break;
 			case 'pokemon':
 				failureCondition = false;
