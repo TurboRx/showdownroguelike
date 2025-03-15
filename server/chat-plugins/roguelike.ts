@@ -455,6 +455,7 @@ export class Roguelike {
 				buf += `${dexMove.name}: ${monData.ppLeft[linkedMoveIndex]}/${dexMove.pp * (8 / 5)}`;
 				linkedMoveIndex++;
 			}
+			buf += `<td><button class="button" name="send" value="/roguelike switch ${linkedIndex + 1}">Move</button>`;
 			buf += `</td></tr>`;
 			linkedIndex++;
 		}
@@ -462,10 +463,11 @@ export class Roguelike {
 		return buf;
 	}
 
-	genQuickSelectHTML(checkItem: ItemType) {
+	genQuickSelectHTML(checkItem: ItemType | "switch", targetIndex?: number) {
 		let buf = `<div style="width:100%;"><center>`;
 		let cmd;
 		let skip = 'shop';
+		let skipmsg = 'Skip'
 		let failureCondition;
 		let index = 1;
 		for (const mon of this.team) {
@@ -496,6 +498,11 @@ export class Roguelike {
 				failureCondition = this.teamData[index - 1].status !== 'fnt';
 				cmd = 'redeem revive, ' + index;
 				break;
+			case 'switch':
+					failureCondition = index === targetIndex;
+					cmd = `switch ${targetIndex}, ` + index;
+					skip = 'switch undo';
+					skipmsg = 'Undo';
 			case 'TM':
 			case 'key':
 			case 'scout':
@@ -511,7 +518,7 @@ export class Roguelike {
 			}
 			index++;
 		}
-		buf += `<br /><br /><button class="button" name="send" value="/roguelike ${skip}">Skip</button>`;
+		buf += `<br /><br /><button class="button" name="send" value="/roguelike ${skip}">${skipmsg}</button>`;
 		buf += `</center></div>`;
 		return buf;
 	}
@@ -825,6 +832,39 @@ export const commands: Chat.ChatCommands = {
 			}
 			userData.goToPage('shop');
 		},
+		switch(target, room, user) {
+			const userData = roguelikeGames.get(user.id);
+			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
+			if (target === 'undo') {
+				userData.goToPage('shop-team');
+			}
+			const args = target.split(',');
+			let arg = args.shift();
+			if (!arg) return this.errorReply(`You need to specify a pokemon to switch with!`);
+			let index1 = parseInt(arg);
+			if (!index1) return this.errorReply(`You need to specify a pokemon to switch with!`);
+			if (!userData.team[index1 - 1]) return this.errorReply(`You need to specify a pokemon to switch with!`);
+			arg = args.shift();
+			if (!arg) {
+				userData.goToPage(`shop-switch-${index1}`);
+				return;
+			} else {
+				let index2 = parseInt(arg);
+				if (!index2) return this.errorReply(`You need to specify a pokemon to switch with!`);
+				index1--;
+				index2--;
+				if (!userData.team[index1] || !userData.team[index2]) return this.errorReply(`You need to specify a pokemon to switch with!`);
+				let carrySet = userData.team[index1];
+				let carryData = userData.teamData[index1];
+				userData.team[index1] = userData.team[index2];
+				userData.teamData[index1] = userData.teamData[index2];
+				userData.teamData[index1].linkedTeamIndex = index1;
+				userData.team[index2] = carrySet;
+				userData.teamData[index2] = carryData;
+				userData.teamData[index2].linkedTeamIndex = index2;
+				userData.goToPage('shop-team');
+			}
+		},
 		giveitem(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
 			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
@@ -897,14 +937,23 @@ export const pages: Chat.PageTable = {
 			break;
 		case 'scout':
 		case 'shop':
-			subtitle = 'Shop';
 			buf += `<b>BP:</b> ${userGameData.battlePoints}<br />`;
 			switch (gameArgs.shift()) {
 			case 'team':
+				subtitle = 'Current Team';
 				buf += `<button class="button" name="send" value="/roguelike shop">Go back to shop</button>`;
 				buf += userGameData.genUserTeamHTML();
 				break;
+			case 'switch':
+				subtitle = 'Current Team';
+				let switchIndex = gameArgs.shift();
+				if (!switchIndex) return this.errorReply('If you tried to switch and reached this error, contact HiZo.');
+				buf = `<center>Switch with who?</center><br />`;
+				let switchNumber = parseInt(switchIndex);
+				buf += userGameData.genQuickSelectHTML('switch', switchNumber);
+				break;
 			default:
+				subtitle = 'Shop';
 				buf += `<button class="button" name="send" value="/roguelike checkteam">Check your team</button>`;
 				buf += userGameData.genShopHTML();
 				buf += `<br /><button class="button" name="send" value="/roguelike next">Start the next battle!</button>`;
