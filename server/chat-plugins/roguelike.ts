@@ -467,7 +467,7 @@ export class Roguelike {
 		let buf = `<div style="width:100%;"><center>`;
 		let cmd;
 		let skip = 'shop';
-		let skipmsg = 'Skip'
+		let skipmsg = 'Skip';
 		let failureCondition;
 		let index = 1;
 		for (const mon of this.team) {
@@ -499,10 +499,10 @@ export class Roguelike {
 				cmd = 'redeem revive, ' + index;
 				break;
 			case 'switch':
-					failureCondition = index === targetIndex;
-					cmd = `switch ${targetIndex}, ` + index;
-					skip = 'switch undo';
-					skipmsg = 'Undo';
+				failureCondition = index === targetIndex;
+				cmd = `switch ${targetIndex}, ` + index;
+				skip = 'switch undo';
+				skipmsg = 'Undo';
 			case 'TM':
 			case 'key':
 			case 'scout':
@@ -854,8 +854,8 @@ export const commands: Chat.ChatCommands = {
 				index1--;
 				index2--;
 				if (!userData.team[index1] || !userData.team[index2]) return this.errorReply(`You need to specify a pokemon to switch with!`);
-				let carrySet = userData.team[index1];
-				let carryData = userData.teamData[index1];
+				const carrySet = userData.team[index1];
+				const carryData = userData.teamData[index1];
 				userData.team[index1] = userData.team[index2];
 				userData.teamData[index1] = userData.teamData[index2];
 				userData.teamData[index1].linkedTeamIndex = index1;
@@ -946,10 +946,10 @@ export const pages: Chat.PageTable = {
 				break;
 			case 'switch':
 				subtitle = 'Current Team';
-				let switchIndex = gameArgs.shift();
+				const switchIndex = gameArgs.shift();
 				if (!switchIndex) return this.errorReply('If you tried to switch and reached this error, contact HiZo.');
 				buf = `<center>Switch with who?</center><br />`;
-				let switchNumber = parseInt(switchIndex);
+				const switchNumber = parseInt(switchIndex);
 				buf += userGameData.genQuickSelectHTML('switch', switchNumber);
 				break;
 			default:
