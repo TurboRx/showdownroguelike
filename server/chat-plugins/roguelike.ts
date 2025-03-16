@@ -172,6 +172,7 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 		all = all.filter(s => !s.tags.includes('Ultra Beast') || s.name === 'Poipole');
 		all = all.filter(s => !['Ursaluna-Bloodmoon', 'Floette-Eternal'].includes(s.name));
 	}
+	// TODO: BST weighting?
 	let depth = 0;
 	while (gennedMons.length < quantity) {
 		const specie = Utils.shuffle(all).shift();
