@@ -927,17 +927,28 @@ export const pages: Chat.PageTable = {
 				subtitle = 'Game Over';
 				buf += `<center><h3>Too bad!</h3><br />`;
 				buf += `<b>Matches won:</b> ${userGameData.battle - 1}<br /><b>Streaks Won:</b> ${userGameData.streak}<br /><b>BP:</b> ${userGameData.battlePoints}`;
-				buf += `<br /><button class="button" name="send" value="/roguelike start">Start a new run</button></center>`;
+				buf += `<br /><br /><button class="button" name="send" value="/roguelike start">Start a new run</button></center>`;
 			} else {
-				subtitle = 'Current Run Info';
-				buf += `<center><h3>Nice win!</h3><br />`;
-				buf += `<b>Current match:</b> ${userGameData.battle}<br /><b>Streaks won:</b> ${userGameData.streak}<br /><b>BP:</b> ${userGameData.battlePoints}`;
-				buf += `<br /><button class="button" name="send" value="/roguelike shop">Go to shop</button></center>`;
+				if (userGameData.streak === 8 && (userGameData.battle - 1) % 7 === 0) {
+					subtitle = 'You won!';
+					buf += `<center><h3>Congratulations, you completed the run!</h3><br />`;
+					buf += `<b>Matches won:</b> ${userGameData.battle - 1}<br /><b>Streaks Won:</b> ${userGameData.streak}<br /><b>BP:</b> ${userGameData.battlePoints}`;
+					buf += `<br /><br /><button class="button" name="send" value="/roguelike shop">Keep going</button><br />`;
+					buf += `<br /><button class="button" name="send" value="/roguelike start">Start a new run</button></center>`;
+				} else {
+					subtitle = 'Current Run Info';
+					buf += `<center><h3>Nice win!</h3><br />`;
+					buf += `<b>Current match:</b> ${userGameData.battle}<br /><b>Streaks won:</b> ${userGameData.streak}<br /><b>BP:</b> ${userGameData.battlePoints}<br />(+5 BP for winning)`;
+					if ((userGameData.battle - 1) % 7 === 0) {
+						buf += `<br />(+5 BP for completing a streak)<br />(Also, your Pokemon are fully healed)`;
+					}
+					buf += `<br /><br /><button class="button" name="send" value="/roguelike shop">Go to shop</button></center>`;
+				}
 			}
 			break;
 		case 'scout':
 		case 'shop':
-			buf += `<b>BP:</b> ${userGameData.battlePoints}<br />`;
+			buf += `<b>Current match:</b> ${(userGameData.battle % 7 === 0 ? 7 : userGameData.battle % 7)}/7 | <b>Streaks won:</b> ${userGameData.streak}/7 | <b>BP:</b> ${userGameData.battlePoints}<br /><br />`;
 			switch (gameArgs.shift()) {
 			case 'team':
 				subtitle = 'Current Team';
