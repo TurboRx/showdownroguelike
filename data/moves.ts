@@ -3162,6 +3162,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					const targetSide = sides[(i + offset) % 4]; // the next side in rotation
 					for (const id in sourceSideConditions) {
 						targetSide.sideConditions[id] = sourceSideConditions[id];
+						targetSide.sideConditions[id].target = targetSide;
 						const effectName = this.dex.conditions.get(id).name;
 						let layers = sourceSideConditions[id].layers || 1;
 						for (; layers > 0; layers--) this.add('-sidestart', targetSide, effectName, '[silent]');
@@ -3186,9 +3187,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 				for (const id in sourceTemp) {
 					targetSideConditions[id] = sourceTemp[id];
+					targetSideConditions[id].target = source.side.foe;
 				}
 				for (const id in targetTemp) {
 					sourceSideConditions[id] = targetTemp[id];
+					sourceSideConditions[id].target = source.side;
 				}
 				this.add('-swapsideconditions');
 			}
@@ -4669,6 +4672,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { nonsky: 1, metronome: 1 },
 		terrain: 'electricterrain',
 		condition: {
+			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -7960,6 +7964,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { nonsky: 1, metronome: 1 },
 		terrain: 'grassyterrain',
 		condition: {
+			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -8618,7 +8623,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-end', pokemon, 'move: Heal Block');
 			},
 			onTryHeal(damage, target, source, effect) {
-				if ((effect?.id === 'zpower') || this.effectState.isZ) return damage;
+				if (effect && (effect.id === 'zpower' || (effect as Move).isZ)) return damage;
+				if (source && target !== source && target.hp !== target.maxhp && effect.name === "Pollen Puff") {
+					this.attrLastMove('[still]');
+					// FIXME: Wrong error message, correct one not supported yet
+					this.add('cant', source, 'move: Heal Block', effect);
+					return null;
+				}
 				return false;
 			},
 			onRestart(target, source, effect) {
@@ -12600,6 +12611,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { nonsky: 1, metronome: 1 },
 		terrain: 'mistyterrain',
 		condition: {
+			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -14065,13 +14077,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onHit(target, source, move) {
 			if (source.isAlly(target)) {
 				if (!this.heal(Math.floor(target.baseMaxhp * 0.5))) {
-					if (target.volatiles['healblock'] && target.hp !== target.maxhp) {
-						this.attrLastMove('[still]');
-						// Wrong error message, correct one not supported yet
-						this.add('cant', source, 'move: Heal Block', move);
-					} else {
-						this.add('-immune', target);
-					}
 					return this.NOT_FAIL;
 				}
 			}
@@ -14646,6 +14651,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { nonsky: 1, metronome: 1 },
 		terrain: 'psychicterrain',
 		condition: {
+			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
