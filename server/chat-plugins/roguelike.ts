@@ -127,12 +127,24 @@ function createAIBattle(userID: ID, ai: AITrainer) {
 }
 
 function genItem(quantity: number) {
-	let all = Dex.items.all().filter(s => !s.isNonstandard);
+	let all = Dex.items.all().filter(s => (s.isGem || s.isPrimalOrb || s.zMove || s.megaStone || s.onDrive || s.onMemory) || !s.isNonstandard);
+	all = all.filter(i => Object.keys(i).some(k => {
+		// Great catch-all to check if an item has a worthwhile effect in battle
+		if (typeof i[k] === 'function') {
+			return true;
+		}
+		if (i.isGem || i.isPrimalOrb || i.zMove || i.megaStone || i.onDrive || i.onMemory) return true;
+		return false;
+	}));
 	all = Utils.shuffle(all);
 	const items = [];
-	for (let x = 0; x < quantity; x++) {
+	while (items.length < quantity) {
 		const plausibleItem = all.shift();
-		if (plausibleItem) items.push(plausibleItem.name);
+		if (plausibleItem) {
+			items.push(plausibleItem.name);
+		} else {
+			break;
+		}
 	}
 	return items;
 }
@@ -182,18 +194,12 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 		const natures: string[] = [];
 		Dex.natures.all().forEach(n => natures.push(n.name));
 
-		const rareItems: string[] = [];
-		Dex.items.all().forEach(n => {
-			if (!n.isNonstandard) {
-				rareItems.push(n.name);
-			}
-		});
 		const set: PokemonSet = {
 			name: specie.baseSpecies,
 			species: specie.name,
 			gender: specie.gender || Utils.randomElement(['M', 'F']),
 			shiny: (Math.floor(Math.random() * 1024) === 69),
-			item: (Math.floor(Math.random() * 20) === 0) ? Utils.randomElement(rareItems) : '',
+			item: (Math.floor(Math.random() * 20) === 0) ? Utils.randomElement(genItem(1)) : '',
 			ability: setAbil,
 			moves: [],
 			nature: Utils.randomElement(natures),
@@ -571,9 +577,12 @@ export class Roguelike {
 			exitButtonText = 'Skip';
 			buf += `<center><h3>Get an item!</h3><br />`;
 			buf += `<div style="width:100%;">`;
+			let itempaddingindex = 0;
 			// @ts-ignore
 			for (const item of this.flags.itemOptions) {
+				if (itempaddingindex > 0) buf += `&nbsp;&nbsp;`;
 				buf += `<button class="button" name="send" value="/roguelike redeem item, ${toID(item)}"><psicon item="${item}" />${item}</button>`;
+				itempaddingindex++;
 			}
 			buf += `</div>`;
 			break;
