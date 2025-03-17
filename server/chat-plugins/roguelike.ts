@@ -922,6 +922,10 @@ export const pages: Chat.PageTable = {
 		const mainRoomArg = gameArgs.shift();
 		let subtitle = '';
 		let buf = `<div class = "pad">`;
+		if ((mainRoomArg !== 'battle' && mainRoomArg !== 'intro') && !userGameData.runEnded) {
+			// just type /forfeit
+			buf += `<button style="float: right;" class="button" name="send" value="/roguelike start">Restart</button><br />`;
+		}
 		switch (mainRoomArg) {
 		case 'battle':
 			if (userGameData.inBattle) {
