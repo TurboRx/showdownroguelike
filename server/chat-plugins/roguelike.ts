@@ -80,7 +80,7 @@ const SHOP_ITEMS: { [k: string]: ShopItem } = {
 	pokeballpack: { name: 'Poke Ball Pack', icon: 'Poke Ball', type: 'pokemon', desc: 'Pick 1 of 3 random Pokemon.', cost: 7, minStreak: 0 },
 	helditempack: { name: 'Held Item Pack', icon: 'Leftovers', type: 'item', desc: 'Pick 1 of 3 held items to put on a Pokemon', cost: 3, minStreak: 0 },
 	maxpotion: { name: 'Max Potion', icon: 'Electirizer', type: 'healHP', desc: 'Heals a pokemon\'s HP fully.', cost: 5, minStreak: 0 },
-	maxelixer: { name: 'Max Elixer', icon: 'Magmarizer', type: 'healPP', desc: 'Heals a pokemon\'s moves fully.', cost: 3, minStreak: 0 },
+	maxelixir: { name: 'Max Elixir', icon: 'Magmarizer', type: 'healPP', desc: 'Heals a pokemon\'s moves fully.', cost: 3, minStreak: 0 },
 	fullheal: { name: 'Full Heal', icon: 'Flower Sweet', type: 'cureStatus', desc: 'Cures a pokemon\'s status.', cost: 3, minStreak: 0 },
 	revive: { name: 'Revive', icon: 'Star Sweet', type: 'revive', desc: 'Revives a Pokemon to half its maximum HP.', cost: 5, minStreak: 1 },
 	// debug2: { name: 'Debug 2', icon: 'berserk gene', type: 'debug', desc: 'Bans HoeenHero from this server twice.', cost: 999, minStreak: 1 },
