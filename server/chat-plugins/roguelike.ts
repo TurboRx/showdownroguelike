@@ -1055,4 +1055,14 @@ export const handlers: Chat.Handlers = {
 		}
 		humanGameData.goToPage('results');
 	},
+
+	onAbandondedBattleDestroy(battle, players) {
+		if (!battle.options.isRoguelikeBattle) return;
+		// Player 1 is the always the human
+		const human = players[0];
+		const humanGameData = roguelikeGames.get(human);
+		if (!humanGameData) return;
+		humanGameData.inBattle = false;
+		humanGameData.refreshPage();
+	},
 };
