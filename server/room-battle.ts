@@ -1260,6 +1260,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 
 	override destroy() {
 		if (!this.ended) {
+			Chat.runHandlers('onAbandondedBattleDestroy', this, this.players.map(p => p.id));
 			this.setEnded();
 			this.room.parent?.game?.onBattleWin?.(this.room, '');
 		}

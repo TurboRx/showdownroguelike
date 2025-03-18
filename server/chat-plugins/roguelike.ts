@@ -938,6 +938,10 @@ export const pages: Chat.PageTable = {
 		const mainRoomArg = gameArgs.shift();
 		let subtitle = '';
 		let buf = `<div class = "pad">`;
+		if ((mainRoomArg !== 'battle' && mainRoomArg !== 'intro') && !userGameData.runEnded) {
+			// just type /forfeit
+			buf += `<button style="float: right;" class="button" name="send" value="/roguelike start">Restart</button><br />`;
+		}
 		switch (mainRoomArg) {
 		case 'battle':
 			if (userGameData.inBattle) {
@@ -1066,5 +1070,15 @@ export const handlers: Chat.Handlers = {
 			humanGameData.lose();
 		}
 		humanGameData.goToPage('results');
+	},
+
+	onAbandondedBattleDestroy(battle, players) {
+		if (!battle.options.isRoguelikeBattle) return;
+		// Player 1 is the always the human
+		const human = players[0];
+		const humanGameData = roguelikeGames.get(human);
+		if (!humanGameData) return;
+		humanGameData.inBattle = false;
+		humanGameData.refreshPage();
 	},
 };
