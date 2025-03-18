@@ -166,6 +166,25 @@ function genItem(quantity: number, extraArg?: PokemonSet[] | string) {
 	return items;
 }
 
+function getMovesAtTarget(pokemon: string, target: 'M' | 'T' | 'L' | 'R' | 'E' | 'D' | 'S' | 'V' | 'C', level?: number) {
+	const fullLearn = Dex.species.getFullLearnset(toID(pokemon));
+	const movesAtlevel: string[] = [];
+	for (const learnsetIndex of fullLearn) {
+		const learnset = learnsetIndex.learnset;
+		for (const move in learnset) {
+			let learnSetstring =  target === 'L' ? `${target}${level}` : target;
+			if (learnset[move].some(source => source.substring(1) === learnSetstring)) {
+				if (!movesAtlevel.includes(move)) {
+					movesAtlevel.push(move);
+				}
+			}
+		}
+	}
+	// randomize moves at equal level
+	Utils.shuffle(movesAtlevel);
+	return movesAtlevel;
+}
+
 function genPokemon(quantity: number, level: number | number[], starter?: boolean) {
 	let minLevel;
 	let maxLevel;
@@ -245,26 +264,13 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 		all = all.filter(s => !(s.baseSpecies === specie.baseSpecies));
 		depth++;
 	}
-	// TODO: Refactor this to own function for TMs
 	for (const moveless of gennedMons) {
 		let viableMoves: string[] = [];
-		const fullLearn = Dex.species.getFullLearnset(toID(moveless.species));
-		for (const learnsetIndex of fullLearn) {
-			const learnset = learnsetIndex.learnset;
-			for (let lvl = 1; lvl <= moveless.level; lvl++) {
-				const movesAtlevel: string[] = [];
-				for (const move in learnset) {
-					if (learnset[move].some(source => source.substring(1) === `L${lvl}`)) {
-						if (!viableMoves.includes(move) && !movesAtlevel.includes(move)) {
-							movesAtlevel.push(move);
-						}
-					}
-				}
-				// randomize moves at equal level
-				Utils.shuffle(movesAtlevel);
-				viableMoves = viableMoves.concat(movesAtlevel);
-			}
+		for (let lvl = 1; lvl <= moveless.level; lvl++) {
+			const movesAtlevel = getMovesAtTarget(moveless.species, 'L', lvl);
+			viableMoves = viableMoves.concat(movesAtlevel);
 		}
+		viableMoves = [...new Set(viableMoves)];
 		if (!viableMoves.length) {
 			throw new Error(`${moveless.species} somehow has no moves at level ${moveless.level}!`);
 		}
