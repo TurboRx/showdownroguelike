@@ -127,16 +127,32 @@ function createAIBattle(userID: ID, ai: AITrainer) {
 	});
 }
 
-function genItem(quantity: number) {
-	let all = Dex.items.all().filter(s => (s.isGem || s.isPrimalOrb || s.zMove || s.megaStone || s.onDrive || s.onMemory) || !s.isNonstandard);
-	all = all.filter(i => Object.keys(i).some(k => {
-		// Great catch-all to check if an item has a worthwhile effect in battle
-		if (typeof i[k] === 'function') {
-			return true;
+function genItem(quantity: number, extraArg?: PokemonSet[] | string) {
+	let all = Dex.items.all().filter(s => (s.isGem || s.itemUser || s.zMove) || !s.isNonstandard);
+	all = all.filter(i => {
+		if (i.itemUser) {
+			if (typeof extraArg === 'string') {
+				const dexSpecies = Dex.species.get(extraArg);
+				let validSpecies = [dexSpecies.name];
+				if (dexSpecies.otherFormes) validSpecies = validSpecies.concat(dexSpecies.otherFormes);
+				return i.itemUser.some(v => validSpecies.includes(v));
+			} else if (extraArg?.length) {
+				return extraArg.some(poke => {
+					const dexSpecies = Dex.species.get(poke.species);
+					let validSpecies = [dexSpecies.name];
+					if (dexSpecies.otherFormes) validSpecies = validSpecies.concat(dexSpecies.otherFormes);
+					return i.itemUser.some(v => validSpecies.includes(v));
+				});
+			}
+		} else {
+			return Object.keys(i).some(k => {
+				if (typeof i[k] === 'function') {
+					return true;
+				}
+				return false;
+			});
 		}
-		if (i.isGem || i.isPrimalOrb || i.zMove || i.megaStone || i.onDrive || i.onMemory) return true;
-		return false;
-	}));
+	});
 	all = Utils.shuffle(all);
 	const items = [];
 	while (items.length < quantity) {
@@ -201,7 +217,7 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 			species: specie.name,
 			gender: specie.gender || Utils.randomElement(['M', 'F']),
 			shiny: (Math.floor(Math.random() * 1024) === 69),
-			item: (Math.floor(Math.random() * 20) === 0) ? Utils.randomElement(genItem(1)) : '',
+			item: (Math.floor(Math.random() * 20) === 0) ? Utils.randomElement(genItem(1, specie.name)) : '',
 			ability: setAbil,
 			moves: [],
 			nature: Utils.randomElement(natures),
@@ -719,7 +735,7 @@ export const commands: Chat.ChatCommands = {
 			case 'scout':
 			case 'debug':
 			case 'item':
-				userData.flags.itemOptions = genItem(3);
+				userData.flags.itemOptions = genItem(3, userData.team);
 				break;
 			}
 			userData.flags.purchasedItem = item;
