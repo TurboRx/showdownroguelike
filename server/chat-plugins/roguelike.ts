@@ -113,6 +113,7 @@ function createAIBattle(userID: ID, ai: AITrainer) {
 	Rooms.createBattle({
 		format: 'gen9roguelikebattle',
 		isRoguelikeBattle: true,
+		allowRenames: false,
 		players: [{
 			user,
 			team: Teams.pack(gameData.team) || '',
@@ -274,6 +275,15 @@ export function roguelikeAI(request: object) {
 	return 'default';
 }
 
+function refreshPage(userID: ID) {
+	const realUser = Users.get(userID);
+	if (realUser) {
+		for (const conn of realUser.connections) {
+			void Chat.parse(`/join view-roguelike`, null, realUser, conn);
+		}
+	}
+}
+
 export class Roguelike {
 	user: ID;
 	battle: number;
@@ -412,18 +422,9 @@ export class Roguelike {
 		return ai;
 	}
 
-	refreshPage() {
-		const realUser = Users.get(this.user);
-		if (realUser) {
-			for (const conn of realUser.connections) {
-				void Chat.parse(`/join view-roguelike`, null, realUser, conn);
-			}
-		}
-	}
-
 	goToPage(target: string) {
 		this.curRoom = target;
-		this.refreshPage();
+		refreshPage(this.user);
 		saveRoguelikeData();
 	}
 
@@ -1063,6 +1064,11 @@ export const handlers: Chat.Handlers = {
 		const humanGameData = roguelikeGames.get(human);
 		if (!humanGameData) return;
 		humanGameData.inBattle = false;
-		humanGameData.refreshPage();
+		refreshPage(humanGameData.user);
 	},
+	onRename(user, oldID, newID) {
+		const humanGameData = roguelikeGames.get(oldID);
+		if (humanGameData?.inBattle) humanGameData.inBattle = false;
+		refreshPage(user.id);
+	}
 };
