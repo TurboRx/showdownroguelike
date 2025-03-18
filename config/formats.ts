@@ -4423,10 +4423,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					while (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {
 						source.level++;
 						source.set.level++;
-						source.baseMaxhp = Math.floor(Math.floor(
-							2 * source.species.baseStats['hp'] + source.set.ivs['hp'] + Math.floor(source.set.evs['hp'] / 4) + 100
-						) * source.level / 100 + 10);
-						source.maxhp = source.baseMaxhp;
+						if (source.baseSpecies.name !== 'Shedinja') {
+							source.baseMaxhp = Math.floor(Math.floor(
+								2 * source.species.baseStats['hp'] + source.set.ivs['hp'] + Math.floor(source.set.evs['hp'] / 4) + 100
+							) * source.level / 100 + 10);
+							source.maxhp = source.baseMaxhp;
+						}
 						source.details = source.getUpdatedDetails();
 						this.add('detailschange', source, source.details);
 						this.add('-heal', source, source.getHealth, '[silent]');
