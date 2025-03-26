@@ -468,7 +468,8 @@ export class Roguelike {
 		for (const mon of this.team) {
 			const monData = this.teamData[linkedIndex];
 			const dexSpecies = Dex.species.get(mon.species);
-			buf += `<tr><td><img src="https://play.pokemonshowdown.com/sprites/gen5/${dexSpecies.spriteid}.png" /><br />${mon.species} ${mon.gender !== 'N' ? '(' + mon.gender + ')' : ''}<br />HP: ${monData.curHP}/${monData.maxHP}<br />Status: ${monData.status ? monData.status.toUpperCase() : 'Healthy'}<br />Level: ${mon.level ? mon.level : 100}<br />Item: ${mon.item === '' ? 'None' : mon.item}`;
+			let path = mon.shiny ? `gen5-shiny` : `gen5`;
+			buf += `<tr><td><img src="https://play.pokemonshowdown.com/sprites/${path}/${dexSpecies.spriteid}.png" /><br />${mon.species} ${mon.gender !== 'N' ? '(' + mon.gender + ')' : ''}<br />HP: ${monData.curHP}/${monData.maxHP}<br />Status: ${monData.status ? monData.status.toUpperCase() : 'Healthy'}<br />Level: ${mon.level ? mon.level : 100}<br />Item: ${mon.item === '' ? 'None' : mon.item}`;
 			buf += `<br />EXP: ${monData.exp}/${monData.expAtNextLevel}</td>`;
 			// @ts-ignore ?????
 			buf += `<td>`;
@@ -520,7 +521,8 @@ export class Roguelike {
 					break;
 			}
 			const dexSpecies = Dex.species.get(mon.species);
-			buf += `<tr><td><img src="https://play.pokemonshowdown.com/sprites/gen5/${dexSpecies.spriteid}.png" /><br />${mon.species} ${mon.gender !== 'N' ? '(' + mon.gender + ')' : ''}<br />Level: ${mon.level ? mon.level : 100}<br />Item: ${mon.item === '' ? 'None' : mon.item}`;
+			let path = mon.shiny ? `gen5-shiny` : `gen5`;
+			buf += `<tr><td><img src="https://play.pokemonshowdown.com/sprites/${path}/${dexSpecies.spriteid}.png" /><br />${mon.species} ${mon.gender !== 'N' ? '(' + mon.gender + ')' : ''}<br />Level: ${mon.level ? mon.level : 100}<br />Item: ${mon.item === '' ? 'None' : mon.item}`;
 			// @ts-ignore ?????
 			buf += `<td>`;
 			buf += `Ability: ${mon.ability}<br />`;
@@ -576,7 +578,8 @@ export class Roguelike {
 			if (!scoutData) {
 				buf += `???`;
 			} else {
-				buf += `<img src="https://play.pokemonshowdown.com/sprites/gen5/${dexSpecies.spriteid}.png" /><br />${mon.species} ${mon.gender !== 'N' ? '(' + mon.gender + ')' : ''}<br />Level: ${mon.level ? mon.level : 100}`;
+				let path = mon.shiny ? `gen5-shiny` : `gen5`;
+				buf += `<img src="https://play.pokemonshowdown.com/sprites/${path}/${dexSpecies.spriteid}.png" /><br />${mon.species} ${mon.gender !== 'N' ? '(' + mon.gender + ')' : ''}<br />Level: ${mon.level ? mon.level : 100}`;
 				if (scoutData === 'revealSet') buf += `<br />Item: ${mon.item === '' ? 'None' : mon.item}`;
 			}
 			// @ts-ignore ?????
@@ -613,7 +616,27 @@ export class Roguelike {
 			} else {
 				buf += `???`;
 			}
-			buf += `<td><button class="button" name="send" value="/roguelike scoutslot ${linkedOpponentIndex + 1}">${buttonText}</button>`;
+			switch (scoutData) {
+				case 'revealMon':
+					if (3 > this.battlePoints) {
+						buf += `<td><button class="button disabled">Not enough BP!</button>`;
+					} else {
+						buf += `<td><button class="button" name="send" value="/roguelike scoutslot ${linkedOpponentIndex + 1}">${buttonText}</button>`;
+					}
+					break;
+				case 'revealSet':
+				buf += `<td><button class="button disabled">Already scouted!</button>`;
+					break;
+				default:
+					buttonText = 'Reveal Pokemon (2 BP)';
+					if (2 > this.battlePoints) {
+						buf += `<td><button class="button disabled">Not enough BP!</button>`;
+					} else {
+						buf += `<td><button class="button" name="send" value="/roguelike scoutslot ${linkedOpponentIndex + 1}">${buttonText}</button>`;
+					}
+					break;
+			}
+
 			buf += `</td></tr>`;
 			linkedOpponentIndex++;
 		}
@@ -859,6 +882,7 @@ export const commands: Chat.ChatCommands = {
 			if (userData.flags.opponentTeamScout[index] === undefined) return this.errorReply(`Slot doesn't exist!`);
 			switch(userData.flags.opponentTeamScout[index]) {
 				case 'revealMon':
+				if (3 > userData.battlePoints) return this.popupReply(`You don't have enough BP to buy this!`);
 					userData.flags.opponentTeamScout[index] = 'revealSet';
 					userData.battlePoints -= 3;
 					break;
@@ -866,6 +890,7 @@ export const commands: Chat.ChatCommands = {
 					return this.errorReply(`You already scouted!`);
 					break;
 				default:
+				if (2 > userData.battlePoints) return this.popupReply(`You don't have enough BP to buy this!`);
 					userData.flags.opponentTeamScout[index] = 'revealMon';
 					userData.battlePoints -= 2;
 					break;
