@@ -1187,7 +1187,7 @@ export const commands: Chat.ChatCommands = {
 			battle.sendInviteForm(connection);
 			return this.errorReply(this.tr`User ${name} not found.`);
 		}
-		if (player.id) {
+		if (player.id || player.isAI) {
 			battle.sendInviteForm(connection);
 			return this.errorReply(this.tr`This room already has a player in slot ${slot}.`);
 		}
