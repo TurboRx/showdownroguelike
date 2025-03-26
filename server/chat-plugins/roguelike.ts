@@ -497,6 +497,56 @@ export class Roguelike {
 		return buf;
 	}
 
+	genMiscTeamHTML(data: PokemonSet[], reason?: string) {
+		let cmd;
+		let buttonText;
+		let buf = `<table style="width:100%; border-collapse: collapse;"border="1"><tr><th>Status</th><th>Info</th><th>Moves</th></tr>`;
+		for (const mon of data) {
+			switch (reason) {
+				case 'starter':
+					cmd = `addstarter ${toID(mon.species)}`;
+					buttonText = `Pick starter`;
+					break;
+				default:
+					cmd = `redeem pokemon, ${toID(mon.species)}`;
+					buttonText = `Add Pokemon`;
+					break;
+			}
+			const dexSpecies = Dex.species.get(mon.species);
+			buf += `<tr><td><img src="https://play.pokemonshowdown.com/sprites/gen5/${dexSpecies.spriteid}.png" /><br />${mon.species} ${mon.gender !== 'N' ? '(' + mon.gender + ')' : ''}<br />Level: ${mon.level ? mon.level : 100}<br />Item: ${mon.item === '' ? 'None' : mon.item}`;
+			// @ts-ignore ?????
+			buf += `<td>`;
+			buf += `Ability: ${mon.ability}<br />`;
+			buf += `Tera Type: ${mon.teraType}<br />`;
+			const dexNature = Dex.natures.get(mon.nature);
+			for (const stat of Object.keys(dexSpecies.baseStats)) {
+				const statNumber = dexSpecies.baseStats[stat as StatID];
+				let calcStat;
+				if (stat === 'hp') {
+					calcStat = Math.floor((((mon.ivs[stat] + (2 * statNumber) + Math.floor(mon.evs[stat] / 4) + 100) * mon.level) / 100) + 10);
+				} else {
+					const mult = (stat === dexNature.plus) ? 1.1 : (stat === dexNature.minus) ? 0.9 : 1;
+					calcStat = Math.floor(mult * Math.floor((((mon.ivs[stat as StatID] + (2 * statNumber) + Math.floor(mon.evs[stat as StatID] / 4)) * mon.level) / 100) + 5));
+				}
+				buf += `${stat.toUpperCase()}: ${calcStat} (EVs: ${mon.evs[stat as StatID]} | IVs: ${mon.ivs[stat as StatID]})<br />`;
+			}
+			buf += `${mon.nature} Nature<br />`;
+			buf += `</td>`;
+			buf += `<td>`;
+			let linkedMoveIndex = 0;
+			for (const move of mon.moves) {
+				if (linkedMoveIndex > 0) buf += '<br />';
+				const dexMove = Dex.moves.get(move);
+				buf += `${dexMove.name}`;
+				linkedMoveIndex++;
+			}
+			buf += `<td><button class="button" name="send" value="/roguelike ${cmd}">${buttonText}</button>`;
+			buf += `</td></tr>`;
+		}
+		buf += `</table>`;
+		return buf;
+	}
+
 	genQuickSelectHTML(checkItem: ItemType | "switch", targetIndex?: number) {
 		let buf = `<div style="width:100%;"><center>`;
 		let cmd;
@@ -584,13 +634,9 @@ export class Roguelike {
 		switch ((this.flags.purchasedItem as ShopItem)?.type) {
 		case 'pokemon':
 			exitButtonText = 'Skip';
-			buf += `<center><h3>Add a Pokemon!</h3><br />`;
-			buf += `<div style="width:100%;">`;
+			buf += `<center><h3>Add a Pokemon!</h3></center><br />`;
 			// @ts-ignore
-			for (const poke of this.flags.pokemonOptions) {
-				buf += `<button class="button" name="send" value="/roguelike redeem pokemon, ${toID(poke.species)}"><img src="https://play.pokemonshowdown.com/sprites/gen5/${Dex.species.get(poke.species).spriteid}.png" /></button>`;
-			}
-			buf += `</div>`;
+			buf += this.genMiscTeamHTML(this.flags.pokemonOptions);
 			break;
 		case 'healHP':
 		case 'healPP':
@@ -625,7 +671,7 @@ export class Roguelike {
 			buf += 'Something went wrong, contact HiZo.';
 			break;
 		}
-		buf += `<br /><button class="button" name="send" value="/roguelike shop">${exitButtonText}</button>`;
+		buf += `<br /><center><button class="button" name="send" value="/roguelike shop">${exitButtonText}</button></center>`;
 		return buf;
 	}
 }
@@ -1046,11 +1092,8 @@ export const pages: Chat.PageTable = {
 				return this.errorReply('If you reached this error, you either already picked a starter or should contact HiZo.');
 			}
 			buf += `<center><h3>Choose a starter!</h3><br />`;
-			buf += `<div style="width:100%;">`;
-			for (const poke of userGameData.flags.pokemonOptions) {
-				buf += `<button class="button" name="send" value="/roguelike addstarter ${toID(poke.species)}"><img src="https://play.pokemonshowdown.com/sprites/gen5/${Dex.species.get(poke.species).spriteid}.png" /></button>`;
-			}
-			buf += `</div>`;
+			// @ts-ignore
+			buf += userGameData.genMiscTeamHTML(userGameData.flags.pokemonOptions, 'starter');
 			break;
 		case 'other':
 			// TODO: ????
