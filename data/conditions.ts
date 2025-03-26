@@ -3,6 +3,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'brn',
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
+			if (!target.isActive) return;
 			if (sourceEffect && sourceEffect.id === 'flameorb') {
 				this.add('-status', target, 'brn', '[from] item: Flame Orb');
 			} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
@@ -21,6 +22,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'par',
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
+			if (!target.isActive) return;
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
 				this.add('-status', target, 'par', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
 			} else {
@@ -48,6 +50,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'slp',
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
+			if (!target.isActive) return;
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
 				this.add('-status', target, 'slp', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
 			} else if (sourceEffect && sourceEffect.effectType === 'Move') {
@@ -84,6 +87,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'frz',
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
+			if (!target.isActive) return;
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
 				this.add('-status', target, 'frz', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
 			} else {
@@ -125,6 +129,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'psn',
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
+			if (!target.isActive) return;
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
 				this.add('-status', target, 'psn', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
 			} else {
@@ -141,6 +146,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
 			this.effectState.stage = 0;
+			if (!target.isActive) return;
 			if (sourceEffect && sourceEffect.id === 'toxicorb') {
 				this.add('-status', target, 'tox', '[from] item: Toxic Orb');
 			} else if (sourceEffect && sourceEffect.effectType === 'Ability') {

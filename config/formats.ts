@@ -4459,7 +4459,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 								pokemon.m.willFaint = true;
 							} else {
 								// @ts-ignore
-								pokemon.setStatus(persist.status as ID);
+								pokemon.setStatus(persist.status as ID, null, null, true);
 							}
 						}
 						let moveIndex = 0;
