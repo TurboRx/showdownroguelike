@@ -230,6 +230,8 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 		}
 		const natures: string[] = [];
 		Dex.natures.all().forEach(n => natures.push(n.name));
+		const types: string[] = [];
+		Dex.types.all().forEach(n => types.push(n.name));
 
 		const set: PokemonSet = {
 			name: specie.baseSpecies,
@@ -241,6 +243,7 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 			moves: [],
 			nature: Utils.randomElement(natures),
 			evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
+			teraType: (Math.floor(Math.random() * 20) === 0) ? Utils.randomElement(types) : Utils.randomElement(specie.types),
 
 			ivs: { hp: Math.floor(Math.random() * 32), atk: Math.floor(Math.random() * 32), def: Math.floor(Math.random() * 32), spa: Math.floor(Math.random() * 32), spd: Math.floor(Math.random() * 32), spe: Math.floor(Math.random() * 32) },
 			level: minLevel,
