@@ -515,18 +515,22 @@ export class Roguelike {
 			case 'healHP':
 				failureCondition = this.teamData[index - 1].curHP >= this.teamData[index - 1].maxHP || this.teamData[index - 1].status === 'fnt';
 				cmd = 'redeem healhp, ' + index;
+				skipmsg = 'Undo';
 				break;
 			case 'healPP':
 				failureCondition = this.teamData[index - 1].ppLeft.every((v, i) => Dex.moves.get(this.team[index - 1].moves[i]).pp * (8 / 5) === v);
 				cmd = 'redeem healpp, ' + index;
+				skipmsg = 'Undo';
 				break;
 			case 'cureStatus':
 				failureCondition = !(this.teamData[index - 1].status && this.teamData[index - 1].status !== 'fnt');
 				cmd = 'redeem curestatus, ' + index;
+				skipmsg = 'Undo';
 				break;
 			case 'revive':
 				failureCondition = this.teamData[index - 1].status !== 'fnt';
 				cmd = 'redeem revive, ' + index;
+				skipmsg = 'Undo';
 				break;
 			case 'switch':
 				failureCondition = index === targetIndex;
@@ -731,6 +735,11 @@ export const commands: Chat.ChatCommands = {
 				const scale = [5, 10];
 				scale.forEach((e, i) => scale[i] = Utils.clampIntRange(e + (userData.streak * 5), 1, 100));
 				userData.flags.pokemonOptions = genPokemon(3, scale);
+				userData.battlePoints -= item.cost;
+				break;
+			case 'item':
+				userData.flags.itemOptions = genItem(3, userData.team);
+				userData.battlePoints -= item.cost;
 				break;
 			case 'healHP':
 			case 'healPP':
@@ -740,12 +749,8 @@ export const commands: Chat.ChatCommands = {
 			case 'key':
 			case 'scout':
 			case 'debug':
-			case 'item':
-				userData.flags.itemOptions = genItem(3, userData.team);
-				break;
 			}
 			userData.flags.purchasedItem = item;
-			userData.battlePoints -= item.cost;
 			userData.goToPage('purchase');
 		},
 		addstarter(target, room, user) {
@@ -799,6 +804,7 @@ export const commands: Chat.ChatCommands = {
 				if (!userData.team[index]) return this.errorReply(`You need to specify a pokemon on your team.`);
 				if (userData.teamData[index].curHP === userData.teamData[index].maxHP) return this.errorReply(`You can't use this on that pokemon.`);
 				userData.teamData[index].curHP = userData.teamData[index].maxHP;
+				userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
 				// TODO: More items
 				break;
 			case 'healpp':
@@ -809,6 +815,7 @@ export const commands: Chat.ChatCommands = {
 				if (!userData.team[index]) return this.errorReply(`You need to specify a pokemon on your team.`);
 				if (userData.teamData[index].ppLeft.every((v, i) => Dex.moves.get(userData.team[index].moves[i]).pp * (8 / 5) === v)) return this.errorReply(`You can't use this on that pokemon.`);
 				userData.teamData[index].ppLeft.forEach((v, i) => userData.teamData[index].ppLeft[i] = Dex.moves.get(userData.team[index].moves[i]).pp * (8 / 5));
+				userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
 				// TODO: More items
 				break;
 			case 'curestatus':
@@ -819,6 +826,7 @@ export const commands: Chat.ChatCommands = {
 				if (!userData.team[index]) return this.errorReply(`You need to specify a pokemon on your team.`);
 				if (!userData.teamData[index].status || userData.teamData[index].status === 'fnt') return this.errorReply(`You can't use this on that pokemon.`);
 				userData.teamData[index].status = false;
+				userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
 				// TODO: More items
 				break;
 			case 'revive':
@@ -830,6 +838,7 @@ export const commands: Chat.ChatCommands = {
 				if (userData.teamData[index].status !== 'fnt') return this.errorReply(`You can't use this on that pokemon.`);
 				userData.teamData[index].curHP = Math.floor(userData.teamData[index].maxHP / 2);
 				userData.teamData[index].status = false;
+				userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
 				// TODO: More items
 				break;
 			case 'item':
