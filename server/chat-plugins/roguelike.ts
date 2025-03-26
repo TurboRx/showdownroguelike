@@ -48,7 +48,9 @@ function getMinExpForMonAtLevel(species: string, level: number) {
 	}
 }
 
-type ItemType = 'pokemon' | 'healHP' | 'healPP' | 'TM' | 'key' | 'scout' | 'debug' | 'revive' | 'cureStatus' | 'item';
+type ItemType = 'pokemon' | 'healHP' | 'healPP' | 'TM' | 'key' | 'debug' | 'revive' | 'cureStatus' | 'item';
+
+type opponentScout = 'revealMon' | 'revealSet' | false;
 
 const SEQUENCE_CHECK: { [k: string]: string[] } = {
 	battle: ['results'],
@@ -318,6 +320,7 @@ export class Roguelike {
 	teamData: UserTeamData[];
 	flags: {
 		pokemonOptions?: PokemonSet[],
+		opponentTeamScout?: opponentScout[];
 		[k: string]: any,
 	};
 	opponentTeam: PokemonSet[];
@@ -381,7 +384,11 @@ export class Roguelike {
 		scale.forEach((e, i) => scale[i] = Utils.clampIntRange(e + (this.streak * 5), 1, 100));
 		const num = RECOMMENDED_TEAM_LENGTH[Utils.clampIntRange(this.streak, 0, 6)];
 		this.opponentTeam = genPokemon(num, scale);
+		this.flags.opponentTeamScout = [];
 		this.opponentTeam.sort((a, b) => a.level - b.level);
+		for (let x = 0; x < this.opponentTeam.length; x++) {
+			this.flags.opponentTeamScout.push(false);
+		}
 	}
 
 	lose() {
@@ -547,6 +554,73 @@ export class Roguelike {
 		return buf;
 	}
 
+	genScoutHTML() {
+		let buf = `<table style="width:100%; border-collapse: collapse;"border="1"><tr><th>Status</th><th>Info</th><th>Moves</th></tr>`;
+		let linkedOpponentIndex = 0;
+		for (const mon of this.opponentTeam) {
+			let buttonText;
+			let scoutData = this.flags.opponentTeamScout[linkedOpponentIndex];
+			switch (scoutData) {
+				case 'revealMon':
+					buttonText = 'Reveal Set (3 BP)';
+					break;
+				case 'revealSet':
+					buttonText = 'Already scouted!';
+					break;
+				default:
+					buttonText = 'Reveal Pokemon (2 BP)';
+					break;
+			}
+			buf += `<tr><td>`;
+			const dexSpecies = Dex.species.get(mon.species);
+			if (!scoutData) {
+				buf += `???`;
+			} else {
+				buf += `<img src="https://play.pokemonshowdown.com/sprites/gen5/${dexSpecies.spriteid}.png" /><br />${mon.species} ${mon.gender !== 'N' ? '(' + mon.gender + ')' : ''}<br />Level: ${mon.level ? mon.level : 100}`;
+				if (scoutData === 'revealSet') buf += `<br />Item: ${mon.item === '' ? 'None' : mon.item}`;
+			}
+			// @ts-ignore ?????
+			buf += `<td>`;
+			if (scoutData === 'revealSet') {
+				buf += `Ability: ${mon.ability}<br />`;
+				buf += `Tera Type: ${mon.teraType}<br />`;
+				const dexNature = Dex.natures.get(mon.nature);
+				for (const stat of Object.keys(dexSpecies.baseStats)) {
+					const statNumber = dexSpecies.baseStats[stat as StatID];
+					let calcStat;
+					if (stat === 'hp') {
+						calcStat = Math.floor((((mon.ivs[stat] + (2 * statNumber) + Math.floor(mon.evs[stat] / 4) + 100) * mon.level) / 100) + 10);
+					} else {
+						const mult = (stat === dexNature.plus) ? 1.1 : (stat === dexNature.minus) ? 0.9 : 1;
+						calcStat = Math.floor(mult * Math.floor((((mon.ivs[stat as StatID] + (2 * statNumber) + Math.floor(mon.evs[stat as StatID] / 4)) * mon.level) / 100) + 5));
+					}
+					buf += `${stat.toUpperCase()}: ${calcStat} (EVs: ${mon.evs[stat as StatID]} | IVs: ${mon.ivs[stat as StatID]})<br />`;
+				}
+				buf += `${mon.nature} Nature<br />`;
+			} else {
+				buf += `???`;
+			}
+			buf += `</td>`;
+			buf += `<td>`;
+			if (scoutData === 'revealSet') {
+				let linkedMoveIndex = 0;
+				for (const move of mon.moves) {
+					if (linkedMoveIndex > 0) buf += '<br />';
+					const dexMove = Dex.moves.get(move);
+					buf += `${dexMove.name}`;
+					linkedMoveIndex++;
+				}
+			} else {
+				buf += `???`;
+			}
+			buf += `<td><button class="button" name="send" value="/roguelike scoutslot ${linkedOpponentIndex + 1}">${buttonText}</button>`;
+			buf += `</td></tr>`;
+			linkedOpponentIndex++;
+		}
+		buf += `</table>`;
+		return buf;
+	}
+
 	genQuickSelectHTML(checkItem: ItemType | "switch", targetIndex?: number) {
 		let buf = `<div style="width:100%;"><center>`;
 		let cmd;
@@ -593,7 +667,6 @@ export class Roguelike {
 				skipmsg = 'Undo';
 			case 'TM':
 			case 'key':
-			case 'scout':
 			case 'debug':
 			}
 			if (failureCondition) {
@@ -648,8 +721,6 @@ export class Roguelike {
 		case 'TM':
 			break;
 		case 'key':
-			break;
-		case 'scout':
 			break;
 		case 'item':
 			exitButtonText = 'Skip';
@@ -773,6 +844,34 @@ export const commands: Chat.ChatCommands = {
 			if (!checkSequence(userData.curRoom, 'shop')) return this.errorReply(`Can't go here yet!`);
 			userData.goToPage('shop-team');
 		},
+		scout(target, room, user) {
+			const userData = roguelikeGames.get(user.id);
+			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
+			if (!checkSequence(userData.curRoom, 'shop')) return this.errorReply(`Can't go here yet!`);
+			userData.goToPage('shop-scout');
+		},
+		scoutslot(target, room, user) {
+			const userData = roguelikeGames.get(user.id);
+			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
+			if (userData.curRoom !== 'shop-scout') return this.errorReply(`Can't scout yet!`);
+			let index = parseInt(target);
+			index--;
+			if (userData.flags.opponentTeamScout[index] === undefined) return this.errorReply(`Slot doesn't exist!`);
+			switch(userData.flags.opponentTeamScout[index]) {
+				case 'revealMon':
+					userData.flags.opponentTeamScout[index] = 'revealSet';
+					userData.battlePoints -= 3;
+					break;
+				case 'revealSet':
+					return this.errorReply(`You already scouted!`);
+					break;
+				default:
+					userData.flags.opponentTeamScout[index] = 'revealMon';
+					userData.battlePoints -= 2;
+					break;
+			}
+			userData.goToPage('shop-scout');
+		},
 		buy(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
 			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
@@ -797,7 +896,6 @@ export const commands: Chat.ChatCommands = {
 			case 'cureStatus':
 			case 'TM':
 			case 'key':
-			case 'scout':
 			case 'debug':
 			}
 			userData.flags.purchasedItem = item;
@@ -1042,7 +1140,6 @@ export const pages: Chat.PageTable = {
 				}
 			}
 			break;
-		case 'scout':
 		case 'shop':
 			buf += `<b>Current match:</b> ${(userGameData.battle % 7 === 0 ? 7 : userGameData.battle % 7)}/7 | <b>Streaks won:</b> ${userGameData.streak}/7 | <b>BP:</b> ${userGameData.battlePoints}<br /><br />`;
 			switch (gameArgs.shift()) {
@@ -1050,6 +1147,12 @@ export const pages: Chat.PageTable = {
 				subtitle = 'Current Team';
 				buf += `<button class="button" name="send" value="/roguelike shop">Go back to shop</button>`;
 				buf += userGameData.genUserTeamHTML();
+				break;
+			case 'scout':
+				subtitle = 'Scouting Opponent';
+				buf += `<button class="button" name="send" value="/roguelike shop">Go back to shop</button><br />`;
+				buf += `<center><h3>Opponent's team</h3><br />`;
+				buf += userGameData.genScoutHTML();
 				break;
 			case 'switch':
 				subtitle = 'Current Team';
@@ -1062,6 +1165,7 @@ export const pages: Chat.PageTable = {
 			default:
 				subtitle = 'Shop';
 				buf += `<button class="button" name="send" value="/roguelike checkteam">Check your team</button>`;
+				buf += `<button class="button" style="float: right;" name="send" value="/roguelike scout">Scout your next opponent</button>`;
 				buf += userGameData.genShopHTML();
 				buf += `<br /><button class="button" name="send" value="/roguelike next">Start the next battle!</button>`;
 			}
