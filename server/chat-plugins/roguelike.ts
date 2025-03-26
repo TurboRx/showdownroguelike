@@ -381,6 +381,7 @@ export class Roguelike {
 		scale.forEach((e, i) => scale[i] = Utils.clampIntRange(e + (this.streak * 5), 1, 100));
 		const num = RECOMMENDED_TEAM_LENGTH[Utils.clampIntRange(this.streak, 0, 6)];
 		this.opponentTeam = genPokemon(num, scale);
+		this.opponentTeam.sort((a, b) => a.level - b.level);
 	}
 
 	lose() {
