@@ -1141,7 +1141,7 @@ export const pages: Chat.PageTable = {
 			}
 			break;
 		case 'shop':
-			buf += `<b>Current match:</b> ${(userGameData.battle % 7 === 0 ? 7 : userGameData.battle % 7)}/7 | <b>Streaks won:</b> ${userGameData.streak}/7 | <b>BP:</b> ${userGameData.battlePoints}<br /><br />`;
+			buf += `<b>Current match:</b> ${(userGameData.battle % 7 === 0 ? 7 : userGameData.battle % 7)}/7 | <b>Current Streak:</b> ${userGameData.streak + 1}/8 | <b>BP:</b> ${userGameData.battlePoints}<br /><br />`;
 			switch (gameArgs.shift()) {
 			case 'team':
 				subtitle = 'Current Team';
