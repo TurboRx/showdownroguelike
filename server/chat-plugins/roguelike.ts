@@ -217,7 +217,7 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 		}
 		let setAbil;
 		// TODO: Assess the Pupitar problem
-		if (specie.abilities.S && Math.floor(Math.random() * 100) === 1) {
+		if (specie.abilities.S && Math.floor(Math.random() * 50) === 1) {
 			setAbil = specie.abilities.S;
 		} else if (specie.abilities.H && Math.floor(Math.random() * 20) === 1) {
 			setAbil = specie.abilities.H;
@@ -1084,7 +1084,15 @@ export const handlers: Chat.Handlers = {
 		humanGameData.inBattle = false;
 		if (human === winner) {
 			if (battle.currentData) humanGameData.syncAfterMatch(battle.currentData);
-			humanGameData.win();
+			if (humanGameData.teamData.every(poke => poke.status === 'fnt')) {
+				if (humanGameData.battle % 7 === 0) {
+					humanGameData.streak++;
+				}
+				humanGameData.battle++;
+				humanGameData.lose();
+			} else {
+				humanGameData.win();
+			}
 		} else {
 			humanGameData.lose();
 		}
