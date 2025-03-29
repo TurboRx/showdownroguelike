@@ -174,7 +174,7 @@ function getMovesAtTarget(pokemon: string, target: 'M' | 'T' | 'L' | 'R' | 'E' |
 	for (const learnsetIndex of fullLearn) {
 		const learnset = learnsetIndex.learnset;
 		for (const move in learnset) {
-			let learnSetstring =  target === 'L' ? `${target}${level}` : target;
+			const learnSetstring = target === 'L' ? `${target}${level}` : target;
 			if (learnset[move].some(source => source.substring(1) === learnSetstring)) {
 				if (!movesAtlevel.includes(move)) {
 					movesAtlevel.push(move);
@@ -200,7 +200,7 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 	const validate = new TeamValidator('gen9roguelikebattle');
 	const gennedMons: PokemonSet[] = [];
 
-	let all = Dex.species.all().filter(s => !s.battleOnly && !s.requiredItems && s.forme !== 'Gmax' && s.forme !== 'Eternamax' && !s.forme.includes('Totem')  && s.forme !== 'Dusk' && s.forme !== 'Bond' && !(s.isNonstandard && s.isNonstandard !== 'Past'));
+	let all = Dex.species.all().filter(s => !s.battleOnly && !s.requiredItems && s.forme !== 'Gmax' && s.forme !== 'Eternamax' && !s.forme.includes('Totem') && s.forme !== 'Dusk' && s.forme !== 'Bond' && !(s.isNonstandard && s.isNonstandard !== 'Past'));
 	if (starter) {
 		all = all.filter(s => !s.prevo);
 
@@ -320,7 +320,7 @@ export class Roguelike {
 	teamData: UserTeamData[];
 	flags: {
 		pokemonOptions?: PokemonSet[],
-		opponentTeamScout?: opponentScout[];
+		opponentTeamScout?: opponentScout[],
 		[k: string]: any,
 	};
 	opponentTeam: PokemonSet[];
@@ -468,7 +468,7 @@ export class Roguelike {
 		for (const mon of this.team) {
 			const monData = this.teamData[linkedIndex];
 			const dexSpecies = Dex.species.get(mon.species);
-			let path = mon.shiny ? `gen5-shiny` : `gen5`;
+			const path = mon.shiny ? `gen5-shiny` : `gen5`;
 			buf += `<tr><td><img src="https://play.pokemonshowdown.com/sprites/${path}/${dexSpecies.spriteid}.png" /><br />${mon.species} ${mon.gender !== 'N' ? '(' + mon.gender + ')' : ''}<br />HP: ${monData.curHP}/${monData.maxHP}<br />Status: ${monData.status ? monData.status.toUpperCase() : 'Healthy'}<br />Level: ${mon.level ? mon.level : 100}<br />Item: ${mon.item === '' ? 'None' : mon.item}`;
 			buf += `<br />EXP: ${monData.exp}/${monData.expAtNextLevel}</td>`;
 			// @ts-ignore ?????
@@ -511,17 +511,17 @@ export class Roguelike {
 		let buf = `<table style="width:100%; border-collapse: collapse;"border="1"><tr><th>Status</th><th>Info</th><th>Moves</th></tr>`;
 		for (const mon of data) {
 			switch (reason) {
-				case 'starter':
-					cmd = `addstarter ${toID(mon.species)}`;
-					buttonText = `Pick starter`;
-					break;
-				default:
-					cmd = `redeem pokemon, ${toID(mon.species)}`;
-					buttonText = `Add Pokemon`;
-					break;
+			case 'starter':
+				cmd = `addstarter ${toID(mon.species)}`;
+				buttonText = `Pick starter`;
+				break;
+			default:
+				cmd = `redeem pokemon, ${toID(mon.species)}`;
+				buttonText = `Add Pokemon`;
+				break;
 			}
 			const dexSpecies = Dex.species.get(mon.species);
-			let path = mon.shiny ? `gen5-shiny` : `gen5`;
+			const path = mon.shiny ? `gen5-shiny` : `gen5`;
 			buf += `<tr><td><img src="https://play.pokemonshowdown.com/sprites/${path}/${dexSpecies.spriteid}.png" /><br />${mon.species} ${mon.gender !== 'N' ? '(' + mon.gender + ')' : ''}<br />Level: ${mon.level ? mon.level : 100}<br />Item: ${mon.item === '' ? 'None' : mon.item}`;
 			// @ts-ignore ?????
 			buf += `<td>`;
@@ -561,24 +561,24 @@ export class Roguelike {
 		let linkedOpponentIndex = 0;
 		for (const mon of this.opponentTeam) {
 			let buttonText;
-			let scoutData = this.flags.opponentTeamScout[linkedOpponentIndex];
+			const scoutData = this.flags.opponentTeamScout[linkedOpponentIndex];
 			switch (scoutData) {
-				case 'revealMon':
-					buttonText = 'Reveal Set (3 BP)';
-					break;
-				case 'revealSet':
-					buttonText = 'Already scouted!';
-					break;
-				default:
-					buttonText = 'Reveal Pokemon (2 BP)';
-					break;
+			case 'revealMon':
+				buttonText = 'Reveal Set (3 BP)';
+				break;
+			case 'revealSet':
+				buttonText = 'Already scouted!';
+				break;
+			default:
+				buttonText = 'Reveal Pokemon (2 BP)';
+				break;
 			}
 			buf += `<tr><td>`;
 			const dexSpecies = Dex.species.get(mon.species);
 			if (!scoutData) {
 				buf += `???`;
 			} else {
-				let path = mon.shiny ? `gen5-shiny` : `gen5`;
+				const path = mon.shiny ? `gen5-shiny` : `gen5`;
 				buf += `<img src="https://play.pokemonshowdown.com/sprites/${path}/${dexSpecies.spriteid}.png" /><br />${mon.species} ${mon.gender !== 'N' ? '(' + mon.gender + ')' : ''}<br />Level: ${mon.level ? mon.level : 100}`;
 				if (scoutData === 'revealSet') buf += `<br />Item: ${mon.item === '' ? 'None' : mon.item}`;
 			}
@@ -617,24 +617,24 @@ export class Roguelike {
 				buf += `???`;
 			}
 			switch (scoutData) {
-				case 'revealMon':
-					if (3 > this.battlePoints) {
-						buf += `<td><button class="button disabled">Not enough BP!</button>`;
-					} else {
-						buf += `<td><button class="button" name="send" value="/roguelike scoutslot ${linkedOpponentIndex + 1}">${buttonText}</button>`;
-					}
-					break;
-				case 'revealSet':
+			case 'revealMon':
+				if (3 > this.battlePoints) {
+					buf += `<td><button class="button disabled">Not enough BP!</button>`;
+				} else {
+					buf += `<td><button class="button" name="send" value="/roguelike scoutslot ${linkedOpponentIndex + 1}">${buttonText}</button>`;
+				}
+				break;
+			case 'revealSet':
 				buf += `<td><button class="button disabled">Already scouted!</button>`;
-					break;
-				default:
-					buttonText = 'Reveal Pokemon (2 BP)';
-					if (2 > this.battlePoints) {
-						buf += `<td><button class="button disabled">Not enough BP!</button>`;
-					} else {
-						buf += `<td><button class="button" name="send" value="/roguelike scoutslot ${linkedOpponentIndex + 1}">${buttonText}</button>`;
-					}
-					break;
+				break;
+			default:
+				buttonText = 'Reveal Pokemon (2 BP)';
+				if (2 > this.battlePoints) {
+					buf += `<td><button class="button disabled">Not enough BP!</button>`;
+				} else {
+					buf += `<td><button class="button" name="send" value="/roguelike scoutslot ${linkedOpponentIndex + 1}">${buttonText}</button>`;
+				}
+				break;
 			}
 
 			buf += `</td></tr>`;
@@ -880,20 +880,20 @@ export const commands: Chat.ChatCommands = {
 			let index = parseInt(target);
 			index--;
 			if (userData.flags.opponentTeamScout[index] === undefined) return this.errorReply(`Slot doesn't exist!`);
-			switch(userData.flags.opponentTeamScout[index]) {
-				case 'revealMon':
+			switch (userData.flags.opponentTeamScout[index]) {
+			case 'revealMon':
 				if (3 > userData.battlePoints) return this.popupReply(`You don't have enough BP to buy this!`);
-					userData.flags.opponentTeamScout[index] = 'revealSet';
-					userData.battlePoints -= 3;
-					break;
-				case 'revealSet':
-					return this.errorReply(`You already scouted!`);
-					break;
-				default:
+				userData.flags.opponentTeamScout[index] = 'revealSet';
+				userData.battlePoints -= 3;
+				break;
+			case 'revealSet':
+				return this.errorReply(`You already scouted!`);
+				break;
+			default:
 				if (2 > userData.battlePoints) return this.popupReply(`You don't have enough BP to buy this!`);
-					userData.flags.opponentTeamScout[index] = 'revealMon';
-					userData.battlePoints -= 2;
-					break;
+				userData.flags.opponentTeamScout[index] = 'revealMon';
+				userData.battlePoints -= 2;
+				break;
 			}
 			userData.goToPage('shop-scout');
 		},
@@ -1285,5 +1285,5 @@ export const handlers: Chat.Handlers = {
 		const humanGameData = roguelikeGames.get(oldID);
 		if (humanGameData?.inBattle) humanGameData.inBattle = false;
 		refreshPage(user.id);
-	}
+	},
 };
