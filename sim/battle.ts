@@ -24,6 +24,7 @@ import { State } from './state';
 import { BattleQueue, type Action } from './battle-queue';
 import { BattleActions } from './battle-actions';
 import { Utils } from '../lib/utils';
+import { EXP_TABLE } from '../server/chat-plugins/roguelike';
 declare const __version: any;
 
 export type ChannelID = 0 | 1 | 2 | 3 | 4;
@@ -3345,6 +3346,77 @@ export class Battle {
 				delete state[k];
 			}
 		}
+	}
+
+	// Functions for Roguelike battles
+	getMinExpForMonAtLevel(species: string, level: number) {
+		const nextlevel = level + 1;
+		species = toID(species);
+		const speciesData = EXP_TABLE[species] || EXP_TABLE[toID(this.dex.species.get(species).baseSpecies)];
+		if (level === 1) return 0;
+		switch (speciesData['expType']) {
+		case 'Erratic':
+			if (level < 50) {
+				return Math.floor((level ** 3 * (100 - level)) / 50);
+			} else if (level < 68) {
+				return Math.floor((level ** 3 * (150 - level)) / 100);
+			} if (level < 90) {
+				return Math.floor((level ** 3 * ((1911 - (10 * level)) / 3)) / 500);
+			} else {
+				return Math.floor((level ** 3 * (160 - level)) / 100);
+			}
+		case 'Fast':
+			return Math.floor((4 * level ** 3) / 5);
+		case 'Medium Fast':
+			return Math.floor(level ** 3);
+		case 'Medium Slow':
+			const a = (6 / 5) * level ** 3;
+			const b = 15 * level ** 2;
+			const c = 100 * level;
+			return Math.floor(a - b + c - 140);
+		case 'Slow':
+			return Math.floor((5 * level ** 3) / 4);
+		case 'Fluctuating':
+			if (level < 15) {
+				return Math.floor((level ** 3 * (((level + 1) / 3) + 24)) / 50);
+			} else if (level < 36) {
+				return Math.floor((level ** 3 * (level + 14)) / 50);
+			} else {
+				return Math.floor((level ** 3 * ((level / 2) + 32)) / 50);
+			}
+		}
+	}
+
+	getMovesAtTarget(pokemon: string, target: 'M' | 'T' | 'L' | 'R' | 'E' | 'D' | 'S' | 'V' | 'C', level?: number) {
+		const fullLearn = Dex.species.getFullLearnset(toID(pokemon));
+		const movesAtlevel: string[] = [];
+		for (const learnsetIndex of fullLearn) {
+			const learnset = learnsetIndex.learnset;
+			for (const move in learnset) {
+				const learnSetstring = target === 'L' ? `${target}${level}` : target;
+				if (learnset[move].some(source => source.substring(1) === learnSetstring)) {
+					if (!movesAtlevel.includes(move)) {
+						movesAtlevel.push(move);
+					}
+				}
+			}
+		}
+		// randomize moves at equal level
+		Utils.shuffle(movesAtlevel);
+		return movesAtlevel;
+	}
+
+	roguelikeAI(request: ChoiceRequest) {
+		if (request.wait) return false;
+		if (request.forceSwitch) {
+			const choiceSlot = Math.floor(Math.random() * (request.side.pokemon.length - 1)) + 2;
+			return 'switch ' + choiceSlot;
+		}
+		if (request.active[0]) {
+			const choiceSlot = Math.floor(Math.random() * request.active[0].moves.length) + 1;
+			return 'move ' + choiceSlot;
+		}
+		return 'default';
 	}
 
 	destroy() {
