@@ -343,6 +343,7 @@ export class Roguelike {
 			mon.exp = newMon.exp;
 			teamSet.evs = newMon.evs;
 			teamSet.item = newMon.item;
+			teamSet.moves = newMon.moves;
 			if (teamSet.level !== newMon.level) {
 				teamSet.level = newMon.level;
 				mon.expAtNextLevel = getMinExpForMonAtLevel(teamSet.species, teamSet.level + 1);
