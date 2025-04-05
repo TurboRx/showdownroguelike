@@ -3420,7 +3420,7 @@ export class Battle {
 		}
 		return 'default';
 	}
-
+	// @ts-expect-error
 	giveExpAndEVs(target: Pokemon, source: Pokemon) {
 		const species = this.toID(target.species.name);
 		const speciesData = EXP_TABLE[species] || EXP_TABLE[this.toID(Dex.species.get(species).baseSpecies)];
@@ -3437,7 +3437,7 @@ export class Battle {
 			this.add('-message', `${source.name} gained ${newEXP} EXP!`);
 			source.m.exp += newEXP;
 			if (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {
-				return this.levelUp(source);
+				return this.levelUp(source, target);
 			}
 			if (!!this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
 		}
@@ -3448,7 +3448,8 @@ export class Battle {
 		return this.p1.pokemon.find(p => p.m.willGetEXP);
 	}
 
-	levelUp(source: Pokemon) {
+	// @ts-expect-error
+	levelUp(source: Pokemon, target: Pokemon) {
 		source.level++;
 		source.set.level++;
 		if (source.baseSpecies.name !== 'Shedinja') {
@@ -3468,13 +3469,16 @@ export class Battle {
 		source.m.levelUpMoves = this.getMovesAtTarget(source.species.name, 'L', nextLevel);
 		if (source.m.levelUpMoves.length) {
 			const newMove = source.m.levelUpMoves.shift();
-			this.processLevelUpMove(newMove, source);
-		} else if (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {
-			this.levelUp(source);
+			return this.processLevelUpMove(newMove, source, target);
 		}
+		if (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {
+			return this.levelUp(source, target);
+		}
+		if (!!this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
 	}
 
-	processLevelUpMove(move: string, source: Pokemon) {
+	// @ts-expect-error 
+	processLevelUpMove(move: string, source: Pokemon, target: Pokemon) {
 		const dexMove = this.dex.moves.get(move);
 		if (source.moves.includes(move)) return;
 		const sketchedMove = {
@@ -3492,16 +3496,19 @@ export class Battle {
 			this.add('message', `${source.name} learned ${dexMove.name}!`);
 			if (source.m.levelUpMoves.length) {
 				const newMove = source.m.levelUpMoves.shift();
-				this.processLevelUpMove(newMove, source);
-			} else if (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {
-				this.levelUp(source);
+				return this.processLevelUpMove(newMove, source, target);
+			}
+			if (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {
+				return this.levelUp(source, target);
 			}
 		} else {
 			this.add('message', `${source.name} wants to learn ${dexMove.name}, but it already has 4 moves. Do you want to forget a move to learn ${dexMove.name}?`);
 			source.m.maybeNewMove = true;
 			source.m.newLevelUpMove = move;
 			// this.makeRequest('levelup');
+			return;
 		}
+		if (!!this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
 	}
 
 	destroy() {
