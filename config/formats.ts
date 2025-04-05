@@ -4405,26 +4405,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		onValidateTeam() {
 			return [`This format cannot be battled via challenge or ladder.`];
 		},
+		onSwitchIn(pokemon) {
+			if (pokemon.side.isAI) return;
+			pokemon.m.willGetEXP = true;
+		},
 		onFaint(target, source, effect) {
 			if (target.side.isAI) {
 				if (!source || source?.side.isAI) source = target.side.foe.active[0];
-				const species = this.toID(target.species.name);
-				const speciesData = EXP_TABLE[species] || EXP_TABLE[this.toID(Dex.species.get(species).baseSpecies)];
-				for (const stat of Object.keys(speciesData['evYield'])) {
-					let num = speciesData['evYield'][stat];
-					for (let x = speciesData['evYield'][stat]; x > 0; x--) {
-						if (Object.values(source.set.evs).reduce((a, b) => a + b, 0) >= 512) break;
-						source.set.evs[stat as StatID] = this.clampIntRange(source.set.evs[stat as StatID] + 1, 0, 255);
-					}
-				}
-				if (source.level < 100) {
-					const newEXP = Math.floor(((speciesData['expYield'] * target.level) / 7) * 1.5);
-					this.add('-message', `${source.name} gained ${newEXP} EXP!`);
-					source.m.exp += newEXP;
-					if (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {
-						this.levelUp(source)
-					}
-				}
+				this.giveExpAndEVs(target, source);
 			}
 		},
 		onBegin() {

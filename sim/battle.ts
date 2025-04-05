@@ -3421,6 +3421,33 @@ export class Battle {
 		return 'default';
 	}
 
+	giveExpAndEVs(target: Pokemon, source: Pokemon) {
+		const species = this.toID(target.species.name);
+		const speciesData = EXP_TABLE[species] || EXP_TABLE[this.toID(Dex.species.get(species).baseSpecies)];
+		source.m.willGetEXP = false;
+		for (const stat of Object.keys(speciesData['evYield'])) {
+			let num = speciesData['evYield'][stat];
+			for (let x = speciesData['evYield'][stat]; x > 0; x--) {
+				if (Object.values(source.set.evs).reduce((a, b) => a + b, 0) >= 512) break;
+				source.set.evs[stat as StatID] = this.clampIntRange(source.set.evs[stat as StatID] + 1, 0, 255);
+			}
+		}
+		if (source.level < 100) {
+			const newEXP = Math.floor(((speciesData['expYield'] * target.level) / 7) * 1.5);
+			this.add('-message', `${source.name} gained ${newEXP} EXP!`);
+			source.m.exp += newEXP;
+			if (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {
+				return this.levelUp(source);
+			}
+			if (!!this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
+		}
+	}
+
+	findNextMonForEXP() {
+		// P1 is always the Human
+		return this.p1.pokemon.find(p => p.m.willGetEXP);
+	}
+
 	levelUp(source: Pokemon) {
 		source.level++;
 		source.set.level++;
