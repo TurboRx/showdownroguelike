@@ -134,6 +134,7 @@ export class Battle {
 	reportPercentages: boolean;
 	supportCancel: boolean;
 	isRoguelikeBattle?: boolean;
+	expMult: number;
 
 	actions: BattleActions;
 	queue: BattleQueue;
@@ -154,6 +155,7 @@ export class Battle {
 	midTurn: boolean;
 	started: boolean;
 	ended: boolean;
+	endedMidCutscene: boolean;
 	winner?: string;
 
 	effect: Effect;
@@ -200,6 +202,7 @@ export class Battle {
 		this.gen = this.dex.gen;
 		this.ruleTable = this.dex.formats.getRuleTable(format);
 		this.isRoguelikeBattle = options.isRoguelikeBattle || false;
+		this.expMult = 1;
 
 		this.trunc = this.dex.trunc;
 		this.clampIntRange = Utils.clampIntRange;
@@ -245,6 +248,7 @@ export class Battle {
 		this.midTurn = false;
 		this.started = false;
 		this.ended = false;
+		this.endedMidCutscene = false;
 
 		this.effect = { id: '' } as Effect;
 		this.effectState = this.initEffectState({ id: '' });
@@ -2573,11 +2577,19 @@ export class Battle {
 		const team3PokemonLeft = this.gameType === 'freeforall' && this.sides[2]!.pokemonLeft;
 		const team4PokemonLeft = this.gameType === 'freeforall' && this.sides[3]!.pokemonLeft;
 		if (!team1PokemonLeft && !team2PokemonLeft && !team3PokemonLeft && !team4PokemonLeft) {
+			if (this.requestState === 'levelup' && !this.endedMidCutscene) {
+				this.endedMidCutscene = true;
+				return true;
+			}
 			this.win(faintData && this.gen > 4 ? faintData.target.side : null);
 			return true;
 		}
 		for (const side of this.sides) {
 			if (!side.foePokemonLeft()) {
+				if (this.requestState === 'levelup' && !this.endedMidCutscene) {
+					this.endedMidCutscene = true;
+					return true;
+				}
 				this.win(side);
 				return true;
 			}
@@ -2698,19 +2710,31 @@ export class Battle {
 		}
 
 		case 'levelup':
-			const dexMove = this.dex.moves.get(action.pokemon.m.overwrite);
+			// I will regret this later if somehow there is doubles
+			const humanSource = action.pokemon.m.overwrite ? action.pokemon : action.pokemon.side.pokemon.find(p => p.m.overwrite)!;
+			const aiTarget = this.getTarget(action.pokemon, action.move, action.targetLoc);
+			const dexMove = this.dex.moves.get(humanSource.m.overwrite);
 			switch (action.move.id) {
 				case 'yes':
 					this.add('message', `Which move should be forgotten?`);
 					this.makeRequest('levelup');
 					break;
 				case 'no':
-					this.add('message', `${action.pokemon.name} did not learn ${dexMove.name}.`);
-					delete action.pokemon.m.overwrite;
-					// Do NOTHING
+					this.add('message', `${humanSource.name} did not learn ${dexMove.name}.`);
+					delete humanSource.m.overwrite;
+					if (humanSource.m.levelUpMoves.length) {
+						const newMove = humanSource.m.levelUpMoves.shift();
+						this.processLevelUpMove(newMove, humanSource, aiTarget!);
+					}
+					if (humanSource.m.exp >= humanSource.m.expAtNextLevel && humanSource.level < 100) {
+						this.levelUp(humanSource, aiTarget!);
+					}
+					if (!!this.findNextMonForEXP()) this.giveExpAndEVs(aiTarget!, this.findNextMonForEXP()!);
+					if (this.endedMidCutscene) this.checkWin();
 					break;
 				default:
-					const sketchIndex = action.pokemon.moves.indexOf(action.move.id);
+					delete humanSource.m.overwrite;
+					const sketchIndex = humanSource.moves.indexOf(action.move.id);
 					const sketchedMove = {
 						move: dexMove.name,
 						id: dexMove.id,
@@ -2720,12 +2744,21 @@ export class Battle {
 						disabled: false,
 						used: false,
 					};
-					action.pokemon.moveSlots[sketchIndex] = sketchedMove;
-					action.pokemon.baseMoveSlots[sketchIndex] = sketchedMove;
+					humanSource.moveSlots[sketchIndex] = sketchedMove;
+					humanSource.baseMoveSlots[sketchIndex] = sketchedMove;
 					this.add('message', `1...`);
 					this.add('message', `2...`);
 					this.add('message', `and... Poof!`);
-					this.add('message', `${action.pokemon.name} forgot ${action.move.name} and learned ${dexMove.name}!`);
+					this.add('message', `${humanSource.name} forgot ${action.move.name} and learned ${dexMove.name}!`);
+					if (humanSource.m.levelUpMoves.length) {
+						const newMove = humanSource.m.levelUpMoves.shift();
+						this.processLevelUpMove(newMove, humanSource, aiTarget!);
+					}
+					if (humanSource.m.exp >= humanSource.m.expAtNextLevel && humanSource.level < 100) {
+						this.levelUp(humanSource, aiTarget!);
+					}
+					if (!!this.findNextMonForEXP()) this.giveExpAndEVs(aiTarget!, this.findNextMonForEXP()!);
+					if (this.endedMidCutscene) this.checkWin();
 					break;
 			}
 			break;
@@ -3480,7 +3513,7 @@ export class Battle {
 			}
 		}
 		if (source.level < 100) {
-			const newEXP = Math.floor(((speciesData['expYield'] * target.level) / 7) * 1.5);
+			const newEXP = Math.floor(((speciesData['expYield'] * target.level) / 7) * 1.5 * this.expMult);
 			this.add('-message', `${source.name} gained ${newEXP} EXP!`);
 			source.m.exp += newEXP;
 			if (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {

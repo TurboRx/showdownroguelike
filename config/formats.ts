@@ -4406,13 +4406,23 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			return [`This format cannot be battled via challenge or ladder.`];
 		},
 		onSwitchIn(pokemon) {
-			if (pokemon.side.isAI) return;
+			if (pokemon.side.isAI) {
+				pokemon.side.foe.active[0].m.willGetEXP = true;
+				return;
+			}
 			pokemon.m.willGetEXP = true;
 		},
 		onFaint(target, source, effect) {
 			if (target.side.isAI) {
 				if (!source || source?.side.isAI) source = target.side.foe.active[0];
+				if (source.side.pokemon.filter(p => p.m.willGetEXP).length > 1) {
+					this.expMult = 0.5
+				} else {
+					this.expMult = 1;
+				}
 				this.giveExpAndEVs(target, source);
+			} else {
+				target.m.willGetEXP = false;
 			}
 		},
 		onBegin() {

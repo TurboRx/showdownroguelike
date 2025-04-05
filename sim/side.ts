@@ -542,7 +542,11 @@ export class Side {
 		// Parse moveText (name or index)
 		// If the move is not found, the action is invalid without requiring further inspection.
 
-		const request = pokemon.getMoveRequestData();
+		let request = pokemon.getMoveRequestData();
+		if (this.battle.requestState === 'levelup') {
+			let relevant = this.pokemon.find(p => p.m.overwrite)!;
+			request = relevant.getMoveRequestData();
+		}
 		let moveid = '';
 		let targetType = '';
 		if (autoChoose) moveText = 1;
@@ -677,7 +681,12 @@ export class Side {
 				pokemon,
 				moveid: moveid,
 			});
-			delete pokemon.m.undecided;
+			if (!pokemon.m.undecided)  {
+				let newPoke = this.pokemon.find(p => p.m.overwrite)!;
+				delete newPoke.m.undecided;
+			} else {
+				delete pokemon.m.undecided;
+			}
 			return true;
 		} else if (!moves.length && !zMove) {
 			// Override action and use Struggle if there are no enabled moves with PP
