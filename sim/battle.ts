@@ -106,7 +106,7 @@ type Part = string | number | boolean | Pokemon | Side | Effect | Move | null | 
 //   - '': no request. Used between turns, or when the battle is over.
 //
 // An individual Side's request state is encapsulated in its `activeRequest` field.
-export type RequestState = 'teampreview' | 'move' | 'switch' | '';
+export type RequestState = 'teampreview' | 'move' | 'switch' | 'levelup' | '';
 
 export class Battle {
 	readonly id: ID;
@@ -1398,6 +1398,21 @@ export class Battle {
 			}
 			break;
 
+		case 'levelup':
+			for (let i = 0; i < this.sides.length; i++) {
+				const side = this.sides[i];
+				if (side.isAI) {
+					requests[i] = { wait: true, side: side.getRequestData() };
+				} else {
+					const activeData = side.pokemon.find(pokemon => pokemon.m.overwrite)!.getMoveRequestData();
+					requests[i] = { active: [activeData], side: side.getRequestData() };
+					if (side.allySide) {
+						(requests[i] as MoveRequest).ally = side.allySide.getRequestData(true);
+					}
+				}
+			}
+			break;
+
 		default:
 			for (let i = 0; i < this.sides.length; i++) {
 				const side = this.sides[i];
@@ -2682,6 +2697,38 @@ export class Battle {
 			break;
 		}
 
+		case 'levelup':
+			const dexMove = this.dex.moves.get(action.pokemon.m.overwrite);
+			switch (action.move.id) {
+				case 'yes':
+					this.add('message', `Which move should be forgotten?`);
+					this.makeRequest('levelup');
+					break;
+				case 'no':
+					this.add('message', `${action.pokemon.name} did not learn ${dexMove.name}.`);
+					delete action.pokemon.m.overwrite;
+					// Do NOTHING
+					break;
+				default:
+					const sketchIndex = action.pokemon.moves.indexOf(action.move.id);
+					const sketchedMove = {
+						move: dexMove.name,
+						id: dexMove.id,
+						pp: dexMove.pp * (8 / 5),
+						maxpp: dexMove.pp * (8 / 5),
+						target: dexMove.target,
+						disabled: false,
+						used: false,
+					};
+					action.pokemon.moveSlots[sketchIndex] = sketchedMove;
+					action.pokemon.baseMoveSlots[sketchIndex] = sketchedMove;
+					this.add('message', `1...`);
+					this.add('message', `2...`);
+					this.add('message', `and... Poof!`);
+					this.add('message', `${action.pokemon.name} forgot ${action.move.name} and learned ${dexMove.name}!`);
+					break;
+			}
+			break;
 		case 'move':
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
@@ -3477,7 +3524,7 @@ export class Battle {
 		if (!!this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
 	}
 
-	// @ts-expect-error 
+	// @ts-expect-error
 	processLevelUpMove(move: string, source: Pokemon, target: Pokemon) {
 		const dexMove = this.dex.moves.get(move);
 		if (source.moves.includes(move)) return;
@@ -3503,9 +3550,9 @@ export class Battle {
 			}
 		} else {
 			this.add('message', `${source.name} wants to learn ${dexMove.name}, but it already has 4 moves. Do you want to forget a move to learn ${dexMove.name}?`);
-			source.m.maybeNewMove = true;
-			source.m.newLevelUpMove = move;
-			// this.makeRequest('levelup');
+			source.m.overwrite = move;
+			source.m.undecided = true;
+			this.makeRequest('levelup');
 			return;
 		}
 		if (!!this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);

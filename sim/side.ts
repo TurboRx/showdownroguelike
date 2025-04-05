@@ -27,7 +27,7 @@ import { toID } from './dex';
 
 /** A single action that can be chosen. Choices will have one Action for each pokemon. */
 export interface ChosenAction {
-	choice: 'move' | 'switch' | 'instaswitch' | 'revivalblessing' | 'team' | 'shift' | 'pass';// action type
+	choice: 'move' | 'switch' | 'instaswitch' | 'revivalblessing' | 'team' | 'shift' | 'pass' | 'levelup';// action type
 	pokemon?: Pokemon; // the pokemon doing the action
 	targetLoc?: number; // relative location of the target to pokemon (move action only)
 	moveid: string; // a move to use (move action only)
@@ -311,6 +311,8 @@ export class Side {
 				return `switch ${action.target!.position + 1}`;
 			case 'team':
 				return `team ${action.pokemon!.position + 1}`;
+			case 'levelup':
+				return `move ${action.moveid}`;
 			default:
 				return action.choice;
 			}
@@ -669,6 +671,14 @@ export class Side {
 			return this.emitChoiceError(`${pokemon.name} is not locked`, { pokemon, update: req => {
 				delete req.maybeLocked;
 			} });
+		} else if (this.battle.requestState === 'levelup') {
+			this.choice.actions.push({
+				choice: 'levelup',
+				pokemon,
+				moveid: moveid,
+			});
+			delete pokemon.m.undecided;
+			return true;
 		} else if (!moves.length && !zMove) {
 			// Override action and use Struggle if there are no enabled moves with PP
 			// Gen 4 and earlier announce a Pokemon has no moves left before the turn begins, and only to that player's side.

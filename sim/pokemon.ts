@@ -1067,6 +1067,28 @@ export class Pokemon {
 			moves,
 		};
 
+		if (this.m.undecided) {
+			data.moves = [{
+				move: 'Yes',
+				id: 'yes' as ID,
+				target: 'self',
+				disabled: false,
+			},{
+				move: 'No',
+				id: 'no' as ID,
+				target: 'self',
+				disabled: false,
+			}];
+			data.trapped = true;
+			return data;
+		}
+
+		if (this.m.overwrite) {
+			data.moves.forEach(m => m.disabled = false);
+			data.trapped = true;
+			return data;
+		}
+
 		if (isLastActive) {
 			if (this.maybeDisabled) {
 				data.maybeDisabled = this.maybeDisabled;
