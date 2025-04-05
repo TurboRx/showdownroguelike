@@ -24,11 +24,10 @@ import type { RequestState } from './battle';
 import { Pokemon, type EffectState } from './pokemon';
 import { State } from './state';
 import { toID } from './dex';
-import { roguelikeAI } from '../server/chat-plugins/roguelike';
 
 /** A single action that can be chosen. Choices will have one Action for each pokemon. */
 export interface ChosenAction {
-	choice: 'move' | 'switch' | 'instaswitch' | 'revivalblessing' | 'team' | 'shift' | 'pass';// action type
+	choice: 'move' | 'switch' | 'instaswitch' | 'revivalblessing' | 'team' | 'shift' | 'pass' | 'levelup';// action type
 	pokemon?: Pokemon; // the pokemon doing the action
 	targetLoc?: number; // relative location of the target to pokemon (move action only)
 	moveid: string; // a move to use (move action only)
@@ -312,6 +311,8 @@ export class Side {
 				return `switch ${action.target!.position + 1}`;
 			case 'team':
 				return `team ${action.pokemon!.position + 1}`;
+			case 'levelup':
+				return `move ${action.moveid}`;
 			default:
 				return action.choice;
 			}
@@ -490,7 +491,7 @@ export class Side {
 		this.battle.send('sideupdate', `${this.id}\n|request|${JSON.stringify(update)}`);
 		this.activeRequest = update;
 		if (this.isAI) {
-			const decision = roguelikeAI(update);
+			const decision = this.battle.roguelikeAI(update);
 			if (decision) this.battle.choose(this.id, decision);
 		}
 	}
@@ -541,7 +542,11 @@ export class Side {
 		// Parse moveText (name or index)
 		// If the move is not found, the action is invalid without requiring further inspection.
 
-		const request = pokemon.getMoveRequestData();
+		let request = pokemon.getMoveRequestData();
+		if (this.battle.requestState === 'levelup') {
+			const relevant = this.pokemon.find(p => p.m.overwrite)!;
+			request = relevant.getMoveRequestData();
+		}
 		let moveid = '';
 		let targetType = '';
 		if (autoChoose) moveText = 1;
@@ -670,6 +675,19 @@ export class Side {
 			return this.emitChoiceError(`${pokemon.name} is not locked`, { pokemon, update: req => {
 				delete req.maybeLocked;
 			} });
+		} else if (this.battle.requestState === 'levelup') {
+			this.choice.actions.push({
+				choice: 'levelup',
+				pokemon,
+				moveid,
+			});
+			if (!pokemon.m.undecided) {
+				const newPoke = this.pokemon.find(p => p.m.overwrite)!;
+				delete newPoke.m.undecided;
+			} else {
+				delete pokemon.m.undecided;
+			}
+			return true;
 		} else if (!moves.length && !zMove) {
 			// Override action and use Struggle if there are no enabled moves with PP
 			// Gen 4 and earlier announce a Pokemon has no moves left before the turn begins, and only to that player's side.

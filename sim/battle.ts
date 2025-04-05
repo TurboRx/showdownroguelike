@@ -24,6 +24,7 @@ import { State } from './state';
 import { BattleQueue, type Action } from './battle-queue';
 import { BattleActions } from './battle-actions';
 import { Utils } from '../lib/utils';
+import { EXP_TABLE } from '../server/chat-plugins/roguelike';
 declare const __version: any;
 
 export type ChannelID = 0 | 1 | 2 | 3 | 4;
@@ -105,7 +106,7 @@ type Part = string | number | boolean | Pokemon | Side | Effect | Move | null | 
 //   - '': no request. Used between turns, or when the battle is over.
 //
 // An individual Side's request state is encapsulated in its `activeRequest` field.
-export type RequestState = 'teampreview' | 'move' | 'switch' | '';
+export type RequestState = 'teampreview' | 'move' | 'switch' | 'levelup' | '';
 
 export class Battle {
 	readonly id: ID;
@@ -133,6 +134,7 @@ export class Battle {
 	reportPercentages: boolean;
 	supportCancel: boolean;
 	isRoguelikeBattle?: boolean;
+	expMult: number;
 
 	actions: BattleActions;
 	queue: BattleQueue;
@@ -153,6 +155,7 @@ export class Battle {
 	midTurn: boolean;
 	started: boolean;
 	ended: boolean;
+	endedMidCutscene: boolean;
 	winner?: string;
 
 	effect: Effect;
@@ -199,6 +202,7 @@ export class Battle {
 		this.gen = this.dex.gen;
 		this.ruleTable = this.dex.formats.getRuleTable(format);
 		this.isRoguelikeBattle = options.isRoguelikeBattle || false;
+		this.expMult = 1;
 
 		this.trunc = this.dex.trunc;
 		this.clampIntRange = Utils.clampIntRange;
@@ -244,6 +248,7 @@ export class Battle {
 		this.midTurn = false;
 		this.started = false;
 		this.ended = false;
+		this.endedMidCutscene = false;
 
 		this.effect = { id: '' } as Effect;
 		this.effectState = this.initEffectState({ id: '' });
@@ -1394,6 +1399,21 @@ export class Battle {
 				const side = this.sides[i];
 				const maxChosenTeamSize = this.ruleTable.pickedTeamSize || undefined;
 				requests[i] = { teamPreview: true, maxChosenTeamSize, side: side.getRequestData() };
+			}
+			break;
+
+		case 'levelup':
+			for (let i = 0; i < this.sides.length; i++) {
+				const side = this.sides[i];
+				if (side.isAI) {
+					requests[i] = { wait: true, side: side.getRequestData() };
+				} else {
+					const activeData = side.pokemon.find(pokemon => pokemon.m.overwrite)!.getMoveRequestData();
+					requests[i] = { active: [activeData], side: side.getRequestData() };
+					if (side.allySide) {
+						(requests[i] as MoveRequest).ally = side.allySide.getRequestData(true);
+					}
+				}
 			}
 			break;
 
@@ -2557,11 +2577,19 @@ export class Battle {
 		const team3PokemonLeft = this.gameType === 'freeforall' && this.sides[2]!.pokemonLeft;
 		const team4PokemonLeft = this.gameType === 'freeforall' && this.sides[3]!.pokemonLeft;
 		if (!team1PokemonLeft && !team2PokemonLeft && !team3PokemonLeft && !team4PokemonLeft) {
+			if (this.requestState === 'levelup' && !this.endedMidCutscene) {
+				this.endedMidCutscene = true;
+				return true;
+			}
 			this.win(faintData && this.gen > 4 ? faintData.target.side : null);
 			return true;
 		}
 		for (const side of this.sides) {
 			if (!side.foePokemonLeft()) {
+				if (this.requestState === 'levelup' && !this.endedMidCutscene) {
+					this.endedMidCutscene = true;
+					return true;
+				}
 				this.win(side);
 				return true;
 			}
@@ -2681,6 +2709,59 @@ export class Battle {
 			break;
 		}
 
+		case 'levelup':
+			// I will regret this later if somehow there is doubles
+			const humanSource = action.pokemon.m.overwrite ? action.pokemon : action.pokemon.side.pokemon.find(p => p.m.overwrite)!;
+			const aiTarget = this.getTarget(action.pokemon, action.move, action.targetLoc);
+			const dexMove = this.dex.moves.get(humanSource.m.overwrite);
+			switch (action.move.id) {
+			case 'yes':
+				this.add('message', `Which move should be forgotten?`);
+				this.makeRequest('levelup');
+				break;
+			case 'no':
+				this.add('message', `${humanSource.name} did not learn ${dexMove.name}.`);
+				delete humanSource.m.overwrite;
+				if (humanSource.m.levelUpMoves.length) {
+					const newMove = humanSource.m.levelUpMoves.shift();
+					this.processLevelUpMove(newMove, humanSource, aiTarget!);
+				}
+				if (humanSource.m.exp >= humanSource.m.expAtNextLevel && humanSource.level < 100) {
+					this.levelUp(humanSource, aiTarget!);
+				}
+				if (this.findNextMonForEXP()) this.giveExpAndEVs(aiTarget!, this.findNextMonForEXP()!);
+				if (this.endedMidCutscene) this.checkWin();
+				break;
+			default:
+				delete humanSource.m.overwrite;
+				const sketchIndex = humanSource.moves.indexOf(action.move.id);
+				const sketchedMove = {
+					move: dexMove.name,
+					id: dexMove.id,
+					pp: dexMove.pp * (8 / 5),
+					maxpp: dexMove.pp * (8 / 5),
+					target: dexMove.target,
+					disabled: false,
+					used: false,
+				};
+				humanSource.moveSlots[sketchIndex] = sketchedMove;
+				humanSource.baseMoveSlots[sketchIndex] = sketchedMove;
+				this.add('message', `1...`);
+				this.add('message', `2...`);
+				this.add('message', `and... Poof!`);
+				this.add('message', `${humanSource.name} forgot ${action.move.name} and learned ${dexMove.name}!`);
+				if (humanSource.m.levelUpMoves.length) {
+					const newMove = humanSource.m.levelUpMoves.shift();
+					this.processLevelUpMove(newMove, humanSource, aiTarget!);
+				}
+				if (humanSource.m.exp >= humanSource.m.expAtNextLevel && humanSource.level < 100) {
+					this.levelUp(humanSource, aiTarget!);
+				}
+				if (this.findNextMonForEXP()) this.giveExpAndEVs(aiTarget!, this.findNextMonForEXP()!);
+				if (this.endedMidCutscene) this.checkWin();
+				break;
+			}
+			break;
 		case 'move':
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
@@ -3297,6 +3378,8 @@ export class Battle {
 					// @ts-ignore
 					monData.item = mon.item;
 					// @ts-ignore
+					monData.moves = mon.moves;
+					// @ts-ignore
 					monData.linkedTeamIndex = mon.m.roguelikeIndex;
 					roguelikeData.push(monData);
 				}
@@ -3345,6 +3428,167 @@ export class Battle {
 				delete state[k];
 			}
 		}
+	}
+
+	// Functions for Roguelike battles
+	getMinExpForMonAtLevel(species: string, level: number) {
+		const nextlevel = level + 1;
+		species = toID(species);
+		const speciesData = EXP_TABLE[species] || EXP_TABLE[toID(this.dex.species.get(species).baseSpecies)];
+		if (level === 1) return 0;
+		switch (speciesData['expType']) {
+		case 'Erratic':
+			if (level < 50) {
+				return Math.floor((level ** 3 * (100 - level)) / 50);
+			} else if (level < 68) {
+				return Math.floor((level ** 3 * (150 - level)) / 100);
+			} if (level < 90) {
+				return Math.floor((level ** 3 * ((1911 - (10 * level)) / 3)) / 500);
+			} else {
+				return Math.floor((level ** 3 * (160 - level)) / 100);
+			}
+		case 'Fast':
+			return Math.floor((4 * level ** 3) / 5);
+		case 'Medium Fast':
+			return Math.floor(level ** 3);
+		case 'Medium Slow':
+			const a = (6 / 5) * level ** 3;
+			const b = 15 * level ** 2;
+			const c = 100 * level;
+			return Math.floor(a - b + c - 140);
+		case 'Slow':
+			return Math.floor((5 * level ** 3) / 4);
+		case 'Fluctuating':
+			if (level < 15) {
+				return Math.floor((level ** 3 * (((level + 1) / 3) + 24)) / 50);
+			} else if (level < 36) {
+				return Math.floor((level ** 3 * (level + 14)) / 50);
+			} else {
+				return Math.floor((level ** 3 * ((level / 2) + 32)) / 50);
+			}
+		}
+	}
+
+	getMovesAtTarget(pokemon: string, target: 'M' | 'T' | 'L' | 'R' | 'E' | 'D' | 'S' | 'V' | 'C', level?: number) {
+		const fullLearn = Dex.species.getFullLearnset(toID(pokemon));
+		const movesAtlevel: string[] = [];
+		for (const learnsetIndex of fullLearn) {
+			const learnset = learnsetIndex.learnset;
+			for (const move in learnset) {
+				const learnSetstring = target === 'L' ? `${target}${level}` : target;
+				if (learnset[move].some(source => source.substring(1) === learnSetstring)) {
+					if (!movesAtlevel.includes(move)) {
+						movesAtlevel.push(move);
+					}
+				}
+			}
+		}
+		// randomize moves at equal level
+		Utils.shuffle(movesAtlevel);
+		return movesAtlevel;
+	}
+
+	roguelikeAI(request: ChoiceRequest) {
+		if (request.wait) return false;
+		if (request.forceSwitch) {
+			const choiceSlot = Math.floor(Math.random() * (request.side.pokemon.length - 1)) + 2;
+			return 'switch ' + choiceSlot;
+		}
+		if (request.active[0]) {
+			const choiceSlot = Math.floor(Math.random() * request.active[0].moves.length) + 1;
+			return 'move ' + choiceSlot;
+		}
+		return 'default';
+	}
+	// @ts-expect-error
+	giveExpAndEVs(target: Pokemon, source: Pokemon) {
+		const species = this.toID(target.species.name);
+		const speciesData = EXP_TABLE[species] || EXP_TABLE[this.toID(Dex.species.get(species).baseSpecies)];
+		source.m.willGetEXP = false;
+		for (const stat of Object.keys(speciesData['evYield'])) {
+			const num = speciesData['evYield'][stat];
+			for (let x = speciesData['evYield'][stat]; x > 0; x--) {
+				if (Object.values(source.set.evs).reduce((a, b) => a + b, 0) >= 512) break;
+				source.set.evs[stat as StatID] = this.clampIntRange(source.set.evs[stat as StatID] + 1, 0, 255);
+			}
+		}
+		if (source.level < 100) {
+			const newEXP = Math.floor(((speciesData['expYield'] * target.level) / 7) * 1.5 * this.expMult);
+			this.add('-message', `${source.name} gained ${newEXP} EXP!`);
+			source.m.exp += newEXP;
+			if (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {
+				return this.levelUp(source, target);
+			}
+			if (this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
+		}
+	}
+
+	findNextMonForEXP() {
+		// P1 is always the Human
+		return this.p1.pokemon.find(p => p.m.willGetEXP);
+	}
+
+	// @ts-expect-error
+	levelUp(source: Pokemon, target: Pokemon) {
+		source.level++;
+		source.set.level++;
+		if (source.baseSpecies.name !== 'Shedinja') {
+			const percent = source.hp / source.baseMaxhp;
+			source.baseMaxhp = Math.floor(Math.floor(
+				2 * source.species.baseStats['hp'] + source.set.ivs['hp'] + Math.floor(source.set.evs['hp'] / 4) + 100
+			) * source.level / 100 + 10);
+			source.maxhp = source.baseMaxhp;
+			source.hp = Math.floor(source.baseMaxhp * percent);
+		}
+		source.details = source.getUpdatedDetails();
+		this.add('detailschange', source, source.details);
+		this.add('-heal', source, source.getHealth, '[silent]');
+		this.add('message', `${source.name} leveled up!`);
+		const nextLevel = source.level + 1;
+		source.m.expAtNextLevel = this.getMinExpForMonAtLevel(this.toID(source.species.name), nextLevel);
+		source.m.levelUpMoves = this.getMovesAtTarget(source.species.name, 'L', nextLevel);
+		if (source.m.levelUpMoves.length) {
+			const newMove = source.m.levelUpMoves.shift();
+			return this.processLevelUpMove(newMove, source, target);
+		}
+		if (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {
+			return this.levelUp(source, target);
+		}
+		if (this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
+	}
+
+	// @ts-expect-error
+	processLevelUpMove(move: string, source: Pokemon, target: Pokemon) {
+		const dexMove = this.dex.moves.get(move);
+		if (source.moves.includes(move)) return;
+		const sketchedMove = {
+			move: dexMove.name,
+			id: dexMove.id,
+			pp: dexMove.pp * (8 / 5),
+			maxpp: dexMove.pp * (8 / 5),
+			target: dexMove.target,
+			disabled: false,
+			used: false,
+		};
+		if (source.moves.length < 4) {
+			source.moveSlots.push(sketchedMove);
+			source.baseMoveSlots.push(sketchedMove);
+			this.add('message', `${source.name} learned ${dexMove.name}!`);
+			if (source.m.levelUpMoves.length) {
+				const newMove = source.m.levelUpMoves.shift();
+				return this.processLevelUpMove(newMove, source, target);
+			}
+			if (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {
+				return this.levelUp(source, target);
+			}
+		} else {
+			this.add('message', `${source.name} wants to learn ${dexMove.name}, but it already has 4 moves. Do you want to forget a move to learn ${dexMove.name}?`);
+			source.m.overwrite = move;
+			source.m.undecided = true;
+			this.makeRequest('levelup');
+			return;
+		}
+		if (this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
 	}
 
 	destroy() {

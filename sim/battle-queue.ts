@@ -18,7 +18,7 @@ import type { Battle } from './battle';
 /** A move action */
 export interface MoveAction {
 	/** action type */
-	choice: 'move' | 'beforeTurnMove' | 'priorityChargeMove';
+	choice: 'move' | 'beforeTurnMove' | 'priorityChargeMove' | 'levelup';
 	order: 3 | 5 | 200 | 201 | 199 | 106;
 	/** priority of the action (lower first) */
 	priority: number;
@@ -172,6 +172,7 @@ export class BattleQueue {
 				beforeTurn: 4,
 				beforeTurnMove: 5,
 				revivalblessing: 6,
+				levelup: 7,
 
 				runSwitch: 101,
 				switch: 103,

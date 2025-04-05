@@ -289,19 +289,6 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 	return gennedMons;
 }
 
-export function roguelikeAI(request: object) {
-	if (request.wait) return false;
-	if (request.forceSwitch) {
-		const choiceSlot = Math.floor(Math.random() * (request.side.pokemon.length - 1)) + 2;
-		return 'switch ' + choiceSlot;
-	}
-	if (request.active[0]) {
-		const choiceSlot = Math.floor(Math.random() * request.active[0].moves.length) + 1;
-		return 'move ' + choiceSlot;
-	}
-	return 'default';
-}
-
 function refreshPage(userID: ID) {
 	const realUser = Users.get(userID);
 	if (realUser) {
@@ -356,6 +343,7 @@ export class Roguelike {
 			mon.exp = newMon.exp;
 			teamSet.evs = newMon.evs;
 			teamSet.item = newMon.item;
+			teamSet.moves = newMon.moves;
 			if (teamSet.level !== newMon.level) {
 				teamSet.level = newMon.level;
 				mon.expAtNextLevel = getMinExpForMonAtLevel(teamSet.species, teamSet.level + 1);

@@ -4405,40 +4405,24 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		onValidateTeam() {
 			return [`This format cannot be battled via challenge or ladder.`];
 		},
+		onSwitchIn(pokemon) {
+			if (pokemon.side.isAI) {
+				pokemon.side.foe.active[0].m.willGetEXP = true;
+				return;
+			}
+			pokemon.m.willGetEXP = true;
+		},
 		onFaint(target, source, effect) {
 			if (target.side.isAI) {
 				if (!source || source?.side.isAI) source = target.side.foe.active[0];
-				const species = this.toID(target.species.name);
-				const speciesData = EXP_TABLE[species] || EXP_TABLE[this.toID(Dex.species.get(species).baseSpecies)];
-				for (const stat of Object.keys(speciesData['evYield'])) {
-					if (Object.values(source.set.evs).reduce((a, b) => a + b, 0) < 512) {
-						source.set.evs[stat as StatID] += speciesData['evYield'][stat];
-						source.set.evs[stat as StatID] = this.clampIntRange(source.set.evs[stat as StatID], 0, 255);
-					}
+				if (source.side.pokemon.filter(p => p.m.willGetEXP).length > 1) {
+					this.expMult = 0.5;
+				} else {
+					this.expMult = 1;
 				}
-				if (source.level < 100) {
-					const newEXP = Math.floor(((speciesData['expYield'] * target.level) / 7) * 1.5);
-					this.add('-message', `${source.name} gained ${newEXP} EXP!`);
-					source.m.exp += newEXP;
-					while (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {
-						source.level++;
-						source.set.level++;
-						if (source.baseSpecies.name !== 'Shedinja') {
-							const percent = source.hp / source.baseMaxhp;
-							source.baseMaxhp = Math.floor(Math.floor(
-								2 * source.species.baseStats['hp'] + source.set.ivs['hp'] + Math.floor(source.set.evs['hp'] / 4) + 100
-							) * source.level / 100 + 10);
-							source.maxhp = source.baseMaxhp;
-							source.hp = Math.floor(source.baseMaxhp * percent);
-						}
-						source.details = source.getUpdatedDetails();
-						this.add('detailschange', source, source.details);
-						this.add('-heal', source, source.getHealth, '[silent]');
-						this.add('message', `${source.name} leveled up!`);
-						const nextLevel = source.level + 1;
-						source.m.expAtNextLevel = source.getMinExpForMonAtLevel(this.toID(source.species.name), nextLevel);
-					}
-				}
+				this.giveExpAndEVs(target, source);
+			} else {
+				target.m.willGetEXP = false;
 			}
 		},
 		onBegin() {
