@@ -3548,7 +3548,7 @@ export class Battle {
 		this.add('message', `${source.name} leveled up!`);
 		const nextLevel = source.level + 1;
 		source.m.expAtNextLevel = this.getMinExpForMonAtLevel(this.toID(source.species.name), nextLevel);
-		source.m.levelUpMoves = this.getMovesAtTarget(source.species.name, 'L', nextLevel);
+		source.m.levelUpMoves = this.getMovesAtTarget(source.species.name, 'L', source.level);
 		if (source.m.levelUpMoves.length) {
 			const newMove = source.m.levelUpMoves.shift();
 			return this.processLevelUpMove(newMove, source, target);
