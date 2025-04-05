@@ -2725,12 +2725,13 @@ export class Battle {
 				if (humanSource.m.levelUpMoves.length) {
 					const newMove = humanSource.m.levelUpMoves.shift();
 					this.processLevelUpMove(newMove, humanSource, aiTarget!);
-				}
-				if (humanSource.m.exp >= humanSource.m.expAtNextLevel && humanSource.level < 100) {
+				} else if (humanSource.m.exp >= humanSource.m.expAtNextLevel && humanSource.level < 100) {
 					this.levelUp(humanSource, aiTarget!);
+				} else if (this.findNextMonForEXP()) {
+					this.giveExpAndEVs(aiTarget!, this.findNextMonForEXP()!);
+				} else if (this.endedMidCutscene) {
+					this.checkWin();
 				}
-				if (this.findNextMonForEXP()) this.giveExpAndEVs(aiTarget!, this.findNextMonForEXP()!);
-				if (this.endedMidCutscene) this.checkWin();
 				break;
 			default:
 				delete humanSource.m.overwrite;
@@ -2753,12 +2754,13 @@ export class Battle {
 				if (humanSource.m.levelUpMoves.length) {
 					const newMove = humanSource.m.levelUpMoves.shift();
 					this.processLevelUpMove(newMove, humanSource, aiTarget!);
-				}
-				if (humanSource.m.exp >= humanSource.m.expAtNextLevel && humanSource.level < 100) {
+				} else if (humanSource.m.exp >= humanSource.m.expAtNextLevel && humanSource.level < 100) {
 					this.levelUp(humanSource, aiTarget!);
+				} else if (this.findNextMonForEXP()) {
+					this.giveExpAndEVs(aiTarget!, this.findNextMonForEXP()!);
+				} else if (this.endedMidCutscene) {
+					this.checkWin();
 				}
-				if (this.findNextMonForEXP()) this.giveExpAndEVs(aiTarget!, this.findNextMonForEXP()!);
-				if (this.endedMidCutscene) this.checkWin();
 				break;
 			}
 			break;
