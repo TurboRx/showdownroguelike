@@ -4416,7 +4416,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			if (target.side.isAI) {
 				if (!source || source?.side.isAI) source = target.side.foe.active[0];
 				if (source.side.pokemon.filter(p => p.m.willGetEXP).length > 1) {
-					this.expMult = 0.5
+					this.expMult = 0.5;
 				} else {
 					this.expMult = 1;
 				}

@@ -2715,51 +2715,51 @@ export class Battle {
 			const aiTarget = this.getTarget(action.pokemon, action.move, action.targetLoc);
 			const dexMove = this.dex.moves.get(humanSource.m.overwrite);
 			switch (action.move.id) {
-				case 'yes':
-					this.add('message', `Which move should be forgotten?`);
-					this.makeRequest('levelup');
-					break;
-				case 'no':
-					this.add('message', `${humanSource.name} did not learn ${dexMove.name}.`);
-					delete humanSource.m.overwrite;
-					if (humanSource.m.levelUpMoves.length) {
-						const newMove = humanSource.m.levelUpMoves.shift();
-						this.processLevelUpMove(newMove, humanSource, aiTarget!);
-					}
-					if (humanSource.m.exp >= humanSource.m.expAtNextLevel && humanSource.level < 100) {
-						this.levelUp(humanSource, aiTarget!);
-					}
-					if (!!this.findNextMonForEXP()) this.giveExpAndEVs(aiTarget!, this.findNextMonForEXP()!);
-					if (this.endedMidCutscene) this.checkWin();
-					break;
-				default:
-					delete humanSource.m.overwrite;
-					const sketchIndex = humanSource.moves.indexOf(action.move.id);
-					const sketchedMove = {
-						move: dexMove.name,
-						id: dexMove.id,
-						pp: dexMove.pp * (8 / 5),
-						maxpp: dexMove.pp * (8 / 5),
-						target: dexMove.target,
-						disabled: false,
-						used: false,
-					};
-					humanSource.moveSlots[sketchIndex] = sketchedMove;
-					humanSource.baseMoveSlots[sketchIndex] = sketchedMove;
-					this.add('message', `1...`);
-					this.add('message', `2...`);
-					this.add('message', `and... Poof!`);
-					this.add('message', `${humanSource.name} forgot ${action.move.name} and learned ${dexMove.name}!`);
-					if (humanSource.m.levelUpMoves.length) {
-						const newMove = humanSource.m.levelUpMoves.shift();
-						this.processLevelUpMove(newMove, humanSource, aiTarget!);
-					}
-					if (humanSource.m.exp >= humanSource.m.expAtNextLevel && humanSource.level < 100) {
-						this.levelUp(humanSource, aiTarget!);
-					}
-					if (!!this.findNextMonForEXP()) this.giveExpAndEVs(aiTarget!, this.findNextMonForEXP()!);
-					if (this.endedMidCutscene) this.checkWin();
-					break;
+			case 'yes':
+				this.add('message', `Which move should be forgotten?`);
+				this.makeRequest('levelup');
+				break;
+			case 'no':
+				this.add('message', `${humanSource.name} did not learn ${dexMove.name}.`);
+				delete humanSource.m.overwrite;
+				if (humanSource.m.levelUpMoves.length) {
+					const newMove = humanSource.m.levelUpMoves.shift();
+					this.processLevelUpMove(newMove, humanSource, aiTarget!);
+				}
+				if (humanSource.m.exp >= humanSource.m.expAtNextLevel && humanSource.level < 100) {
+					this.levelUp(humanSource, aiTarget!);
+				}
+				if (this.findNextMonForEXP()) this.giveExpAndEVs(aiTarget!, this.findNextMonForEXP()!);
+				if (this.endedMidCutscene) this.checkWin();
+				break;
+			default:
+				delete humanSource.m.overwrite;
+				const sketchIndex = humanSource.moves.indexOf(action.move.id);
+				const sketchedMove = {
+					move: dexMove.name,
+					id: dexMove.id,
+					pp: dexMove.pp * (8 / 5),
+					maxpp: dexMove.pp * (8 / 5),
+					target: dexMove.target,
+					disabled: false,
+					used: false,
+				};
+				humanSource.moveSlots[sketchIndex] = sketchedMove;
+				humanSource.baseMoveSlots[sketchIndex] = sketchedMove;
+				this.add('message', `1...`);
+				this.add('message', `2...`);
+				this.add('message', `and... Poof!`);
+				this.add('message', `${humanSource.name} forgot ${action.move.name} and learned ${dexMove.name}!`);
+				if (humanSource.m.levelUpMoves.length) {
+					const newMove = humanSource.m.levelUpMoves.shift();
+					this.processLevelUpMove(newMove, humanSource, aiTarget!);
+				}
+				if (humanSource.m.exp >= humanSource.m.expAtNextLevel && humanSource.level < 100) {
+					this.levelUp(humanSource, aiTarget!);
+				}
+				if (this.findNextMonForEXP()) this.giveExpAndEVs(aiTarget!, this.findNextMonForEXP()!);
+				if (this.endedMidCutscene) this.checkWin();
+				break;
 			}
 			break;
 		case 'move':
@@ -3506,7 +3506,7 @@ export class Battle {
 		const speciesData = EXP_TABLE[species] || EXP_TABLE[this.toID(Dex.species.get(species).baseSpecies)];
 		source.m.willGetEXP = false;
 		for (const stat of Object.keys(speciesData['evYield'])) {
-			let num = speciesData['evYield'][stat];
+			const num = speciesData['evYield'][stat];
 			for (let x = speciesData['evYield'][stat]; x > 0; x--) {
 				if (Object.values(source.set.evs).reduce((a, b) => a + b, 0) >= 512) break;
 				source.set.evs[stat as StatID] = this.clampIntRange(source.set.evs[stat as StatID] + 1, 0, 255);
@@ -3519,7 +3519,7 @@ export class Battle {
 			if (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {
 				return this.levelUp(source, target);
 			}
-			if (!!this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
+			if (this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
 		}
 	}
 
@@ -3554,7 +3554,7 @@ export class Battle {
 		if (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {
 			return this.levelUp(source, target);
 		}
-		if (!!this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
+		if (this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
 	}
 
 	// @ts-expect-error
@@ -3588,7 +3588,7 @@ export class Battle {
 			this.makeRequest('levelup');
 			return;
 		}
-		if (!!this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
+		if (this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
 	}
 
 	destroy() {

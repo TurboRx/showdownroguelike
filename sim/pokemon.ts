@@ -1073,7 +1073,7 @@ export class Pokemon {
 				id: 'yes' as ID,
 				target: 'self',
 				disabled: false,
-			},{
+			}, {
 				move: 'No',
 				id: 'no' as ID,
 				target: 'self',

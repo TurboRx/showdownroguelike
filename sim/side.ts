@@ -544,7 +544,7 @@ export class Side {
 
 		let request = pokemon.getMoveRequestData();
 		if (this.battle.requestState === 'levelup') {
-			let relevant = this.pokemon.find(p => p.m.overwrite)!;
+			const relevant = this.pokemon.find(p => p.m.overwrite)!;
 			request = relevant.getMoveRequestData();
 		}
 		let moveid = '';
@@ -679,10 +679,10 @@ export class Side {
 			this.choice.actions.push({
 				choice: 'levelup',
 				pokemon,
-				moveid: moveid,
+				moveid,
 			});
-			if (!pokemon.m.undecided)  {
-				let newPoke = this.pokemon.find(p => p.m.overwrite)!;
+			if (!pokemon.m.undecided) {
+				const newPoke = this.pokemon.find(p => p.m.overwrite)!;
 				delete newPoke.m.undecided;
 			} else {
 				delete pokemon.m.undecided;
