@@ -3522,6 +3522,7 @@ export class Battle {
 				return this.levelUp(source, target);
 			}
 			if (this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
+			if (this.endedMidCutscene) return this.checkWin();
 		}
 	}
 
@@ -3557,6 +3558,7 @@ export class Battle {
 			return this.levelUp(source, target);
 		}
 		if (this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
+		if (this.endedMidCutscene) return this.checkWin();
 	}
 
 	// @ts-expect-error
@@ -3591,6 +3593,7 @@ export class Battle {
 			return;
 		}
 		if (this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
+		if (this.endedMidCutscene) return this.checkWin();
 	}
 
 	destroy() {
