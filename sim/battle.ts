@@ -2730,7 +2730,7 @@ export class Battle {
 					this.levelUp(humanSource, aiTarget!);
 				} else if (this.findNextMonForEXP()) {
 					this.giveExpAndEVs(aiTarget!, this.findNextMonForEXP()!);
-				} else if (this.endedMidCutscene) {
+				} else if (this.endedMidCutscene || aiTarget!.side.foePokemonLeft()) {
 					this.checkWin();
 				}
 				break;
