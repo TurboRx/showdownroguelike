@@ -156,6 +156,7 @@ export class Battle {
 	started: boolean;
 	ended: boolean;
 	endedMidCutscene: boolean;
+	switchAfterLevelup: boolean;
 	winner?: string;
 
 	effect: Effect;
@@ -249,6 +250,7 @@ export class Battle {
 		this.started = false;
 		this.ended = false;
 		this.endedMidCutscene = false;
+		this.switchAfterLevelup = false;
 
 		this.effect = { id: '' } as Effect;
 		this.effectState = this.initEffectState({ id: '' });
@@ -2730,6 +2732,9 @@ export class Battle {
 					this.levelUp(humanSource, aiTarget!);
 				} else if (this.findNextMonForEXP()) {
 					this.giveExpAndEVs(aiTarget!, this.findNextMonForEXP()!);
+				} else if (this.switchAfterLevelup) {
+					this.makeRequest('switch');
+					this.switchAfterLevelup = false;
 				} else if (this.endedMidCutscene || !aiTarget!.side.foePokemonLeft()) {
 					this.checkWin();
 				}
@@ -2759,6 +2764,9 @@ export class Battle {
 					this.levelUp(humanSource, aiTarget!);
 				} else if (this.findNextMonForEXP()) {
 					this.giveExpAndEVs(aiTarget!, this.findNextMonForEXP()!);
+				} else if (this.switchAfterLevelup) {
+					this.makeRequest('switch');
+					this.switchAfterLevelup = false;
 				} else if (this.endedMidCutscene || !aiTarget!.side.foePokemonLeft()) {
 					this.checkWin();
 				}
@@ -2972,6 +2980,10 @@ export class Battle {
 
 		for (const playerSwitch of switches) {
 			if (playerSwitch) {
+				if (this.requestState === 'levelup') {
+					this.switchAfterLevelup = true;
+					return true;
+				}
 				this.makeRequest('switch');
 				return true;
 			}
@@ -3523,6 +3535,11 @@ export class Battle {
 				return this.levelUp(source, target);
 			}
 			if (this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
+			if (this.switchAfterLevelup) {
+				this.makeRequest('switch');
+				this.switchAfterLevelup = false;
+				return;
+			}
 			if (this.endedMidCutscene || !target!.side.foePokemonLeft()) return this.checkWin();
 		}
 	}
