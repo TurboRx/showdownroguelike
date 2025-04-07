@@ -2730,7 +2730,7 @@ export class Battle {
 					this.levelUp(humanSource, aiTarget!);
 				} else if (this.findNextMonForEXP()) {
 					this.giveExpAndEVs(aiTarget!, this.findNextMonForEXP()!);
-				} else if (this.endedMidCutscene || aiTarget!.side.foePokemonLeft()) {
+				} else if (this.endedMidCutscene || !aiTarget!.side.foePokemonLeft()) {
 					this.checkWin();
 				}
 				break;
@@ -2759,7 +2759,7 @@ export class Battle {
 					this.levelUp(humanSource, aiTarget!);
 				} else if (this.findNextMonForEXP()) {
 					this.giveExpAndEVs(aiTarget!, this.findNextMonForEXP()!);
-				} else if (this.endedMidCutscene) {
+				} else if (this.endedMidCutscene || !aiTarget!.side.foePokemonLeft()) {
 					this.checkWin();
 				}
 				break;
@@ -3523,7 +3523,7 @@ export class Battle {
 				return this.levelUp(source, target);
 			}
 			if (this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
-			if (this.endedMidCutscene) return this.checkWin();
+			if (this.endedMidCutscene || !target!.side.foePokemonLeft()) return this.checkWin();
 		}
 	}
 
@@ -3559,7 +3559,7 @@ export class Battle {
 			return this.levelUp(source, target);
 		}
 		if (this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
-		if (this.endedMidCutscene) return this.checkWin();
+		if (this.endedMidCutscene || !target!.side.foePokemonLeft()) return this.checkWin();
 	}
 
 	// @ts-expect-error
@@ -3594,7 +3594,7 @@ export class Battle {
 			return;
 		}
 		if (this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
-		if (this.endedMidCutscene) return this.checkWin();
+		if (this.endedMidCutscene || !target!.side.foePokemonLeft()) return this.checkWin();
 	}
 
 	destroy() {
