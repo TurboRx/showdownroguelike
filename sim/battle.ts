@@ -2719,6 +2719,7 @@ export class Battle {
 				this.add('message', `Which move should be forgotten?`);
 				this.makeRequest('levelup');
 				break;
+			case 'undo':
 			case 'no':
 				this.add('message', `${humanSource.name} did not learn ${dexMove.name}.`);
 				delete humanSource.m.overwrite;
