@@ -3565,33 +3565,37 @@ export class Battle {
 	// @ts-expect-error
 	processLevelUpMove(move: string, source: Pokemon, target: Pokemon) {
 		const dexMove = this.dex.moves.get(move);
-		if (source.moves.includes(move)) return;
-		const sketchedMove = {
-			move: dexMove.name,
-			id: dexMove.id,
-			pp: dexMove.pp * (8 / 5),
-			maxpp: dexMove.pp * (8 / 5),
-			target: dexMove.target,
-			disabled: false,
-			used: false,
-		};
-		if (source.moves.length < 4) {
-			source.moveSlots.push(sketchedMove);
-			source.baseMoveSlots.push(sketchedMove);
-			this.add('message', `${source.name} learned ${dexMove.name}!`);
-			if (source.m.levelUpMoves.length) {
-				const newMove = source.m.levelUpMoves.shift();
-				return this.processLevelUpMove(newMove, source, target);
+		if (!source.moves.includes(move)) {
+			const sketchedMove = {
+				move: dexMove.name,
+				id: dexMove.id,
+				pp: dexMove.pp * (8 / 5),
+				maxpp: dexMove.pp * (8 / 5),
+				target: dexMove.target,
+				disabled: false,
+				used: false,
+			};
+			if (source.moves.length < 4) {
+				source.moveSlots.push(sketchedMove);
+				source.baseMoveSlots.push(sketchedMove);
+				this.add('message', `${source.name} learned ${dexMove.name}!`);
+				if (source.m.levelUpMoves.length) {
+					const newMove = source.m.levelUpMoves.shift();
+					return this.processLevelUpMove(newMove, source, target);
+				}
+				if (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {
+					return this.levelUp(source, target);
+				}
+			} else {
+				this.add('message', `${source.name} wants to learn ${dexMove.name}, but it already has 4 moves. Do you want to forget a move to learn ${dexMove.name}?`);
+				source.m.overwrite = move;
+				source.m.undecided = true;
+				this.makeRequest('levelup');
+				return;
 			}
-			if (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {
-				return this.levelUp(source, target);
-			}
-		} else {
-			this.add('message', `${source.name} wants to learn ${dexMove.name}, but it already has 4 moves. Do you want to forget a move to learn ${dexMove.name}?`);
-			source.m.overwrite = move;
-			source.m.undecided = true;
-			this.makeRequest('levelup');
-			return;
+		}
+		if (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {
+			return this.levelUp(source, target);
 		}
 		if (this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
 		if (this.endedMidCutscene || !target!.side.foePokemonLeft()) return this.checkWin();
