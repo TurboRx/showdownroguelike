@@ -3381,7 +3381,10 @@ export class Battle {
 					if (mon.hp < 1) monData.status = 'fnt';
 					// @ts-ignore
 					monData.ppLeft = [];
-					for (const move of mon.moveSlots) {
+					monData.moves = [];
+					for (const move of mon.baseMoveSlots) {
+						// @ts-ignore
+						monData.moves.push(move.move);
 						// @ts-ignore
 						monData.ppLeft.push(move.pp);
 					}
@@ -3391,9 +3394,7 @@ export class Battle {
 					// @ts-ignore
 					monData.level = mon.set.level;
 					// @ts-ignore
-					monData.item = mon.item;
-					// @ts-ignore
-					monData.moves = mon.moves;
+					monData.item = mon.item.length ? Dex.items.get(mon.item).name : mon.item;
 					// @ts-ignore
 					monData.linkedTeamIndex = mon.m.roguelikeIndex;
 					roguelikeData.push(monData);
