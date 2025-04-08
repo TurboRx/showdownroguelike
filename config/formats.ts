@@ -4619,7 +4619,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				} else {
 					this.expMult = 1;
 				}
-				this.giveExpAndEVs(target, source);
+				if (!source.hp) source.m.willGetEXP = false;
+				if (this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
 			} else {
 				target.m.willGetEXP = false;
 			}
