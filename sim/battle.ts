@@ -3487,7 +3487,7 @@ export class Battle {
 
 	getMovesAtTarget(pokemon: string, target: 'M' | 'T' | 'L' | 'R' | 'E' | 'D' | 'S' | 'V' | 'C', level?: number) {
 		let genNumber = 9;
-		while (genNumber > 6) {
+		while (genNumber > 1) {
 			if (Dex.mod(`gen${genNumber}`).species.get(toID(pokemon)).isNonstandard) {
 				genNumber--;
 				continue;
