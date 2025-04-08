@@ -1058,11 +1058,6 @@ export class Pokemon {
 		const canSwitchIn = this.battle.canSwitch(this.side) > 0;
 		let moves = this.getMoves(lockedMove, isLastActive);
 
-		if (!moves.length) {
-			moves = [{ move: 'Struggle', id: 'struggle' as ID, target: 'randomNormal', disabled: false }];
-			lockedMove = 'struggle' as ID;
-		}
-
 		const data: PokemonMoveRequestData = {
 			moves,
 		};
@@ -1093,6 +1088,11 @@ export class Pokemon {
 			});
 			data.trapped = true;
 			return data;
+		}
+
+		if (!moves.length) {
+			moves = [{ move: 'Struggle', id: 'struggle' as ID, target: 'randomNormal', disabled: false }];
+			lockedMove = 'struggle' as ID;
 		}
 
 		if (isLastActive) {
