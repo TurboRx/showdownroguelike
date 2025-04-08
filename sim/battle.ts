@@ -2714,7 +2714,7 @@ export class Battle {
 		case 'levelup':
 			// I will regret this later if somehow there is doubles
 			const humanSource = action.pokemon.m.overwrite ? action.pokemon : action.pokemon.side.pokemon.find(p => p.m.overwrite)!;
-			const aiTarget = this.getTarget(action.pokemon, action.move, action.targetLoc);
+			const aiTarget = this.getTarget(action.pokemon, action.move, action.targetLoc) || action.pokemon.side.foe.active[0];
 			const dexMove = this.dex.moves.get(humanSource.m.overwrite);
 			switch (action.move.id) {
 			case 'yes':
