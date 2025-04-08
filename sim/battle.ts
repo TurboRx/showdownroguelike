@@ -3486,13 +3486,21 @@ export class Battle {
 	}
 
 	getMovesAtTarget(pokemon: string, target: 'M' | 'T' | 'L' | 'R' | 'E' | 'D' | 'S' | 'V' | 'C', level?: number) {
+		let genNumber = 9;
+		while (genNumber > 6) {
+			if (Dex.mod(`gen${genNumber}`).species.get(toID(pokemon)).isNonstandard) {
+				genNumber--;
+				continue;
+			}
+			break;
+		}
 		const fullLearn = Dex.species.getFullLearnset(toID(pokemon));
 		const movesAtlevel: string[] = [];
 		for (const learnsetIndex of fullLearn) {
 			const learnset = learnsetIndex.learnset;
 			for (const move in learnset) {
-				const learnSetstring = target === 'L' ? `${target}${level}` : target;
-				if (learnset[move].some(source => source.substring(1) === learnSetstring)) {
+				const learnSetstring = target === 'L' ? `${genNumber}${target}${level}` : genNumber + target;
+				if (learnset[move].some(source => source === learnSetstring)) {
 					if (!movesAtlevel.includes(move)) {
 						movesAtlevel.push(move);
 					}
