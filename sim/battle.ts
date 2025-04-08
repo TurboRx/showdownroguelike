@@ -3576,6 +3576,11 @@ export class Battle {
 			return this.levelUp(source, target);
 		}
 		if (this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
+		if (this.switchAfterLevelup) {
+			this.makeRequest('switch');
+			this.switchAfterLevelup = false;
+			return;
+		}
 		if (this.endedMidCutscene || !target!.side.foePokemonLeft()) return this.checkWin();
 	}
 
@@ -3615,6 +3620,11 @@ export class Battle {
 			return this.levelUp(source, target);
 		}
 		if (this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
+		if (this.switchAfterLevelup) {
+			this.makeRequest('switch');
+			this.switchAfterLevelup = false;
+			return;
+		}
 		if (this.endedMidCutscene || !target!.side.foePokemonLeft()) return this.checkWin();
 	}
 
