@@ -50,13 +50,14 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'slp',
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
-			if (!target.isActive) return;
-			if (sourceEffect && sourceEffect.effectType === 'Ability') {
-				this.add('-status', target, 'slp', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
-			} else if (sourceEffect && sourceEffect.effectType === 'Move') {
-				this.add('-status', target, 'slp', `[from] move: ${sourceEffect.name}`);
-			} else {
-				this.add('-status', target, 'slp');
+			if (target.isActive) {
+				if (sourceEffect && sourceEffect.effectType === 'Ability') {
+					this.add('-status', target, 'slp', '[from] ability: ' + sourceEffect.name, `[of] ${source}`);
+				} else if (sourceEffect && sourceEffect.effectType === 'Move') {
+					this.add('-status', target, 'slp', `[from] move: ${sourceEffect.name}`);
+				} else {
+					this.add('-status', target, 'slp');
+				}
 			}
 			// 1-3 turns
 			this.effectState.startTime = this.random(2, 5);
