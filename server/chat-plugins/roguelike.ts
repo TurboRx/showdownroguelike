@@ -831,9 +831,9 @@ function checkSequence(before: string, after: string) {
 }
 
 export const commands: Chat.ChatCommands = {
-	uwu(target, room, user) {
-		return Teams.export(genPokemon(3, [5, 10]));
-	},
+	// uwu(target, room, user) {
+	// 	return Teams.export(genPokemon(3, [5, 10]));
+	// },
 	game: {
 		'': 'getpage',
 		getpage(target, room, user) {
