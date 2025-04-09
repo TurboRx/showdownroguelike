@@ -3494,6 +3494,7 @@ export class Battle {
 			}
 			break;
 		}
+    if (toID(pokemon) === 'floetteeternal') genNumber = 6;
 		const fullLearn = Dex.species.getFullLearnset(toID(pokemon));
 		const movesAtlevel: string[] = [];
 		for (const learnsetIndex of fullLearn) {
