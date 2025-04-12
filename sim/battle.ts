@@ -3374,7 +3374,8 @@ export class Battle {
 					const monData = {};
 					// @ts-ignore shut up
 					monData.curHP = mon.hp;
-					monData.maxHP = mon.maxhp;
+					const pokemon = mon.set;
+					monData.maxHP = Math.floor(((pokemon.ivs.hp + (2 * this.dex.species.get(mon.baseSpecies).baseStats['hp']) + Math.floor(pokemon.evs.hp / 4) + 100) * pokemon.level) / 100) + 10;;
 					// @ts-ignore
 					monData.status = mon.status.length ? mon.status : false;
 					// @ts-ignore
