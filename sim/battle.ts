@@ -2727,15 +2727,15 @@ export class Battle {
 				delete humanSource.m.overwrite;
 				if (humanSource.m.levelUpMoves.length) {
 					const newMove = humanSource.m.levelUpMoves.shift();
-					this.processLevelUpMove(newMove, humanSource, aiTarget!);
+					this.processLevelUpMove(newMove, humanSource, aiTarget);
 				} else if (humanSource.m.exp >= humanSource.m.expAtNextLevel && humanSource.level < 100) {
-					this.levelUp(humanSource, aiTarget!);
+					this.levelUp(humanSource, aiTarget);
 				} else if (this.findNextMonForEXP()) {
-					this.giveExpAndEVs(aiTarget!, this.findNextMonForEXP()!);
+					this.giveExpAndEVs(aiTarget, this.findNextMonForEXP()!);
 				} else if (this.switchAfterLevelup) {
 					this.makeRequest('switch');
 					this.switchAfterLevelup = false;
-				} else if (this.endedMidCutscene || !aiTarget!.side.foePokemonLeft()) {
+				} else if (this.endedMidCutscene || !aiTarget.side.foePokemonLeft()) {
 					this.checkWin();
 				}
 				break;
@@ -2759,15 +2759,15 @@ export class Battle {
 				this.add('message', `${humanSource.name} forgot ${action.move.name} and learned ${dexMove.name}!`);
 				if (humanSource.m.levelUpMoves.length) {
 					const newMove = humanSource.m.levelUpMoves.shift();
-					this.processLevelUpMove(newMove, humanSource, aiTarget!);
+					this.processLevelUpMove(newMove, humanSource, aiTarget);
 				} else if (humanSource.m.exp >= humanSource.m.expAtNextLevel && humanSource.level < 100) {
-					this.levelUp(humanSource, aiTarget!);
+					this.levelUp(humanSource, aiTarget);
 				} else if (this.findNextMonForEXP()) {
-					this.giveExpAndEVs(aiTarget!, this.findNextMonForEXP()!);
+					this.giveExpAndEVs(aiTarget, this.findNextMonForEXP()!);
 				} else if (this.switchAfterLevelup) {
 					this.makeRequest('switch');
 					this.switchAfterLevelup = false;
-				} else if (this.endedMidCutscene || !aiTarget!.side.foePokemonLeft()) {
+				} else if (this.endedMidCutscene || !aiTarget.side.foePokemonLeft()) {
 					this.checkWin();
 				}
 				break;
@@ -3375,7 +3375,7 @@ export class Battle {
 					// @ts-ignore shut up
 					monData.curHP = mon.hp;
 					const pokemon = mon.set;
-					monData.maxHP = Math.floor(((pokemon.ivs.hp + (2 * this.dex.species.get(mon.baseSpecies).baseStats['hp']) + Math.floor(pokemon.evs.hp / 4) + 100) * pokemon.level) / 100) + 10;;
+					monData.maxHP = Math.floor(((pokemon.ivs.hp + (2 * this.dex.species.get(mon.baseSpecies).baseStats['hp']) + Math.floor(pokemon.evs.hp / 4) + 100) * pokemon.level) / 100) + 10;
 					// @ts-ignore
 					monData.status = mon.status.length ? mon.status : false;
 					// @ts-ignore
@@ -3495,7 +3495,7 @@ export class Battle {
 			}
 			break;
 		}
-    if (toID(pokemon) === 'floetteeternal') genNumber = 6;
+		if (toID(pokemon) === 'floetteeternal') genNumber = 6;
 		const fullLearn = Dex.species.getFullLearnset(toID(pokemon));
 		const movesAtlevel: string[] = [];
 		for (const learnsetIndex of fullLearn) {
@@ -3551,7 +3551,7 @@ export class Battle {
 				this.switchAfterLevelup = false;
 				return;
 			}
-			if (this.endedMidCutscene || !target!.side.foePokemonLeft()) return this.checkWin();
+			if (this.endedMidCutscene || !target.side.foePokemonLeft()) return this.checkWin();
 		}
 	}
 
@@ -3592,7 +3592,7 @@ export class Battle {
 			this.switchAfterLevelup = false;
 			return;
 		}
-		if (this.endedMidCutscene || !target!.side.foePokemonLeft()) return this.checkWin();
+		if (this.endedMidCutscene || !target.side.foePokemonLeft()) return this.checkWin();
 	}
 
 	// @ts-expect-error
@@ -3636,7 +3636,7 @@ export class Battle {
 			this.switchAfterLevelup = false;
 			return;
 		}
-		if (this.endedMidCutscene || !target!.side.foePokemonLeft()) return this.checkWin();
+		if (this.endedMidCutscene || !target.side.foePokemonLeft()) return this.checkWin();
 	}
 
 	destroy() {
