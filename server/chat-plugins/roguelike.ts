@@ -147,6 +147,7 @@ function genItem(quantity: number, extraArg?: PokemonSet[] | string) {
 				});
 			}
 		} else {
+			if (i.zMove) return true;
 			return Object.keys(i).some(k => {
 				if (typeof i[k] === 'function') {
 					return true;
