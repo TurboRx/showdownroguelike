@@ -171,13 +171,14 @@ function genItem(quantity: number, extraArg?: PokemonSet[] | string) {
 
 function getMovesAtTarget(pokemon: string, target: 'M' | 'T' | 'L' | 'R' | 'E' | 'D' | 'S' | 'V' | 'C', level?: number) {
 	let genNumber = 9;
-	while (genNumber > 6) {
+	while (genNumber > 1) {
 		if (Dex.mod(`gen${genNumber}`).species.get(toID(pokemon)).isNonstandard) {
 			genNumber--;
 			continue;
 		}
 		break;
 	}
+	if (toID(pokemon) === 'floetteeternal') genNumber = 6;
 	const fullLearn = Dex.species.getFullLearnset(toID(pokemon));
 	const movesAtlevel: string[] = [];
 	for (const learnsetIndex of fullLearn) {
@@ -831,9 +832,9 @@ function checkSequence(before: string, after: string) {
 }
 
 export const commands: Chat.ChatCommands = {
-	uwu(target, room, user) {
-		return Teams.export(genPokemon(3, [5, 10]));
-	},
+	// uwu(target, room, user) {
+	// 	return Teams.export(genPokemon(3, [5, 10]));
+	// },
 	game: {
 		'': 'getpage',
 		getpage(target, room, user) {

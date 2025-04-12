@@ -3487,13 +3487,14 @@ export class Battle {
 
 	getMovesAtTarget(pokemon: string, target: 'M' | 'T' | 'L' | 'R' | 'E' | 'D' | 'S' | 'V' | 'C', level?: number) {
 		let genNumber = 9;
-		while (genNumber > 6) {
+		while (genNumber > 1) {
 			if (Dex.mod(`gen${genNumber}`).species.get(toID(pokemon)).isNonstandard) {
 				genNumber--;
 				continue;
 			}
 			break;
 		}
+    if (toID(pokemon) === 'floetteeternal') genNumber = 6;
 		const fullLearn = Dex.species.getFullLearnset(toID(pokemon));
 		const movesAtlevel: string[] = [];
 		for (const learnsetIndex of fullLearn) {
