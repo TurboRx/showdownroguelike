@@ -1007,7 +1007,7 @@ export const commands: Chat.ChatCommands = {
 				index--;
 				if (!userData.team[index]) return this.errorReply(`You need to specify a pokemon on your team.`);
 				if (userData.teamData[index].status !== 'fnt') return this.errorReply(`You can't use this on that pokemon.`);
-				userData.teamData[index].curHP = Math.floor(userData.teamData[index].maxHP / 2);
+				userData.teamData[index].curHP = userData.team[index].species === 'Shedinja' ? userData.teamData[index].maxHP : Math.floor(userData.teamData[index].maxHP / 2);
 				userData.teamData[index].status = false;
 				userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
 				// TODO: More items
