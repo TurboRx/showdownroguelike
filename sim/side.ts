@@ -535,7 +535,7 @@ export class Side {
 			return this.emitChoiceError(`Can't move: You need a ${this.requestState} response`);
 		}
 		const index = this.getChoiceIndex();
-		if (index >= this.active.length) {
+		if (index >= this.active.length && this.battle.requestState !== 'levelup') {
 			return this.emitChoiceError(`Can't move: You sent more choices than unfainted Pokémon.`);
 		}
 		const autoChoose = !moveText;
