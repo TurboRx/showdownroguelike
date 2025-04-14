@@ -544,7 +544,7 @@ export class Side {
 		// Parse moveText (name or index)
 		// If the move is not found, the action is invalid without requiring further inspection.
 
-		let request = pokemon?.getMoveRequestData();
+		let request = pokemon.getMoveRequestData();
 		if (this.battle.requestState === 'levelup') {
 			const relevant = this.pokemon.find(p => p.m.overwrite);
 			if (relevant) request = relevant.getMoveRequestData();
