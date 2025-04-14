@@ -539,7 +539,7 @@ export class Side {
 			return this.emitChoiceError(`Can't move: You sent more choices than unfainted Pokémon.`);
 		}
 		const autoChoose = !moveText;
-		const pokemon: Pokemon = this.active[index];
+		const pokemon: Pokemon = this.active[index] || this.pokemon[0];
 
 		// Parse moveText (name or index)
 		// If the move is not found, the action is invalid without requiring further inspection.
