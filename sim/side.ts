@@ -546,8 +546,8 @@ export class Side {
 
 		let request = pokemon.getMoveRequestData();
 		if (this.battle.requestState === 'levelup') {
-			const relevant = this.pokemon.find(p => p.m.overwrite)!;
-			request = relevant.getMoveRequestData();
+			const relevant = this.pokemon.find(p => p.m.overwrite);
+			if (relevant) request = relevant.getMoveRequestData();
 		}
 		let moveid = '';
 		let targetType = '';
