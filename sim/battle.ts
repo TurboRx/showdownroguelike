@@ -3496,9 +3496,24 @@ export class Battle {
 			break;
 		}
 		if (toID(pokemon) === 'floetteeternal') genNumber = 6;
+		let prevoList = [];
+		let dexSpecies = Dex.species.get(pokemon);
+		while (dexSpecies.prevo) {
+			prevoList.push(dexSpecies.prevo);
+			dexSpecies = Dex.species.get(dexSpecies.prevo);
+		}
 		const fullLearn = Dex.species.getFullLearnset(toID(pokemon));
 		const movesAtlevel: string[] = [];
 		for (const learnsetIndex of fullLearn) {
+			if (prevoList) {
+				prevoList.forEach(p => {
+					let learnset = Dex.species.getLearnsetData(toID(p));
+					if (learnset.species.name !== p) p = learnset.species.name;
+				});
+				if (prevoList.includes(learnsetIndex.species.name)) {
+					continue;
+				}
+			}
 			const learnset = learnsetIndex.learnset;
 			for (const move in learnset) {
 				const learnSetstring = target === 'L' ? `${genNumber}${target}${level}` : genNumber + target;
