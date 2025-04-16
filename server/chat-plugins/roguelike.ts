@@ -456,6 +456,8 @@ export class Roguelike {
 	goToPage(target: string) {
 		this.curRoom = target;
 		refreshPage(this.user);
+		let realUser = Users.get(this.user);
+		if (realUser) realUser.lastCommand = '';
 		saveRoguelikeData();
 	}
 
@@ -846,7 +848,12 @@ export const commands: Chat.ChatCommands = {
 		getpage(target, room, user) {
 			return this.parse(`/join view-roguelike`);
 		},
-		start(target, room, user) {
+		restart: 'start',
+		start(target, room, user, connections, cmd) {
+			if (cmd.includes('restart') && user.lastCommand !== 'roguelike restart') {
+				user.lastCommand = 'roguelike restart';
+				return this.popupReply('Do you really want to restart your run? If so, click the restart button again.')
+			}
 			createSaveData(user);
 			// const newFoe = userData.createAITrainer();
 			// createAIBattle(userData.user, newFoe);
@@ -1127,7 +1134,7 @@ export const pages: Chat.PageTable = {
 		let buf = `<div class = "pad">`;
 		if ((mainRoomArg !== 'battle' && mainRoomArg !== 'intro') && !userGameData.runEnded) {
 			// just type /forfeit
-			buf += `<button style="float: right;" class="button" name="send" value="/roguelike start">Restart</button><br />`;
+			buf += `<button style="float: right;" class="button" name="send" value="/roguelike restart">Restart</button><br />`;
 		}
 		switch (mainRoomArg) {
 		case 'battle':
