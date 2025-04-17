@@ -852,6 +852,15 @@ export const commands: Chat.ChatCommands = {
 	// uwu(target, room, user) {
 	// 	return Teams.export(genPokemon(3, [5, 10]));
 	// },
+	peek(target, room, user) {
+		this.checkCan('globalban');
+		if (user.id === toID(target)) return this.errorReply(`Cheater >:(`);
+		let gameData = roguelikeGames.get(toID(target));
+		if (gameData) {
+			return this.sendReplyBox(`<b>User</b>: ${gameData.user}<br /><b>Battle #</b>: ${gameData.battle}<br /><b>Streak #</b>: ${gameData.streak}<br /><b>BP</b>: ${gameData.battlePoints}<br /><b>Team</b>: ${Teams.export(gameData.team).replaceAll('\n', '<br />')}<b>Oppnent Team</b>: ${Teams.export(gameData.opponentTeam).replaceAll('\n', '<br />')}<b>Team Data</b>: ${JSON.stringify(gameData.teamData)}<br /><b>Flags</b>: ${JSON.stringify(gameData.flags)}`);
+		}
+		return this.errorReply(`User not found`);
+	},
 	game: {
 		'': 'getpage',
 		getpage(target, room, user) {
