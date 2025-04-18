@@ -849,11 +849,9 @@ function checkSequence(before: string, after: string) {
 }
 
 export const commands: Chat.ChatCommands = {
-	// uwu(target, room, user) {
-	// 	return Teams.export(genPokemon(3, [5, 10]));
-	// },
 	peek(target, room, user) {
-		this.checkCan('globalban');
+		this.checkCan('lock');
+		if (!target) return this.parse('/help peek');
 		if (user.id === toID(target)) return this.errorReply(`Cheater >:(`);
 		let gameData = roguelikeGames.get(toID(target));
 		if (gameData) {
@@ -861,6 +859,25 @@ export const commands: Chat.ChatCommands = {
 		}
 		return this.errorReply(`User not found`);
 	},
+	peekhelp: [`/peek [user] - Gets the user's current game data, if applicable. Requires: % @ ~`],
+	transfer: 'transferdata',
+	transferdata(target, room, user) {
+		this.checkCan('lock');
+		const args = target.split(',');
+		if (!target || args.length !== 2) return this.parse('/help transferdata');
+		if (user.id === toID(target)) return this.errorReply(`You are transferring data to the same person!`);
+		let gameData = roguelikeGames.get(toID(args[0]));
+		if (gameData) {
+			let newUser = toID(args[1]);
+			gameData.user = newUser;
+			roguelikeGames.set(newUser, gameData);
+			roguelikeGames.delete(toID(args[0]));
+			saveRoguelikeData();
+			return this.sendReply('Done!');
+		}
+		return this.errorReply(`User not found`);
+	},
+	transferdatahelp: [`/transferdata [old username], [new username] - Transfers a user's data from between usernames. Requires: % @ ~`],
 	game: {
 		'': 'getpage',
 		getpage(target, room, user) {
