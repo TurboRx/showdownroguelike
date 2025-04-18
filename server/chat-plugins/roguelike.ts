@@ -852,10 +852,11 @@ export const commands: Chat.ChatCommands = {
 	peek(target, room, user) {
 		this.checkCan('lock');
 		if (!target) return this.parse('/help peek');
-		if (user.id === toID(target)) return this.errorReply(`Cheater >:(`);
+		let leak = true;
+		if (user.id === toID(target)) leak = false;
 		let gameData = roguelikeGames.get(toID(target));
 		if (gameData) {
-			return this.sendReplyBox(`<b>User</b>: ${gameData.user}<br /><b>Battle #</b>: ${gameData.battle}<br /><b>Streak #</b>: ${gameData.streak}<br /><b>BP</b>: ${gameData.battlePoints}<br /><b>Team</b>: ${Teams.export(gameData.team).replaceAll('\n', '<br />')}<b>Oppnent Team</b>: ${Teams.export(gameData.opponentTeam).replaceAll('\n', '<br />')}<b>Team Data</b>: ${JSON.stringify(gameData.teamData)}<br /><b>Flags</b>: ${JSON.stringify(gameData.flags)}`);
+			return this.sendReplyBox(`<b>User</b>: ${gameData.user}<br /><b>Battle #</b>: ${gameData.battle}<br /><b>Streak #</b>: ${gameData.streak}<br /><b>BP</b>: ${gameData.battlePoints}<br /><b>Team</b>: ${Teams.export(gameData.team).replaceAll('\n', '<br />') || '<br />'}<b>Oppnent Team</b>: ${leak ? Teams.export(gameData.opponentTeam).replaceAll('\n', '<br />') : `[REDACTED]<br />`}<b>Team Data</b>: ${JSON.stringify(gameData.teamData)}<br /><b>Flags</b>: ${JSON.stringify(gameData.flags)}`);
 		}
 		return this.errorReply(`User not found`);
 	},
@@ -866,13 +867,24 @@ export const commands: Chat.ChatCommands = {
 		const args = target.split(',');
 		if (!target || args.length !== 2) return this.parse('/help transferdata');
 		if (user.id === toID(target)) return this.errorReply(`You are transferring data to the same person!`);
-		let gameData = roguelikeGames.get(toID(args[0]));
-		if (gameData) {
+		let oldUser = toID(args[0]);
+		let oldUsernameData = roguelikeGames.get(oldUser);
+		if (oldUsernameData) {
 			let newUser = toID(args[1]);
-			gameData.user = newUser;
-			roguelikeGames.set(newUser, gameData);
-			roguelikeGames.delete(toID(args[0]));
+			let newUsernameData = roguelikeGames.get(newUser);
+			if (newUsernameData) {
+				newUsernameData = Utils.deepClone(newUsernameData) as Roguelike;
+				oldUsernameData.user = newUser;
+				roguelikeGames.set(newUser, oldUsernameData);
+				newUsernameData.user = oldUser;
+				roguelikeGames.set(oldUser, newUsernameData);
+			} else {
+				oldUsernameData.user = newUser;
+				roguelikeGames.set(newUser, oldUsernameData);
+				roguelikeGames.delete(oldUser);
+			}
 			saveRoguelikeData();
+			refreshPage(newUser);
 			return this.sendReply('Done!');
 		}
 		return this.errorReply(`User not found`);
