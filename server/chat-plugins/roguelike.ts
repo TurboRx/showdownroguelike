@@ -837,10 +837,11 @@ export const commands: Chat.ChatCommands = {
 	peek(target, room, user) {
 		this.checkCan('lock');
 		if (!target) return this.parse('/help peek');
-		if (user.id === toID(target)) return this.errorReply(`Cheater >:(`);
+		let leak = true;
+		if (user.id === toID(target)) leak = false;
 		let gameData = roguelikeGames.get(toID(target));
 		if (gameData) {
-			return this.sendReplyBox(`<b>User</b>: ${gameData.user}<br /><b>Battle #</b>: ${gameData.battle}<br /><b>Streak #</b>: ${gameData.streak}<br /><b>BP</b>: ${gameData.battlePoints}<br /><b>Team</b>: ${Teams.export(gameData.team).replaceAll('\n', '<br />')}<b>Oppnent Team</b>: ${Teams.export(gameData.opponentTeam).replaceAll('\n', '<br />')}<b>Team Data</b>: ${JSON.stringify(gameData.teamData)}<br /><b>Flags</b>: ${JSON.stringify(gameData.flags)}`);
+			return this.sendReplyBox(`<b>User</b>: ${gameData.user}<br /><b>Battle #</b>: ${gameData.battle}<br /><b>Streak #</b>: ${gameData.streak}<br /><b>BP</b>: ${gameData.battlePoints}<br /><b>Team</b>: ${Teams.export(gameData.team).replaceAll('\n', '<br />') || '<br />'}<b>Oppnent Team</b>: ${leak ? Teams.export(gameData.opponentTeam).replaceAll('\n', '<br />') : `[REDACTED]<br />`}<b>Team Data</b>: ${JSON.stringify(gameData.teamData)}<br /><b>Flags</b>: ${JSON.stringify(gameData.flags)}`);
 		}
 		return this.errorReply(`User not found`);
 	},
