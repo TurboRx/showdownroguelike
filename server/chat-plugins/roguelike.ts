@@ -852,13 +852,24 @@ export const commands: Chat.ChatCommands = {
 		const args = target.split(',');
 		if (!target || args.length !== 2) return this.parse('/help transferdata');
 		if (user.id === toID(target)) return this.errorReply(`You are transferring data to the same person!`);
-		let gameData = roguelikeGames.get(toID(args[0]));
-		if (gameData) {
+		let oldUser = toID(args[0]);
+		let oldUsernameData = roguelikeGames.get(oldUser);
+		if (oldUsernameData) {
 			let newUser = toID(args[1]);
-			gameData.user = newUser;
-			roguelikeGames.set(newUser, gameData);
-			roguelikeGames.delete(toID(args[0]));
+			let newUsernameData = roguelikeGames.get(newUser);
+			if (newUsernameData) {
+				newUsernameData = Utils.deepClone(newUsernameData) as Roguelike;
+				oldUsernameData.user = newUser;
+				roguelikeGames.set(newUser, oldUsernameData);
+				newUsernameData.user = oldUser;
+				roguelikeGames.set(oldUser, newUsernameData);
+			} else {
+				oldUsernameData.user = newUser;
+				roguelikeGames.set(newUser, oldUsernameData);
+				roguelikeGames.delete(oldUser);
+			}
 			saveRoguelikeData();
+			refreshPage(newUser);
 			return this.sendReply('Done!');
 		}
 		return this.errorReply(`User not found`);
