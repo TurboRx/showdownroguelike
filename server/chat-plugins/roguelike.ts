@@ -858,7 +858,7 @@ export const commands: Chat.ChatCommands = {
 		if (gameData) {
 			return this.sendReplyBox(`<b>User</b>: ${gameData.user}<br /><b>Battle #</b>: ${gameData.battle}<br /><b>Streak #</b>: ${gameData.streak}<br /><b>BP</b>: ${gameData.battlePoints}<br /><b>Team</b>: ${Teams.export(gameData.team).replaceAll('\n', '<br />') || '<br />'}<b>Oppnent Team</b>: ${leak ? Teams.export(gameData.opponentTeam).replaceAll('\n', '<br />') : `[REDACTED]<br />`}<b>Team Data</b>: ${JSON.stringify(gameData.teamData)}<br /><b>Flags</b>: ${JSON.stringify(gameData.flags)}`);
 		}
-		return this.errorReply(`User not found`);
+		throw new Chat.ErrorMessage(`User not found`);
 	},
 	peekhelp: [`/peek [user] - Gets the user's current game data, if applicable. Requires: % @ ~`],
 	transfer: 'transferdata',
@@ -866,7 +866,7 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('lock');
 		const args = target.split(',');
 		if (!target || args.length !== 2) return this.parse('/help transferdata');
-		if (user.id === toID(target)) return this.errorReply(`You are transferring data to the same person!`);
+		if (user.id === toID(target)) throw new Chat.ErrorMessage(`You are transferring data to the same person!`);
 		let oldUser = toID(args[0]);
 		let oldUsernameData = roguelikeGames.get(oldUser);
 		if (oldUsernameData) {
@@ -887,7 +887,7 @@ export const commands: Chat.ChatCommands = {
 			refreshPage(newUser);
 			return this.sendReply('Done!');
 		}
-		return this.errorReply(`User not found`);
+		throw new Chat.ErrorMessage(`User not found`);
 	},
 	transferdatahelp: [`/transferdata [old username], [new username] - Transfers a user's data from between usernames. Requires: % @ ~`],
 	game: {
@@ -914,30 +914,30 @@ export const commands: Chat.ChatCommands = {
 		},
 		shop(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
-			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
-			if (!checkSequence(userData.curRoom, 'shop')) return this.errorReply(`Can't go to shop yet!`);
+			if (!userData || userData.runEnded) throw new Chat.ErrorMessage(`You need to make a new run first.`);
+			if (!checkSequence(userData.curRoom, 'shop')) throw new Chat.ErrorMessage(`Can't go to shop yet!`);
 			if (userData.flags.purchasedItem) delete userData.flags.purchasedItem;
 			userData.goToPage('shop');
 		},
 		checkteam(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
-			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
-			if (!checkSequence(userData.curRoom, 'shop')) return this.errorReply(`Can't go here yet!`);
+			if (!userData || userData.runEnded) throw new Chat.ErrorMessage(`You need to make a new run first.`);
+			if (!checkSequence(userData.curRoom, 'shop')) throw new Chat.ErrorMessage(`Can't go here yet!`);
 			userData.goToPage('shop-team');
 		},
 		scout(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
-			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
-			if (!checkSequence(userData.curRoom, 'shop')) return this.errorReply(`Can't go here yet!`);
+			if (!userData || userData.runEnded) throw new Chat.ErrorMessage(`You need to make a new run first.`);
+			if (!checkSequence(userData.curRoom, 'shop')) throw new Chat.ErrorMessage(`Can't go here yet!`);
 			userData.goToPage('shop-scout');
 		},
 		scoutslot(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
-			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
-			if (userData.curRoom !== 'shop-scout') return this.errorReply(`Can't scout yet!`);
+			if (!userData || userData.runEnded) throw new Chat.ErrorMessage(`You need to make a new run first.`);
+			if (userData.curRoom !== 'shop-scout') throw new Chat.ErrorMessage(`Can't scout yet!`);
 			let index = parseInt(target);
 			index--;
-			if (userData.flags.opponentTeamScout[index] === undefined) return this.errorReply(`Slot doesn't exist!`);
+			if (userData.flags.opponentTeamScout[index] === undefined) throw new Chat.ErrorMessage(`Slot doesn't exist!`);
 			switch (userData.flags.opponentTeamScout[index]) {
 			case 'revealMon':
 				if (3 > userData.battlePoints) return this.popupReply(`You don't have enough BP to buy this!`);
@@ -945,7 +945,7 @@ export const commands: Chat.ChatCommands = {
 				userData.battlePoints -= 3;
 				break;
 			case 'revealSet':
-				return this.errorReply(`You already scouted!`);
+				throw new Chat.ErrorMessage(`You already scouted!`);
 				break;
 			default:
 				if (2 > userData.battlePoints) return this.popupReply(`You don't have enough BP to buy this!`);
@@ -957,10 +957,10 @@ export const commands: Chat.ChatCommands = {
 		},
 		buy(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
-			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
-			if (userData.curRoom !== 'shop') return this.errorReply(`Can't buy stuff yet!`);
+			if (!userData || userData.runEnded) throw new Chat.ErrorMessage(`You need to make a new run first.`);
+			if (userData.curRoom !== 'shop') throw new Chat.ErrorMessage(`Can't buy stuff yet!`);
 			const item = SHOP_ITEMS[target] || false;
-			if (!item) return this.errorReply('Does that item even exist?');
+			if (!item) throw new Chat.ErrorMessage('Does that item even exist?');
 			if (item.cost > userData.battlePoints) return this.popupReply(`You don't have enough BP to buy this!`);
 			switch (item.type) {
 			case 'pokemon':
@@ -986,12 +986,12 @@ export const commands: Chat.ChatCommands = {
 		},
 		addstarter(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
-			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
-			if (!userData.flags.pokemonOptions) return this.errorReply(`No Pokemon to add.`);
-			if (userData.curRoom !== 'intro') return this.errorReply(`You already have a starter.`);
+			if (!userData || userData.runEnded) throw new Chat.ErrorMessage(`You need to make a new run first.`);
+			if (!userData.flags.pokemonOptions) throw new Chat.ErrorMessage(`No Pokemon to add.`);
+			if (userData.curRoom !== 'intro') throw new Chat.ErrorMessage(`You already have a starter.`);
 			const pokes = userData.flags.pokemonOptions;
 			const poke = pokes.find(p => toID(p.species) === toID(target));
-			if (!poke) return this.errorReply(`You can't choose that pokemon.`);
+			if (!poke) throw new Chat.ErrorMessage(`You can't choose that pokemon.`);
 			if (userData.team.length >= 6) {
 				// TODO: Figure out releasing pokemon.
 			} else {
@@ -1005,18 +1005,18 @@ export const commands: Chat.ChatCommands = {
 		redeem(target, room, user) {
 			let index: number;
 			const userData = roguelikeGames.get(user.id);
-			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
-			if (!userData.flags.purchasedItem) return this.errorReply(`You need to purchase something first.`);
+			if (!userData || userData.runEnded) throw new Chat.ErrorMessage(`You need to make a new run first.`);
+			if (!userData.flags.purchasedItem) throw new Chat.ErrorMessage(`You need to purchase something first.`);
 			const args = target.split(',');
 			let arg = args.shift();
 			switch (arg) {
 			case 'pokemon':
-				if (!userData.flags.pokemonOptions) return this.errorReply(`No Pokemon to add.`);
+				if (!userData.flags.pokemonOptions) throw new Chat.ErrorMessage(`No Pokemon to add.`);
 				arg = args.shift();
-				if (!arg) return this.errorReply(`You need to specify a pokemon.`);
+				if (!arg) throw new Chat.ErrorMessage(`You need to specify a pokemon.`);
 				const pokes = userData.flags.pokemonOptions;
 				const poke = pokes.find(p => toID(p.species) === toID(arg));
-				if (!poke) return this.errorReply(`You can't choose that pokemon.`);
+				if (!poke) throw new Chat.ErrorMessage(`You can't choose that pokemon.`);
 				if (userData.team.length >= 6) {
 					userData.flags.replacingWith = poke;
 					userData.goToPage('purchase-release');
@@ -1029,44 +1029,44 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'healhp':
 				arg = args.shift();
-				if (!arg) return this.errorReply(`You need to specify a pokemon.`);
+				if (!arg) throw new Chat.ErrorMessage(`You need to specify a pokemon.`);
 				index = parseInt(arg);
 				index--;
-				if (!userData.team[index]) return this.errorReply(`You need to specify a pokemon on your team.`);
-				if (userData.teamData[index].curHP === userData.teamData[index].maxHP) return this.errorReply(`You can't use this on that pokemon.`);
+				if (!userData.team[index]) throw new Chat.ErrorMessage(`You need to specify a pokemon on your team.`);
+				if (userData.teamData[index].curHP === userData.teamData[index].maxHP) throw new Chat.ErrorMessage(`You can't use this on that pokemon.`);
 				userData.teamData[index].curHP = userData.teamData[index].maxHP;
 				userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
 				// TODO: More items
 				break;
 			case 'healpp':
 				arg = args.shift();
-				if (!arg) return this.errorReply(`You need to specify a pokemon.`);
+				if (!arg) throw new Chat.ErrorMessage(`You need to specify a pokemon.`);
 				index = parseInt(arg);
 				index--;
-				if (!userData.team[index]) return this.errorReply(`You need to specify a pokemon on your team.`);
-				if (userData.teamData[index].ppLeft.every((v, i) => Dex.moves.get(userData.team[index].moves[i]).pp * (8 / 5) === v)) return this.errorReply(`You can't use this on that pokemon.`);
+				if (!userData.team[index]) throw new Chat.ErrorMessage(`You need to specify a pokemon on your team.`);
+				if (userData.teamData[index].ppLeft.every((v, i) => Dex.moves.get(userData.team[index].moves[i]).pp * (8 / 5) === v)) throw new Chat.ErrorMessage(`You can't use this on that pokemon.`);
 				userData.teamData[index].ppLeft.forEach((v, i) => userData.teamData[index].ppLeft[i] = Dex.moves.get(userData.team[index].moves[i]).pp * (8 / 5));
 				userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
 				// TODO: More items
 				break;
 			case 'curestatus':
 				arg = args.shift();
-				if (!arg) return this.errorReply(`You need to specify a pokemon.`);
+				if (!arg) throw new Chat.ErrorMessage(`You need to specify a pokemon.`);
 				index = parseInt(arg);
 				index--;
-				if (!userData.team[index]) return this.errorReply(`You need to specify a pokemon on your team.`);
-				if (!userData.teamData[index].status || userData.teamData[index].status === 'fnt') return this.errorReply(`You can't use this on that pokemon.`);
+				if (!userData.team[index]) throw new Chat.ErrorMessage(`You need to specify a pokemon on your team.`);
+				if (!userData.teamData[index].status || userData.teamData[index].status === 'fnt') throw new Chat.ErrorMessage(`You can't use this on that pokemon.`);
 				userData.teamData[index].status = false;
 				userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
 				// TODO: More items
 				break;
 			case 'revive':
 				arg = args.shift();
-				if (!arg) return this.errorReply(`You need to specify a pokemon.`);
+				if (!arg) throw new Chat.ErrorMessage(`You need to specify a pokemon.`);
 				index = parseInt(arg);
 				index--;
-				if (!userData.team[index]) return this.errorReply(`You need to specify a pokemon on your team.`);
-				if (userData.teamData[index].status !== 'fnt') return this.errorReply(`You can't use this on that pokemon.`);
+				if (!userData.team[index]) throw new Chat.ErrorMessage(`You need to specify a pokemon on your team.`);
+				if (userData.teamData[index].status !== 'fnt') throw new Chat.ErrorMessage(`You can't use this on that pokemon.`);
 				userData.teamData[index].curHP = userData.team[index].species === 'Shedinja' ? userData.teamData[index].maxHP : Math.floor(userData.teamData[index].maxHP / 2);
 				userData.teamData[index].status = false;
 				userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
@@ -1074,23 +1074,23 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'item':
 				arg = args.shift();
-				if (!arg) return this.errorReply(`You need to specify an item.`);
+				if (!arg) throw new Chat.ErrorMessage(`You need to specify an item.`);
 				const dexItem = Dex.items.get(arg);
-				if (!dexItem) return this.errorReply(`You need to specify an item.`);
+				if (!dexItem) throw new Chat.ErrorMessage(`You need to specify an item.`);
 				userData.flags.newItem = dexItem.name;
 				userData.goToPage('purchase-item');
 				delete userData.flags.itemOptions;
 				return;
 			default:
-				return this.errorReply(`Your command is too vague.`);
+				throw new Chat.ErrorMessage(`Your command is too vague.`);
 			}
 			if (userData.flags.purchasedItem) delete userData.flags.purchasedItem;
 			userData.goToPage('shop');
 		},
 		replacepoke(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
-			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
-			if (!userData.flags.replacingWith) return this.errorReply(`You need to purchase something first.`);
+			if (!userData || userData.runEnded) throw new Chat.ErrorMessage(`You need to make a new run first.`);
+			if (!userData.flags.replacingWith) throw new Chat.ErrorMessage(`You need to purchase something first.`);
 			if (target === 'skip') {
 				delete userData.flags.replacingWith;
 				if (userData.flags.purchasedItem) delete userData.flags.purchasedItem;
@@ -1107,26 +1107,26 @@ export const commands: Chat.ChatCommands = {
 		},
 		switch(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
-			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
+			if (!userData || userData.runEnded) throw new Chat.ErrorMessage(`You need to make a new run first.`);
 			if (target === 'undo') {
 				userData.goToPage('shop-team');
 			}
 			const args = target.split(',');
 			let arg = args.shift();
-			if (!arg) return this.errorReply(`You need to specify a pokemon to switch with!`);
+			if (!arg) throw new Chat.ErrorMessage(`You need to specify a pokemon to switch with!`);
 			let index1 = parseInt(arg);
-			if (!index1) return this.errorReply(`You need to specify a pokemon to switch with!`);
-			if (!userData.team[index1 - 1]) return this.errorReply(`You need to specify a pokemon to switch with!`);
+			if (!index1) throw new Chat.ErrorMessage(`You need to specify a pokemon to switch with!`);
+			if (!userData.team[index1 - 1]) throw new Chat.ErrorMessage(`You need to specify a pokemon to switch with!`);
 			arg = args.shift();
 			if (!arg) {
 				userData.goToPage(`shop-switch-${index1}`);
 				return;
 			} else {
 				let index2 = parseInt(arg);
-				if (!index2) return this.errorReply(`You need to specify a pokemon to switch with!`);
+				if (!index2) throw new Chat.ErrorMessage(`You need to specify a pokemon to switch with!`);
 				index1--;
 				index2--;
-				if (!userData.team[index1] || !userData.team[index2]) return this.errorReply(`You need to specify a pokemon to switch with!`);
+				if (!userData.team[index1] || !userData.team[index2]) throw new Chat.ErrorMessage(`You need to specify a pokemon to switch with!`);
 				const carrySet = userData.team[index1];
 				const carryData = userData.teamData[index1];
 				userData.team[index1] = userData.team[index2];
@@ -1140,8 +1140,8 @@ export const commands: Chat.ChatCommands = {
 		},
 		giveitem(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
-			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
-			if (!userData.flags.newItem) return this.errorReply(`You need to purchase something first.`);
+			if (!userData || userData.runEnded) throw new Chat.ErrorMessage(`You need to make a new run first.`);
+			if (!userData.flags.newItem) throw new Chat.ErrorMessage(`You need to purchase something first.`);
 			if (target === 'skip') {
 				delete userData.flags.newItem;
 				if (userData.flags.purchasedItem) delete userData.flags.purchasedItem;
@@ -1158,8 +1158,8 @@ export const commands: Chat.ChatCommands = {
 		},
 		next(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
-			if (!userData || userData.runEnded) return this.errorReply(`You need to make a new run first.`);
-			if (!checkSequence(userData.curRoom, 'battle') || userData.inBattle) return this.errorReply(`Can't battle yet!`);
+			if (!userData || userData.runEnded) throw new Chat.ErrorMessage(`You need to make a new run first.`);
+			if (!checkSequence(userData.curRoom, 'battle') || userData.inBattle) throw new Chat.ErrorMessage(`Can't battle yet!`);
 			const newFoe = userData.createAITrainer();
 			createAIBattle(userData.user, newFoe);
 		},
@@ -1193,7 +1193,7 @@ export const pages: Chat.PageTable = {
 		case 'battle':
 			if (userGameData.inBattle) {
 				this.title = '[Roguelike] Currently in battle';
-				return this.errorReply('You are currently in battle!');
+				throw new Chat.ErrorMessage('You are currently in battle!');
 			} else {
 				buf += `<center>Something went wrong, please try again.`;
 				buf += `<br /><br /><button class="button" name="send" value="/roguelike next">Redo Battle</button></center>`;
@@ -1240,7 +1240,7 @@ export const pages: Chat.PageTable = {
 			case 'switch':
 				subtitle = 'Current Team';
 				const switchIndex = gameArgs.shift();
-				if (!switchIndex) return this.errorReply('If you tried to switch and reached this error, contact HiZo.');
+				if (!switchIndex) throw new Chat.ErrorMessage('If you tried to switch and reached this error, contact HiZo.');
 				buf = `<center>Switch with who?</center><br />`;
 				const switchNumber = parseInt(switchIndex);
 				buf += userGameData.genQuickSelectHTML('switch', switchNumber);
@@ -1256,7 +1256,7 @@ export const pages: Chat.PageTable = {
 		case 'purchase':
 			if (!userGameData.flags.purchasedItem) {
 				this.title = '[Roguelike] Purchase Error';
-				return this.errorReply('If you tried to purchased something and reached this error, contact HiZo.');
+				throw new Chat.ErrorMessage('If you tried to purchased something and reached this error, contact HiZo.');
 			}
 			subtitle = 'Complete Purchase';
 			switch (gameArgs.shift()) {
@@ -1276,7 +1276,7 @@ export const pages: Chat.PageTable = {
 			subtitle = 'Pick a Starter';
 			if (!userGameData.flags.pokemonOptions) {
 				this.title = '[Roguelike] Error';
-				return this.errorReply('If you reached this error, you either already picked a starter or should contact HiZo.');
+				throw new Chat.ErrorMessage('If you reached this error, you either already picked a starter or should contact HiZo.');
 			}
 			buf += `<center><h3>Choose a starter!</h3><br />`;
 			// @ts-ignore
