@@ -849,6 +849,30 @@ function checkSequence(before: string, after: string) {
 }
 
 export const commands: Chat.ChatCommands = {
+	extractsave(target, room, user) {
+			this.checkCan('console');
+			if (!target) return this.parse('/help extractsave');
+			let gameData = roguelikeGames.get(toID(target));
+			if (gameData) {
+				const okey = gameData.user;
+				const JSONobj = Object.create(null);
+				JSONobj[okey] = {};
+				for (const prop in gameData) {
+					if (prop === 'flags') {
+						JSONobj[okey][prop] = {};
+						for (const deepProp in gameData[prop]) {
+							JSONobj[okey][prop][deepProp] = gameData[prop][deepProp];
+						}
+					} else {
+						// @ts-ignore
+						JSONobj[okey][prop] = gameData[prop];
+					}
+				}
+				return this.sendReplyBox(JSON.stringify(JSONobj))
+			}
+			throw new Chat.ErrorMessage(`User not found.`);
+	},
+	extractsavehelp: [`/extractsave [user] - Gets the user's save data as a JSON, if applicable. Requires: ~`],
 	peek(target, room, user) {
 		this.checkCan('lock');
 		if (!target) return this.parse('/help peek');
