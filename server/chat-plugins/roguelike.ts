@@ -359,6 +359,7 @@ export class Roguelike {
 		let index = 0;
 		for (const mon of this.teamData) {
 			const teamSet = this.team[index];
+			const dexSpecies = Dex.species.get(teamSet.species);
 			const newMon = newData[index];
 			// @ts-ignore
 			mon.curHP = newMon.curHP;
@@ -373,8 +374,8 @@ export class Roguelike {
 			if (teamSet.level !== newMon.level) {
 				teamSet.level = newMon.level;
 				mon.expAtNextLevel = getMinExpForMonAtLevel(teamSet.species, teamSet.level + 1);
-				mon.maxHP = newMon.maxHP;
 			}
+			mon.maxHP = Math.floor((((teamSet.ivs['hp'] + (2 * dexSpecies.baseStats['hp']) + Math.floor(teamSet.evs['hp'] / 4) + 100) * teamSet.level) / 100) + 10);
 			index++;
 		}
 	}
