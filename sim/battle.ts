@@ -3495,7 +3495,7 @@ export class Battle {
 			break;
 		}
 		if (toID(pokemon) === 'floetteeternal') genNumber = 6;
-		let prevoList = [];
+		const prevoList = [];
 		let dexSpecies = Dex.species.get(pokemon);
 		while (dexSpecies.prevo) {
 			prevoList.push(dexSpecies.prevo);
@@ -3506,7 +3506,7 @@ export class Battle {
 		for (const learnsetIndex of fullLearn) {
 			if (prevoList) {
 				prevoList.forEach(p => {
-					let learnset = Dex.species.getLearnsetData(toID(p));
+					const learnset = Dex.species.getLearnsetData(toID(p));
 					if (learnset.species.name !== p) p = learnset.species.name;
 				});
 				if (prevoList.includes(learnsetIndex.species.name)) {
@@ -3542,7 +3542,7 @@ export class Battle {
 	}
 	// @ts-expect-error
 	giveExpAndEVs(target: Pokemon, source: Pokemon) {
-		let mult = (source.m.expAll && !source.m.willGetEXP) ? .5 : this.expMult;
+		const mult = (source.m.expAll && !source.m.willGetEXP) ? 0.5 : this.expMult;
 		const species = this.toID(target.species.name);
 		const speciesData = EXP_TABLE[species] || EXP_TABLE[this.toID(Dex.species.get(species).baseSpecies)];
 		source.m.willGetEXP = false;

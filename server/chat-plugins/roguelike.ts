@@ -102,7 +102,7 @@ interface BackupData {
 	battlePoints: number;
 	team: PokemonSet[];
 	teamData: UserTeamData[];
-	keyItems: String[],
+	keyItems: string[];
 	flags: {
 		[k: string]: any,
 	};
@@ -122,7 +122,7 @@ function createAIBattle(userID: ID, ai: AITrainer) {
 		players: [{
 			user,
 			team: Teams.pack(gameData.team) || '',
-			roguelikeTeamData: { teamData: gameData.teamData, keyItems: gameData.keyItems},
+			roguelikeTeamData: { teamData: gameData.teamData, keyItems: gameData.keyItems },
 			// @ts-ignore AI has no user data
 		}, {
 			username: ai.name,
@@ -182,7 +182,7 @@ function getMovesAtTarget(pokemon: string, target: 'M' | 'T' | 'L' | 'R' | 'E' |
 		break;
 	}
 	if (toID(pokemon) === 'floetteeternal') genNumber = 6;
-	let prevoList = [];
+	const prevoList = [];
 	let dexSpecies = Dex.species.get(pokemon);
 	while (dexSpecies.prevo) {
 		prevoList.push(dexSpecies.prevo);
@@ -193,7 +193,7 @@ function getMovesAtTarget(pokemon: string, target: 'M' | 'T' | 'L' | 'R' | 'E' |
 	for (const learnsetIndex of fullLearn) {
 		if (prevoList) {
 			prevoList.forEach(p => {
-				let learnset = Dex.species.getLearnsetData(toID(p));
+				const learnset = Dex.species.getLearnsetData(toID(p));
 				if (learnset.species.name !== p) p = learnset.species.name;
 			});
 			if (prevoList.includes(learnsetIndex.species.name)) {
@@ -333,7 +333,7 @@ export class Roguelike {
 	battlePoints: number;
 	team: PokemonSet[];
 	teamData: UserTeamData[];
-	keyItems: String[];
+	keyItems: string[];
 	flags: {
 		pokemonOptions?: PokemonSet[],
 		opponentTeamScout?: opponentScout[],
@@ -477,7 +477,7 @@ export class Roguelike {
 	goToPage(target: string) {
 		this.curRoom = target;
 		refreshPage(this.user);
-		let realUser = Users.get(this.user);
+		const realUser = Users.get(this.user);
 		if (realUser) realUser.lastCommand = '';
 		saveRoguelikeData();
 	}
@@ -858,27 +858,27 @@ function checkSequence(before: string, after: string) {
 
 export const commands: Chat.ChatCommands = {
 	extractsave(target, room, user) {
-			this.checkCan('console');
-			if (!target) return this.parse('/help extractsave');
-			let gameData = roguelikeGames.get(toID(target));
-			if (gameData) {
-				const okey = gameData.user;
-				const JSONobj = Object.create(null);
-				JSONobj[okey] = {};
-				for (const prop in gameData) {
-					if (prop === 'flags') {
-						JSONobj[okey][prop] = {};
-						for (const deepProp in gameData[prop]) {
-							JSONobj[okey][prop][deepProp] = gameData[prop][deepProp];
-						}
-					} else {
-						// @ts-ignore
-						JSONobj[okey][prop] = gameData[prop];
+		this.checkCan('console');
+		if (!target) return this.parse('/help extractsave');
+		const gameData = roguelikeGames.get(toID(target));
+		if (gameData) {
+			const okey = gameData.user;
+			const JSONobj = Object.create(null);
+			JSONobj[okey] = {};
+			for (const prop in gameData) {
+				if (prop === 'flags') {
+					JSONobj[okey][prop] = {};
+					for (const deepProp in gameData[prop]) {
+						JSONobj[okey][prop][deepProp] = gameData[prop][deepProp];
 					}
+				} else {
+					// @ts-ignore
+					JSONobj[okey][prop] = gameData[prop];
 				}
-				return this.sendReplyBox(JSON.stringify(JSONobj))
 			}
-			throw new Chat.ErrorMessage(`User not found.`);
+			return this.sendReplyBox(JSON.stringify(JSONobj));
+		}
+		throw new Chat.ErrorMessage(`User not found.`);
 	},
 	extractsavehelp: [`/extractsave [user] - Gets the user's save data as a JSON, if applicable. Requires: ~`],
 	peek(target, room, user) {
@@ -886,7 +886,7 @@ export const commands: Chat.ChatCommands = {
 		if (!target) return this.parse('/help peek');
 		let leak = true;
 		if (user.id === toID(target)) leak = false;
-		let gameData = roguelikeGames.get(toID(target));
+		const gameData = roguelikeGames.get(toID(target));
 		if (gameData) {
 			return this.sendReplyBox(`<b>User</b>: ${gameData.user}<br /><b>Battle #</b>: ${gameData.battle}<br /><b>Streak #</b>: ${gameData.streak}<br /><b>BP</b>: ${gameData.battlePoints}<br /><b>Team</b>: ${Teams.export(gameData.team).replaceAll('\n', '<br />') || '<br />'}<b>Oppnent Team</b>: ${leak ? Teams.export(gameData.opponentTeam).replaceAll('\n', '<br />') : `[REDACTED]<br />`}<b>Team Data</b>: ${JSON.stringify(gameData.teamData)}<br /><b>Flags</b>: ${JSON.stringify(gameData.flags)}`);
 		}
@@ -899,10 +899,10 @@ export const commands: Chat.ChatCommands = {
 		const args = target.split(',');
 		if (!target || args.length !== 2) return this.parse('/help transferdata');
 		if (user.id === toID(target)) throw new Chat.ErrorMessage(`You are transferring data to the same person!`);
-		let oldUser = toID(args[0]);
-		let oldUsernameData = roguelikeGames.get(oldUser);
+		const oldUser = toID(args[0]);
+		const oldUsernameData = roguelikeGames.get(oldUser);
 		if (oldUsernameData) {
-			let newUser = toID(args[1]);
+			const newUser = toID(args[1]);
 			let newUsernameData = roguelikeGames.get(newUser);
 			if (newUsernameData) {
 				newUsernameData = Utils.deepClone(newUsernameData) as Roguelike;
@@ -937,7 +937,7 @@ export const commands: Chat.ChatCommands = {
 		start(target, room, user, connections, cmd) {
 			if (cmd.includes('restart') && user.lastCommand !== 'roguelike restart') {
 				user.lastCommand = 'roguelike restart';
-				return this.popupReply('Do you really want to restart your run? If so, click the restart button again.')
+				return this.popupReply('Do you really want to restart your run? If so, click the restart button again.');
 			}
 			createSaveData(user);
 			// const newFoe = userData.createAITrainer();
