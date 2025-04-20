@@ -466,7 +466,7 @@ export interface RoomBattlePlayerOptions {
 	inviteOnly?: boolean;
 	hidden?: boolean;
 	isAI?: boolean;
-	roguelikeTeamData?: object[];
+	roguelikeTeamData?: AnyObject;
 }
 
 export interface RoomBattleOptions {

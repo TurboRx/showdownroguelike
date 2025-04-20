@@ -4631,6 +4631,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				return;
 			}
 			pokemon.m.willGetEXP = true;
+			if (pokemon.side.roguelikeTeamData.keyItems.includes('Exp. All')) {
+				pokemon.side.pokemon.forEach(p => {
+					p.m.giveExpAll = true;
+					p.m.expAll = true;
+				});
+			}
 		},
 		onFaint(target, source, effect) {
 			if (target.side.isAI) {
@@ -4650,10 +4656,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		onBegin() {
 			for (const side of this.sides) {
 				if (side.isAI) continue;
-				if (side.roguelikeTeamData) {
-					const data = side.roguelikeTeamData;
+				if (side.roguelikeTeamData.teamData) {
+					const data = side.roguelikeTeamData.teamData;
 					let index = 0;
 					for (const pokemon of side.pokemon) {
+						if (side.roguelikeTeamData.keyItems.includes('Exp. All')) {
+							pokemon.m.giveExpAll = true;
+							pokemon.m.expAll = true;
+						}
 						const persist = data[index];
 						pokemon.m.exp = persist.exp;
 						pokemon.m.expAtNextLevel = persist.expAtNextLevel;

@@ -3542,9 +3542,11 @@ export class Battle {
 	}
 	// @ts-expect-error
 	giveExpAndEVs(target: Pokemon, source: Pokemon) {
+		let mult = (source.m.expAll && !source.m.willGetEXP) ? .5 : this.expMult;
 		const species = this.toID(target.species.name);
 		const speciesData = EXP_TABLE[species] || EXP_TABLE[this.toID(Dex.species.get(species).baseSpecies)];
 		source.m.willGetEXP = false;
+		source.m.giveExpAll = false;
 		for (const stat of Object.keys(speciesData['evYield'])) {
 			const num = speciesData['evYield'][stat];
 			for (let x = speciesData['evYield'][stat]; x > 0; x--) {
@@ -3553,7 +3555,7 @@ export class Battle {
 			}
 		}
 		if (source.level < 100) {
-			const newEXP = Math.floor(((speciesData['expYield'] * target.level) / 7) * 1.5 * this.expMult);
+			const newEXP = Math.floor(((speciesData['expYield'] * target.level) / 7) * 1.5 * mult);
 			this.add('-message', `${source.name} gained ${newEXP} EXP!`);
 			source.m.exp += newEXP;
 			if (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {
@@ -3571,7 +3573,7 @@ export class Battle {
 
 	findNextMonForEXP() {
 		// P1 is always the Human
-		return this.p1.pokemon.find(p => p.m.willGetEXP);
+		return this.p1.pokemon.find(p => p.m.willGetEXP || (p.m.expAll && p.m.giveExpAll && !p.fainted));
 	}
 
 	// @ts-expect-error
@@ -3587,9 +3589,11 @@ export class Battle {
 			source.hp = Math.floor(source.baseMaxhp * percent);
 		}
 		source.details = source.getUpdatedDetails();
-		this.add('detailschange', source, source.details);
-		this.add('-heal', source, source.getHealth, '[silent]');
-		this.add('message', `${source.name} leveled up!`);
+		if (source.isActive) {
+			this.add('detailschange', source, source.details);
+			this.add('-heal', source, source.getHealth, '[silent]');
+			this.add('message', `${source.name} leveled up!`);
+		}
 		const nextLevel = source.level + 1;
 		source.m.expAtNextLevel = this.getMinExpForMonAtLevel(this.toID(source.species.name), nextLevel);
 		source.m.levelUpMoves = this.getMovesAtTarget(source.species.name, 'L', source.level);

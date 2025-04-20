@@ -86,6 +86,7 @@ const SHOP_ITEMS: { [k: string]: ShopItem } = {
 	maxelixir: { name: 'Max Elixir', icon: 'Magmarizer', type: 'healPP', desc: 'Heals a pokemon\'s moves fully.', cost: 3, minStreak: 0 },
 	fullheal: { name: 'Full Heal', icon: 'Flower Sweet', type: 'cureStatus', desc: 'Cures a pokemon\'s status.', cost: 3, minStreak: 0 },
 	revive: { name: 'Revive', icon: 'Star Sweet', type: 'revive', desc: 'Revives a Pokemon to half its maximum HP.', cost: 5, minStreak: 1 },
+	expall: { name: 'Exp. All', icon: 'Ribbon Sweet', type: 'key', desc: 'Gives 50% Exp. to all non-fainted Pokemon not in the battle', cost: 1, minStreak: 0 },
 	// debug2: { name: 'Debug 2', icon: 'berserk gene', type: 'debug', desc: 'Bans HoeenHero from this server twice.', cost: 999, minStreak: 1 },
 };
 
@@ -101,6 +102,7 @@ interface BackupData {
 	battlePoints: number;
 	team: PokemonSet[];
 	teamData: UserTeamData[];
+	keyItems: String[],
 	flags: {
 		[k: string]: any,
 	};
@@ -120,7 +122,7 @@ function createAIBattle(userID: ID, ai: AITrainer) {
 		players: [{
 			user,
 			team: Teams.pack(gameData.team) || '',
-			roguelikeTeamData: gameData.teamData,
+			roguelikeTeamData: { teamData: gameData.teamData, keyItems: gameData.keyItems},
 			// @ts-ignore AI has no user data
 		}, {
 			username: ai.name,
@@ -331,6 +333,7 @@ export class Roguelike {
 	battlePoints: number;
 	team: PokemonSet[];
 	teamData: UserTeamData[];
+	keyItems: String[];
 	flags: {
 		pokemonOptions?: PokemonSet[],
 		opponentTeamScout?: opponentScout[],
@@ -349,6 +352,7 @@ export class Roguelike {
 		this.team = backup?.team || [];
 		this.teamData = backup?.teamData || [];
 		this.flags = backup?.flags || [];
+		this.keyItems = backup?.keyItems || [];
 		this.opponentTeam = backup?.opponentTeam || [];
 		this.curRoom = backup?.curRoom || 'intro';
 		this.runEnded = backup?.runEnded || false;
@@ -733,6 +737,8 @@ export class Roguelike {
 			buf += `<tr><td><psicon item ="${item.icon}"> ${item.name}</td><td>${item.desc}</td><td>${item.cost} BP</td>`;
 			if (item.cost > this.battlePoints) {
 				buf += `<td><button class="button disabled">Not enough BP!</button>`;
+			} else if (item.type === 'key' && this.keyItems.includes(item.name)) {
+				buf += `<td><button class="button disabled">Already bought!</button>`;
 			} else {
 				buf += `<td><button class="button" name="send" value="/roguelike buy ${key}">Purchase</button>`;
 			}
@@ -1005,6 +1011,10 @@ export const commands: Chat.ChatCommands = {
 			case 'cureStatus':
 			case 'TM':
 			case 'key':
+				userData.keyItems.push(item.name);
+				userData.battlePoints -= item.cost;
+				userData.goToPage('shop');
+				return;
 			case 'debug':
 			}
 			userData.flags.purchasedItem = item;
