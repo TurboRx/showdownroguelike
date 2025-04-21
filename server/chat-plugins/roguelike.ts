@@ -81,7 +81,7 @@ interface RotationalItem {
 interface TMItem extends RotationalItem {
 	move: string;
 }
-// TODO: make a list of tm sprites to pull from for doing this
+
 const TM_LIST: { [k: string]: TMItem } = JSON.parse(FS('data/roguelike/tmdb.json').readSync());
 
 
