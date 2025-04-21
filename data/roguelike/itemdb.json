@@ -1,0 +1,2282 @@
+{
+	"abilityshield": {
+		"name": "Ability Shield",
+		"icon": "Ability Shield",
+		"type": "item",
+		"cost": 5
+	},
+	"abomasite": {
+		"name": "Abomasite",
+		"icon": "Abomasite",
+		"type": "item",
+		"cost": 5
+	},
+	"absolite": {
+		"name": "Absolite",
+		"icon": "Absolite",
+		"type": "item",
+		"cost": 5
+	},
+	"absorbbulb": {
+		"name": "Absorb Bulb",
+		"icon": "Absorb Bulb",
+		"type": "item",
+		"cost": 5
+	},
+	"adamantcrystal": {
+		"name": "Adamant Crystal",
+		"icon": "Adamant Crystal",
+		"type": "item",
+		"cost": 5
+	},
+	"adamantorb": {
+		"name": "Adamant Orb",
+		"icon": "Adamant Orb",
+		"type": "item",
+		"cost": 5
+	},
+	"adrenalineorb": {
+		"name": "Adrenaline Orb",
+		"icon": "Adrenaline Orb",
+		"type": "item",
+		"cost": 5
+	},
+	"aerodactylite": {
+		"name": "Aerodactylite",
+		"icon": "Aerodactylite",
+		"type": "item",
+		"cost": 5
+	},
+	"aggronite": {
+		"name": "Aggronite",
+		"icon": "Aggronite",
+		"type": "item",
+		"cost": 5
+	},
+	"aguavberry": {
+		"name": "Aguav Berry",
+		"icon": "Aguav Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"airballoon": {
+		"name": "Air Balloon",
+		"icon": "Air Balloon",
+		"type": "item",
+		"cost": 5
+	},
+	"alakazite": {
+		"name": "Alakazite",
+		"icon": "Alakazite",
+		"type": "item",
+		"cost": 5
+	},
+	"aloraichiumz": {
+		"name": "Aloraichium Z",
+		"icon": "Aloraichium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"altarianite": {
+		"name": "Altarianite",
+		"icon": "Altarianite",
+		"type": "item",
+		"cost": 5
+	},
+	"ampharosite": {
+		"name": "Ampharosite",
+		"icon": "Ampharosite",
+		"type": "item",
+		"cost": 5
+	},
+	"apicotberry": {
+		"name": "Apicot Berry",
+		"icon": "Apicot Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"aspearberry": {
+		"name": "Aspear Berry",
+		"icon": "Aspear Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"assaultvest": {
+		"name": "Assault Vest",
+		"icon": "Assault Vest",
+		"type": "item",
+		"cost": 5
+	},
+	"audinite": {
+		"name": "Audinite",
+		"icon": "Audinite",
+		"type": "item",
+		"cost": 5
+	},
+	"auspiciousarmor": {
+		"name": "Auspicious Armor",
+		"icon": "Auspicious Armor",
+		"type": "item",
+		"cost": 5
+	},
+	"babiriberry": {
+		"name": "Babiri Berry",
+		"icon": "Babiri Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"banettite": {
+		"name": "Banettite",
+		"icon": "Banettite",
+		"type": "item",
+		"cost": 5
+	},
+	"beastball": {
+		"name": "Beast Ball",
+		"icon": "Beast Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"beedrillite": {
+		"name": "Beedrillite",
+		"icon": "Beedrillite",
+		"type": "item",
+		"cost": 5
+	},
+	"berrysweet": {
+		"name": "Berry Sweet",
+		"icon": "Berry Sweet",
+		"type": "item",
+		"cost": 5
+	},
+	"bignugget": {
+		"name": "Big Nugget",
+		"icon": "Big Nugget",
+		"type": "item",
+		"cost": 5
+	},
+	"bigroot": {
+		"name": "Big Root",
+		"icon": "Big Root",
+		"type": "item",
+		"cost": 5
+	},
+	"bindingband": {
+		"name": "Binding Band",
+		"icon": "Binding Band",
+		"type": "item",
+		"cost": 5
+	},
+	"blackbelt": {
+		"name": "Black Belt",
+		"icon": "Black Belt",
+		"type": "item",
+		"cost": 5
+	},
+	"blackglasses": {
+		"name": "Black Glasses",
+		"icon": "Black Glasses",
+		"type": "item",
+		"cost": 5
+	},
+	"blacksludge": {
+		"name": "Black Sludge",
+		"icon": "Black Sludge",
+		"type": "item",
+		"cost": 5
+	},
+	"blastoisinite": {
+		"name": "Blastoisinite",
+		"icon": "Blastoisinite",
+		"type": "item",
+		"cost": 5
+	},
+	"blazikenite": {
+		"name": "Blazikenite",
+		"icon": "Blazikenite",
+		"type": "item",
+		"cost": 5
+	},
+	"blueorb": {
+		"name": "Blue Orb",
+		"icon": "Blue Orb",
+		"type": "item",
+		"cost": 5
+	},
+	"blunderpolicy": {
+		"name": "Blunder Policy",
+		"icon": "Blunder Policy",
+		"type": "item",
+		"cost": 5
+	},
+	"boosterenergy": {
+		"name": "Booster Energy",
+		"icon": "Booster Energy",
+		"type": "item",
+		"cost": 5
+	},
+	"bottlecap": {
+		"name": "Bottle Cap",
+		"icon": "Bottle Cap",
+		"type": "item",
+		"cost": 5
+	},
+	"brightpowder": {
+		"name": "Bright Powder",
+		"icon": "Bright Powder",
+		"type": "item",
+		"cost": 5
+	},
+	"buggem": {
+		"name": "Bug Gem",
+		"icon": "Bug Gem",
+		"type": "item",
+		"cost": 5
+	},
+	"bugmemory": {
+		"name": "Bug Memory",
+		"icon": "Bug Memory",
+		"type": "item",
+		"cost": 5
+	},
+	"buginiumz": {
+		"name": "Buginium Z",
+		"icon": "Buginium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"burndrive": {
+		"name": "Burn Drive",
+		"icon": "Burn Drive",
+		"type": "item",
+		"cost": 5
+	},
+	"cameruptite": {
+		"name": "Cameruptite",
+		"icon": "Cameruptite",
+		"type": "item",
+		"cost": 5
+	},
+	"cellbattery": {
+		"name": "Cell Battery",
+		"icon": "Cell Battery",
+		"type": "item",
+		"cost": 5
+	},
+	"charcoal": {
+		"name": "Charcoal",
+		"icon": "Charcoal",
+		"type": "item",
+		"cost": 5
+	},
+	"charizarditex": {
+		"name": "Charizardite X",
+		"icon": "Charizardite X",
+		"type": "item",
+		"cost": 5
+	},
+	"charizarditey": {
+		"name": "Charizardite Y",
+		"icon": "Charizardite Y",
+		"type": "item",
+		"cost": 5
+	},
+	"chartiberry": {
+		"name": "Charti Berry",
+		"icon": "Charti Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"cheriberry": {
+		"name": "Cheri Berry",
+		"icon": "Cheri Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"chestoberry": {
+		"name": "Chesto Berry",
+		"icon": "Chesto Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"chilanberry": {
+		"name": "Chilan Berry",
+		"icon": "Chilan Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"chilldrive": {
+		"name": "Chill Drive",
+		"icon": "Chill Drive",
+		"type": "item",
+		"cost": 5
+	},
+	"chippedpot": {
+		"name": "Chipped Pot",
+		"icon": "Chipped Pot",
+		"type": "item",
+		"cost": 5
+	},
+	"choiceband": {
+		"name": "Choice Band",
+		"icon": "Choice Band",
+		"type": "item",
+		"cost": 5
+	},
+	"choicescarf": {
+		"name": "Choice Scarf",
+		"icon": "Choice Scarf",
+		"type": "item",
+		"cost": 5
+	},
+	"choicespecs": {
+		"name": "Choice Specs",
+		"icon": "Choice Specs",
+		"type": "item",
+		"cost": 5
+	},
+	"chopleberry": {
+		"name": "Chople Berry",
+		"icon": "Chople Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"clearamulet": {
+		"name": "Clear Amulet",
+		"icon": "Clear Amulet",
+		"type": "item",
+		"cost": 5
+	},
+	"cloversweet": {
+		"name": "Clover Sweet",
+		"icon": "Clover Sweet",
+		"type": "item",
+		"cost": 5
+	},
+	"cobaberry": {
+		"name": "Coba Berry",
+		"icon": "Coba Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"colburberry": {
+		"name": "Colbur Berry",
+		"icon": "Colbur Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"cornerstonemask": {
+		"name": "Cornerstone Mask",
+		"icon": "Cornerstone Mask",
+		"type": "item",
+		"cost": 5
+	},
+	"covertcloak": {
+		"name": "Covert Cloak",
+		"icon": "Covert Cloak",
+		"type": "item",
+		"cost": 5
+	},
+	"crackedpot": {
+		"name": "Cracked Pot",
+		"icon": "Cracked Pot",
+		"type": "item",
+		"cost": 5
+	},
+	"custapberry": {
+		"name": "Custap Berry",
+		"icon": "Custap Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"damprock": {
+		"name": "Damp Rock",
+		"icon": "Damp Rock",
+		"type": "item",
+		"cost": 5
+	},
+	"darkgem": {
+		"name": "Dark Gem",
+		"icon": "Dark Gem",
+		"type": "item",
+		"cost": 5
+	},
+	"darkmemory": {
+		"name": "Dark Memory",
+		"icon": "Dark Memory",
+		"type": "item",
+		"cost": 5
+	},
+	"darkiniumz": {
+		"name": "Darkinium Z",
+		"icon": "Darkinium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"dawnstone": {
+		"name": "Dawn Stone",
+		"icon": "Dawn Stone",
+		"type": "item",
+		"cost": 5
+	},
+	"decidiumz": {
+		"name": "Decidium Z",
+		"icon": "Decidium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"deepseascale": {
+		"name": "Deep Sea Scale",
+		"icon": "Deep Sea Scale",
+		"type": "item",
+		"cost": 5
+	},
+	"deepseatooth": {
+		"name": "Deep Sea Tooth",
+		"icon": "Deep Sea Tooth",
+		"type": "item",
+		"cost": 5
+	},
+	"destinyknot": {
+		"name": "Destiny Knot",
+		"icon": "Destiny Knot",
+		"type": "item",
+		"cost": 5
+	},
+	"diancite": {
+		"name": "Diancite",
+		"icon": "Diancite",
+		"type": "item",
+		"cost": 5
+	},
+	"diveball": {
+		"name": "Dive Ball",
+		"icon": "Dive Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"dousedrive": {
+		"name": "Douse Drive",
+		"icon": "Douse Drive",
+		"type": "item",
+		"cost": 5
+	},
+	"dracoplate": {
+		"name": "Draco Plate",
+		"icon": "Draco Plate",
+		"type": "item",
+		"cost": 5
+	},
+	"dragonfang": {
+		"name": "Dragon Fang",
+		"icon": "Dragon Fang",
+		"type": "item",
+		"cost": 5
+	},
+	"dragongem": {
+		"name": "Dragon Gem",
+		"icon": "Dragon Gem",
+		"type": "item",
+		"cost": 5
+	},
+	"dragonmemory": {
+		"name": "Dragon Memory",
+		"icon": "Dragon Memory",
+		"type": "item",
+		"cost": 5
+	},
+	"dragonscale": {
+		"name": "Dragon Scale",
+		"icon": "Dragon Scale",
+		"type": "item",
+		"cost": 5
+	},
+	"dragoniumz": {
+		"name": "Dragonium Z",
+		"icon": "Dragonium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"dreadplate": {
+		"name": "Dread Plate",
+		"icon": "Dread Plate",
+		"type": "item",
+		"cost": 5
+	},
+	"dreamball": {
+		"name": "Dream Ball",
+		"icon": "Dream Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"dubiousdisc": {
+		"name": "Dubious Disc",
+		"icon": "Dubious Disc",
+		"type": "item",
+		"cost": 5
+	},
+	"duskball": {
+		"name": "Dusk Ball",
+		"icon": "Dusk Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"duskstone": {
+		"name": "Dusk Stone",
+		"icon": "Dusk Stone",
+		"type": "item",
+		"cost": 5
+	},
+	"earthplate": {
+		"name": "Earth Plate",
+		"icon": "Earth Plate",
+		"type": "item",
+		"cost": 5
+	},
+	"eeviumz": {
+		"name": "Eevium Z",
+		"icon": "Eevium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"ejectbutton": {
+		"name": "Eject Button",
+		"icon": "Eject Button",
+		"type": "item",
+		"cost": 5
+	},
+	"ejectpack": {
+		"name": "Eject Pack",
+		"icon": "Eject Pack",
+		"type": "item",
+		"cost": 5
+	},
+	"electirizer": {
+		"name": "Electirizer",
+		"icon": "Electirizer",
+		"type": "item",
+		"cost": 5
+	},
+	"electricgem": {
+		"name": "Electric Gem",
+		"icon": "Electric Gem",
+		"type": "item",
+		"cost": 5
+	},
+	"electricmemory": {
+		"name": "Electric Memory",
+		"icon": "Electric Memory",
+		"type": "item",
+		"cost": 5
+	},
+	"electricseed": {
+		"name": "Electric Seed",
+		"icon": "Electric Seed",
+		"type": "item",
+		"cost": 5
+	},
+	"electriumz": {
+		"name": "Electrium Z",
+		"icon": "Electrium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"enigmaberry": {
+		"name": "Enigma Berry",
+		"icon": "Enigma Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"eviolite": {
+		"name": "Eviolite",
+		"icon": "Eviolite",
+		"type": "item",
+		"cost": 5
+	},
+	"expertbelt": {
+		"name": "Expert Belt",
+		"icon": "Expert Belt",
+		"type": "item",
+		"cost": 5
+	},
+	"fairiumz": {
+		"name": "Fairium Z",
+		"icon": "Fairium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"fairyfeather": {
+		"name": "Fairy Feather",
+		"icon": "Fairy Feather",
+		"type": "item",
+		"cost": 5
+	},
+	"fairygem": {
+		"name": "Fairy Gem",
+		"icon": "Fairy Gem",
+		"type": "item",
+		"cost": 5
+	},
+	"fairymemory": {
+		"name": "Fairy Memory",
+		"icon": "Fairy Memory",
+		"type": "item",
+		"cost": 5
+	},
+	"fastball": {
+		"name": "Fast Ball",
+		"icon": "Fast Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"fightinggem": {
+		"name": "Fighting Gem",
+		"icon": "Fighting Gem",
+		"type": "item",
+		"cost": 5
+	},
+	"fightingmemory": {
+		"name": "Fighting Memory",
+		"icon": "Fighting Memory",
+		"type": "item",
+		"cost": 5
+	},
+	"fightiniumz": {
+		"name": "Fightinium Z",
+		"icon": "Fightinium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"figyberry": {
+		"name": "Figy Berry",
+		"icon": "Figy Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"firegem": {
+		"name": "Fire Gem",
+		"icon": "Fire Gem",
+		"type": "item",
+		"cost": 5
+	},
+	"firememory": {
+		"name": "Fire Memory",
+		"icon": "Fire Memory",
+		"type": "item",
+		"cost": 5
+	},
+	"firestone": {
+		"name": "Fire Stone",
+		"icon": "Fire Stone",
+		"type": "item",
+		"cost": 5
+	},
+	"firiumz": {
+		"name": "Firium Z",
+		"icon": "Firium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"fistplate": {
+		"name": "Fist Plate",
+		"icon": "Fist Plate",
+		"type": "item",
+		"cost": 5
+	},
+	"flameorb": {
+		"name": "Flame Orb",
+		"icon": "Flame Orb",
+		"type": "item",
+		"cost": 5
+	},
+	"flameplate": {
+		"name": "Flame Plate",
+		"icon": "Flame Plate",
+		"type": "item",
+		"cost": 5
+	},
+	"floatstone": {
+		"name": "Float Stone",
+		"icon": "Float Stone",
+		"type": "item",
+		"cost": 5
+	},
+	"flowersweet": {
+		"name": "Flower Sweet",
+		"icon": "Flower Sweet",
+		"type": "item",
+		"cost": 5
+	},
+	"flyinggem": {
+		"name": "Flying Gem",
+		"icon": "Flying Gem",
+		"type": "item",
+		"cost": 5
+	},
+	"flyingmemory": {
+		"name": "Flying Memory",
+		"icon": "Flying Memory",
+		"type": "item",
+		"cost": 5
+	},
+	"flyiniumz": {
+		"name": "Flyinium Z",
+		"icon": "Flyinium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"focusband": {
+		"name": "Focus Band",
+		"icon": "Focus Band",
+		"type": "item",
+		"cost": 5
+	},
+	"focussash": {
+		"name": "Focus Sash",
+		"icon": "Focus Sash",
+		"type": "item",
+		"cost": 5
+	},
+	"friendball": {
+		"name": "Friend Ball",
+		"icon": "Friend Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"galaricacuff": {
+		"name": "Galarica Cuff",
+		"icon": "Galarica Cuff",
+		"type": "item",
+		"cost": 5
+	},
+	"galaricawreath": {
+		"name": "Galarica Wreath",
+		"icon": "Galarica Wreath",
+		"type": "item",
+		"cost": 5
+	},
+	"galladite": {
+		"name": "Galladite",
+		"icon": "Galladite",
+		"type": "item",
+		"cost": 5
+	},
+	"ganlonberry": {
+		"name": "Ganlon Berry",
+		"icon": "Ganlon Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"garchompite": {
+		"name": "Garchompite",
+		"icon": "Garchompite",
+		"type": "item",
+		"cost": 5
+	},
+	"gardevoirite": {
+		"name": "Gardevoirite",
+		"icon": "Gardevoirite",
+		"type": "item",
+		"cost": 5
+	},
+	"gengarite": {
+		"name": "Gengarite",
+		"icon": "Gengarite",
+		"type": "item",
+		"cost": 5
+	},
+	"ghostgem": {
+		"name": "Ghost Gem",
+		"icon": "Ghost Gem",
+		"type": "item",
+		"cost": 5
+	},
+	"ghostmemory": {
+		"name": "Ghost Memory",
+		"icon": "Ghost Memory",
+		"type": "item",
+		"cost": 5
+	},
+	"ghostiumz": {
+		"name": "Ghostium Z",
+		"icon": "Ghostium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"glalitite": {
+		"name": "Glalitite",
+		"icon": "Glalitite",
+		"type": "item",
+		"cost": 5
+	},
+	"goldbottlecap": {
+		"name": "Gold Bottle Cap",
+		"icon": "Gold Bottle Cap",
+		"type": "item",
+		"cost": 5
+	},
+	"grassgem": {
+		"name": "Grass Gem",
+		"icon": "Grass Gem",
+		"type": "item",
+		"cost": 5
+	},
+	"grassmemory": {
+		"name": "Grass Memory",
+		"icon": "Grass Memory",
+		"type": "item",
+		"cost": 5
+	},
+	"grassiumz": {
+		"name": "Grassium Z",
+		"icon": "Grassium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"grassyseed": {
+		"name": "Grassy Seed",
+		"icon": "Grassy Seed",
+		"type": "item",
+		"cost": 5
+	},
+	"greatball": {
+		"name": "Great Ball",
+		"icon": "Great Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"grepaberry": {
+		"name": "Grepa Berry",
+		"icon": "Grepa Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"gripclaw": {
+		"name": "Grip Claw",
+		"icon": "Grip Claw",
+		"type": "item",
+		"cost": 5
+	},
+	"griseouscore": {
+		"name": "Griseous Core",
+		"icon": "Griseous Core",
+		"type": "item",
+		"cost": 5
+	},
+	"griseousorb": {
+		"name": "Griseous Orb",
+		"icon": "Griseous Orb",
+		"type": "item",
+		"cost": 5
+	},
+	"groundgem": {
+		"name": "Ground Gem",
+		"icon": "Ground Gem",
+		"type": "item",
+		"cost": 5
+	},
+	"groundmemory": {
+		"name": "Ground Memory",
+		"icon": "Ground Memory",
+		"type": "item",
+		"cost": 5
+	},
+	"groundiumz": {
+		"name": "Groundium Z",
+		"icon": "Groundium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"gyaradosite": {
+		"name": "Gyaradosite",
+		"icon": "Gyaradosite",
+		"type": "item",
+		"cost": 5
+	},
+	"habanberry": {
+		"name": "Haban Berry",
+		"icon": "Haban Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"hardstone": {
+		"name": "Hard Stone",
+		"icon": "Hard Stone",
+		"type": "item",
+		"cost": 5
+	},
+	"healball": {
+		"name": "Heal Ball",
+		"icon": "Heal Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"hearthflamemask": {
+		"name": "Hearthflame Mask",
+		"icon": "Hearthflame Mask",
+		"type": "item",
+		"cost": 5
+	},
+	"heatrock": {
+		"name": "Heat Rock",
+		"icon": "Heat Rock",
+		"type": "item",
+		"cost": 5
+	},
+	"heavyball": {
+		"name": "Heavy Ball",
+		"icon": "Heavy Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"heavydutyboots": {
+		"name": "Heavy-Duty Boots",
+		"icon": "Heavy-Duty Boots",
+		"type": "item",
+		"cost": 5
+	},
+	"heracronite": {
+		"name": "Heracronite",
+		"icon": "Heracronite",
+		"type": "item",
+		"cost": 5
+	},
+	"hondewberry": {
+		"name": "Hondew Berry",
+		"icon": "Hondew Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"houndoominite": {
+		"name": "Houndoominite",
+		"icon": "Houndoominite",
+		"type": "item",
+		"cost": 5
+	},
+	"iapapaberry": {
+		"name": "Iapapa Berry",
+		"icon": "Iapapa Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"icegem": {
+		"name": "Ice Gem",
+		"icon": "Ice Gem",
+		"type": "item",
+		"cost": 5
+	},
+	"icememory": {
+		"name": "Ice Memory",
+		"icon": "Ice Memory",
+		"type": "item",
+		"cost": 5
+	},
+	"icestone": {
+		"name": "Ice Stone",
+		"icon": "Ice Stone",
+		"type": "item",
+		"cost": 5
+	},
+	"icicleplate": {
+		"name": "Icicle Plate",
+		"icon": "Icicle Plate",
+		"type": "item",
+		"cost": 5
+	},
+	"iciumz": {
+		"name": "Icium Z",
+		"icon": "Icium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"icyrock": {
+		"name": "Icy Rock",
+		"icon": "Icy Rock",
+		"type": "item",
+		"cost": 5
+	},
+	"inciniumz": {
+		"name": "Incinium Z",
+		"icon": "Incinium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"insectplate": {
+		"name": "Insect Plate",
+		"icon": "Insect Plate",
+		"type": "item",
+		"cost": 5
+	},
+	"ironball": {
+		"name": "Iron Ball",
+		"icon": "Iron Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"ironplate": {
+		"name": "Iron Plate",
+		"icon": "Iron Plate",
+		"type": "item",
+		"cost": 5
+	},
+	"jabocaberry": {
+		"name": "Jaboca Berry",
+		"icon": "Jaboca Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"kasibberry": {
+		"name": "Kasib Berry",
+		"icon": "Kasib Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"kebiaberry": {
+		"name": "Kebia Berry",
+		"icon": "Kebia Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"keeberry": {
+		"name": "Kee Berry",
+		"icon": "Kee Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"kelpsyberry": {
+		"name": "Kelpsy Berry",
+		"icon": "Kelpsy Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"kangaskhanite": {
+		"name": "Kangaskhanite",
+		"icon": "Kangaskhanite",
+		"type": "item",
+		"cost": 5
+	},
+	"kingsrock": {
+		"name": "King's Rock",
+		"icon": "King's Rock",
+		"type": "item",
+		"cost": 5
+	},
+	"kommoniumz": {
+		"name": "Kommonium Z",
+		"icon": "Kommonium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"laggingtail": {
+		"name": "Lagging Tail",
+		"icon": "Lagging Tail",
+		"type": "item",
+		"cost": 5
+	},
+	"lansatberry": {
+		"name": "Lansat Berry",
+		"icon": "Lansat Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"latiasite": {
+		"name": "Latiasite",
+		"icon": "Latiasite",
+		"type": "item",
+		"cost": 5
+	},
+	"latiosite": {
+		"name": "Latiosite",
+		"icon": "Latiosite",
+		"type": "item",
+		"cost": 5
+	},
+	"leafstone": {
+		"name": "Leaf Stone",
+		"icon": "Leaf Stone",
+		"type": "item",
+		"cost": 5
+	},
+	"leek": {
+		"name": "Leek",
+		"icon": "Leek",
+		"type": "item",
+		"cost": 5
+	},
+	"leftovers": {
+		"name": "Leftovers",
+		"icon": "Leftovers",
+		"type": "item",
+		"cost": 5
+	},
+	"leppaberry": {
+		"name": "Leppa Berry",
+		"icon": "Leppa Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"levelball": {
+		"name": "Level Ball",
+		"icon": "Level Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"liechiberry": {
+		"name": "Liechi Berry",
+		"icon": "Liechi Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"lifeorb": {
+		"name": "Life Orb",
+		"icon": "Life Orb",
+		"type": "item",
+		"cost": 5
+	},
+	"lightball": {
+		"name": "Light Ball",
+		"icon": "Light Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"lightclay": {
+		"name": "Light Clay",
+		"icon": "Light Clay",
+		"type": "item",
+		"cost": 5
+	},
+	"loadeddice": {
+		"name": "Loaded Dice",
+		"icon": "Loaded Dice",
+		"type": "item",
+		"cost": 5
+	},
+	"lopunnite": {
+		"name": "Lopunnite",
+		"icon": "Lopunnite",
+		"type": "item",
+		"cost": 5
+	},
+	"loveball": {
+		"name": "Love Ball",
+		"icon": "Love Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"lovesweet": {
+		"name": "Love Sweet",
+		"icon": "Love Sweet",
+		"type": "item",
+		"cost": 5
+	},
+	"lucarionite": {
+		"name": "Lucarionite",
+		"icon": "Lucarionite",
+		"type": "item",
+		"cost": 5
+	},
+	"luckypunch": {
+		"name": "Lucky Punch",
+		"icon": "Lucky Punch",
+		"type": "item",
+		"cost": 5
+	},
+	"lumberry": {
+		"name": "Lum Berry",
+		"icon": "Lum Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"luminousmoss": {
+		"name": "Luminous Moss",
+		"icon": "Luminous Moss",
+		"type": "item",
+		"cost": 5
+	},
+	"lunaliumz": {
+		"name": "Lunalium Z",
+		"icon": "Lunalium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"lureball": {
+		"name": "Lure Ball",
+		"icon": "Lure Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"lustrousglobe": {
+		"name": "Lustrous Globe",
+		"icon": "Lustrous Globe",
+		"type": "item",
+		"cost": 5
+	},
+	"lustrousorb": {
+		"name": "Lustrous Orb",
+		"icon": "Lustrous Orb",
+		"type": "item",
+		"cost": 5
+	},
+	"luxuryball": {
+		"name": "Luxury Ball",
+		"icon": "Luxury Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"lycaniumz": {
+		"name": "Lycanium Z",
+		"icon": "Lycanium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"magmarizer": {
+		"name": "Magmarizer",
+		"icon": "Magmarizer",
+		"type": "item",
+		"cost": 5
+	},
+	"magnet": {
+		"name": "Magnet",
+		"icon": "Magnet",
+		"type": "item",
+		"cost": 5
+	},
+	"magoberry": {
+		"name": "Mago Berry",
+		"icon": "Mago Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"maliciousarmor": {
+		"name": "Malicious Armor",
+		"icon": "Malicious Armor",
+		"type": "item",
+		"cost": 5
+	},
+	"manectite": {
+		"name": "Manectite",
+		"icon": "Manectite",
+		"type": "item",
+		"cost": 5
+	},
+	"marangaberry": {
+		"name": "Maranga Berry",
+		"icon": "Maranga Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"marshadiumz": {
+		"name": "Marshadium Z",
+		"icon": "Marshadium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"masterball": {
+		"name": "Master Ball",
+		"icon": "Master Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"masterpieceteacup": {
+		"name": "Masterpiece Teacup",
+		"icon": "Masterpiece Teacup",
+		"type": "item",
+		"cost": 5
+	},
+	"mawilite": {
+		"name": "Mawilite",
+		"icon": "Mawilite",
+		"type": "item",
+		"cost": 5
+	},
+	"meadowplate": {
+		"name": "Meadow Plate",
+		"icon": "Meadow Plate",
+		"type": "item",
+		"cost": 5
+	},
+	"medichamite": {
+		"name": "Medichamite",
+		"icon": "Medichamite",
+		"type": "item",
+		"cost": 5
+	},
+	"mentalherb": {
+		"name": "Mental Herb",
+		"icon": "Mental Herb",
+		"type": "item",
+		"cost": 5
+	},
+	"metagrossite": {
+		"name": "Metagrossite",
+		"icon": "Metagrossite",
+		"type": "item",
+		"cost": 5
+	},
+	"metalalloy": {
+		"name": "Metal Alloy",
+		"icon": "Metal Alloy",
+		"type": "item",
+		"cost": 5
+	},
+	"metalcoat": {
+		"name": "Metal Coat",
+		"icon": "Metal Coat",
+		"type": "item",
+		"cost": 5
+	},
+	"metalpowder": {
+		"name": "Metal Powder",
+		"icon": "Metal Powder",
+		"type": "item",
+		"cost": 5
+	},
+	"metronome": {
+		"name": "Metronome",
+		"icon": "Metronome",
+		"type": "item",
+		"cost": 5
+	},
+	"mewniumz": {
+		"name": "Mewnium Z",
+		"icon": "Mewnium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"mewtwonitex": {
+		"name": "Mewtwonite X",
+		"icon": "Mewtwonite X",
+		"type": "item",
+		"cost": 5
+	},
+	"mewtwonitey": {
+		"name": "Mewtwonite Y",
+		"icon": "Mewtwonite Y",
+		"type": "item",
+		"cost": 5
+	},
+	"micleberry": {
+		"name": "Micle Berry",
+		"icon": "Micle Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"mimikiumz": {
+		"name": "Mimikium Z",
+		"icon": "Mimikium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"mindplate": {
+		"name": "Mind Plate",
+		"icon": "Mind Plate",
+		"type": "item",
+		"cost": 5
+	},
+	"miracleseed": {
+		"name": "Miracle Seed",
+		"icon": "Miracle Seed",
+		"type": "item",
+		"cost": 5
+	},
+	"mirrorherb": {
+		"name": "Mirror Herb",
+		"icon": "Mirror Herb",
+		"type": "item",
+		"cost": 5
+	},
+	"mistyseed": {
+		"name": "Misty Seed",
+		"icon": "Misty Seed",
+		"type": "item",
+		"cost": 5
+	},
+	"moonball": {
+		"name": "Moon Ball",
+		"icon": "Moon Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"moonstone": {
+		"name": "Moon Stone",
+		"icon": "Moon Stone",
+		"type": "item",
+		"cost": 5
+	},
+	"muscleband": {
+		"name": "Muscle Band",
+		"icon": "Muscle Band",
+		"type": "item",
+		"cost": 5
+	},
+	"mysticwater": {
+		"name": "Mystic Water",
+		"icon": "Mystic Water",
+		"type": "item",
+		"cost": 5
+	},
+	"nestball": {
+		"name": "Nest Ball",
+		"icon": "Nest Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"netball": {
+		"name": "Net Ball",
+		"icon": "Net Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"nevermeltice": {
+		"name": "Never-Melt Ice",
+		"icon": "Never-Melt Ice",
+		"type": "item",
+		"cost": 5
+	},
+	"normalgem": {
+		"name": "Normal Gem",
+		"icon": "Normal Gem",
+		"type": "item",
+		"cost": 5
+	},
+	"normaliumz": {
+		"name": "Normalium Z",
+		"icon": "Normalium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"occaberry": {
+		"name": "Occa Berry",
+		"icon": "Occa Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"oranberry": {
+		"name": "Oran Berry",
+		"icon": "Oran Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"ovalstone": {
+		"name": "Oval Stone",
+		"icon": "Oval Stone",
+		"type": "item",
+		"cost": 5
+	},
+	"passhoberry": {
+		"name": "Passho Berry",
+		"icon": "Passho Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"payapaberry": {
+		"name": "Payapa Berry",
+		"icon": "Payapa Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"pechaberry": {
+		"name": "Pecha Berry",
+		"icon": "Pecha Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"persimberry": {
+		"name": "Persim Berry",
+		"icon": "Persim Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"petayaberry": {
+		"name": "Petaya Berry",
+		"icon": "Petaya Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"pidgeotite": {
+		"name": "Pidgeotite",
+		"icon": "Pidgeotite",
+		"type": "item",
+		"cost": 5
+	},
+	"pikaniumz": {
+		"name": "Pikanium Z",
+		"icon": "Pikanium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"pikashuniumz": {
+		"name": "Pikashunium Z",
+		"icon": "Pikashunium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"pinsirite": {
+		"name": "Pinsirite",
+		"icon": "Pinsirite",
+		"type": "item",
+		"cost": 5
+	},
+	"pixieplate": {
+		"name": "Pixie Plate",
+		"icon": "Pixie Plate",
+		"type": "item",
+		"cost": 5
+	},
+	"poisonbarb": {
+		"name": "Poison Barb",
+		"icon": "Poison Barb",
+		"type": "item",
+		"cost": 5
+	},
+	"poisongem": {
+		"name": "Poison Gem",
+		"icon": "Poison Gem",
+		"type": "item",
+		"cost": 5
+	},
+	"poisonmemory": {
+		"name": "Poison Memory",
+		"icon": "Poison Memory",
+		"type": "item",
+		"cost": 5
+	},
+	"poisoniumz": {
+		"name": "Poisonium Z",
+		"icon": "Poisonium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"pokeball": {
+		"name": "Poke Ball",
+		"icon": "Poke Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"pomegberry": {
+		"name": "Pomeg Berry",
+		"icon": "Pomeg Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"poweranklet": {
+		"name": "Power Anklet",
+		"icon": "Power Anklet",
+		"type": "item",
+		"cost": 5
+	},
+	"powerband": {
+		"name": "Power Band",
+		"icon": "Power Band",
+		"type": "item",
+		"cost": 5
+	},
+	"powerbelt": {
+		"name": "Power Belt",
+		"icon": "Power Belt",
+		"type": "item",
+		"cost": 5
+	},
+	"powerbracer": {
+		"name": "Power Bracer",
+		"icon": "Power Bracer",
+		"type": "item",
+		"cost": 5
+	},
+	"powerherb": {
+		"name": "Power Herb",
+		"icon": "Power Herb",
+		"type": "item",
+		"cost": 5
+	},
+	"powerlens": {
+		"name": "Power Lens",
+		"icon": "Power Lens",
+		"type": "item",
+		"cost": 5
+	},
+	"powerweight": {
+		"name": "Power Weight",
+		"icon": "Power Weight",
+		"type": "item",
+		"cost": 5
+	},
+	"premierball": {
+		"name": "Premier Ball",
+		"icon": "Premier Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"primariumz": {
+		"name": "Primarium Z",
+		"icon": "Primarium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"prismscale": {
+		"name": "Prism Scale",
+		"icon": "Prism Scale",
+		"type": "item",
+		"cost": 5
+	},
+	"protectivepads": {
+		"name": "Protective Pads",
+		"icon": "Protective Pads",
+		"type": "item",
+		"cost": 5
+	},
+	"protector": {
+		"name": "Protector",
+		"icon": "Protector",
+		"type": "item",
+		"cost": 5
+	},
+	"psychicgem": {
+		"name": "Psychic Gem",
+		"icon": "Psychic Gem",
+		"type": "item",
+		"cost": 5
+	},
+	"psychicmemory": {
+		"name": "Psychic Memory",
+		"icon": "Psychic Memory",
+		"type": "item",
+		"cost": 5
+	},
+	"psychicseed": {
+		"name": "Psychic Seed",
+		"icon": "Psychic Seed",
+		"type": "item",
+		"cost": 5
+	},
+	"psychiumz": {
+		"name": "Psychium Z",
+		"icon": "Psychium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"punchingglove": {
+		"name": "Punching Glove",
+		"icon": "Punching Glove",
+		"type": "item",
+		"cost": 5
+	},
+	"qualotberry": {
+		"name": "Qualot Berry",
+		"icon": "Qualot Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"quickball": {
+		"name": "Quick Ball",
+		"icon": "Quick Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"quickclaw": {
+		"name": "Quick Claw",
+		"icon": "Quick Claw",
+		"type": "item",
+		"cost": 5
+	},
+	"quickpowder": {
+		"name": "Quick Powder",
+		"icon": "Quick Powder",
+		"type": "item",
+		"cost": 5
+	},
+	"rarebone": {
+		"name": "Rare Bone",
+		"icon": "Rare Bone",
+		"type": "item",
+		"cost": 5
+	},
+	"rawstberry": {
+		"name": "Rawst Berry",
+		"icon": "Rawst Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"razorclaw": {
+		"name": "Razor Claw",
+		"icon": "Razor Claw",
+		"type": "item",
+		"cost": 5
+	},
+	"razorfang": {
+		"name": "Razor Fang",
+		"icon": "Razor Fang",
+		"type": "item",
+		"cost": 5
+	},
+	"reapercloth": {
+		"name": "Reaper Cloth",
+		"icon": "Reaper Cloth",
+		"type": "item",
+		"cost": 5
+	},
+	"redcard": {
+		"name": "Red Card",
+		"icon": "Red Card",
+		"type": "item",
+		"cost": 5
+	},
+	"redorb": {
+		"name": "Red Orb",
+		"icon": "Red Orb",
+		"type": "item",
+		"cost": 5
+	},
+	"repeatball": {
+		"name": "Repeat Ball",
+		"icon": "Repeat Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"ribbonsweet": {
+		"name": "Ribbon Sweet",
+		"icon": "Ribbon Sweet",
+		"type": "item",
+		"cost": 5
+	},
+	"rindoberry": {
+		"name": "Rindo Berry",
+		"icon": "Rindo Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"ringtarget": {
+		"name": "Ring Target",
+		"icon": "Ring Target",
+		"type": "item",
+		"cost": 5
+	},
+	"rockgem": {
+		"name": "Rock Gem",
+		"icon": "Rock Gem",
+		"type": "item",
+		"cost": 5
+	},
+	"rockmemory": {
+		"name": "Rock Memory",
+		"icon": "Rock Memory",
+		"type": "item",
+		"cost": 5
+	},
+	"rockiumz": {
+		"name": "Rockium Z",
+		"icon": "Rockium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"rockyhelmet": {
+		"name": "Rocky Helmet",
+		"icon": "Rocky Helmet",
+		"type": "item",
+		"cost": 5
+	},
+	"roomservice": {
+		"name": "Room Service",
+		"icon": "Room Service",
+		"type": "item",
+		"cost": 5
+	},
+	"roseliberry": {
+		"name": "Roseli Berry",
+		"icon": "Roseli Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"rowapberry": {
+		"name": "Rowap Berry",
+		"icon": "Rowap Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"rustedshield": {
+		"name": "Rusted Shield",
+		"icon": "Rusted Shield",
+		"type": "item",
+		"cost": 5
+	},
+	"rustedsword": {
+		"name": "Rusted Sword",
+		"icon": "Rusted Sword",
+		"type": "item",
+		"cost": 5
+	},
+	"sablenite": {
+		"name": "Sablenite",
+		"icon": "Sablenite",
+		"type": "item",
+		"cost": 5
+	},
+	"safariball": {
+		"name": "Safari Ball",
+		"icon": "Safari Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"safetygoggles": {
+		"name": "Safety Goggles",
+		"icon": "Safety Goggles",
+		"type": "item",
+		"cost": 5
+	},
+	"salacberry": {
+		"name": "Salac Berry",
+		"icon": "Salac Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"salamencite": {
+		"name": "Salamencite",
+		"icon": "Salamencite",
+		"type": "item",
+		"cost": 5
+	},
+	"sceptilite": {
+		"name": "Sceptilite",
+		"icon": "Sceptilite",
+		"type": "item",
+		"cost": 5
+	},
+	"scizorite": {
+		"name": "Scizorite",
+		"icon": "Scizorite",
+		"type": "item",
+		"cost": 5
+	},
+	"scopelens": {
+		"name": "Scope Lens",
+		"icon": "Scope Lens",
+		"type": "item",
+		"cost": 5
+	},
+	"sharpbeak": {
+		"name": "Sharp Beak",
+		"icon": "Sharp Beak",
+		"type": "item",
+		"cost": 5
+	},
+	"sharpedonite": {
+		"name": "Sharpedonite",
+		"icon": "Sharpedonite",
+		"type": "item",
+		"cost": 5
+	},
+	"shedshell": {
+		"name": "Shed Shell",
+		"icon": "Shed Shell",
+		"type": "item",
+		"cost": 5
+	},
+	"shellbell": {
+		"name": "Shell Bell",
+		"icon": "Shell Bell",
+		"type": "item",
+		"cost": 5
+	},
+	"shinystone": {
+		"name": "Shiny Stone",
+		"icon": "Shiny Stone",
+		"type": "item",
+		"cost": 5
+	},
+	"shockdrive": {
+		"name": "Shock Drive",
+		"icon": "Shock Drive",
+		"type": "item",
+		"cost": 5
+	},
+	"shucaberry": {
+		"name": "Shuca Berry",
+		"icon": "Shuca Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"silkscarf": {
+		"name": "Silk Scarf",
+		"icon": "Silk Scarf",
+		"type": "item",
+		"cost": 5
+	},
+	"silverpowder": {
+		"name": "Silver Powder",
+		"icon": "Silver Powder",
+		"type": "item",
+		"cost": 5
+	},
+	"sitrusberry": {
+		"name": "Sitrus Berry",
+		"icon": "Sitrus Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"skyplate": {
+		"name": "Sky Plate",
+		"icon": "Sky Plate",
+		"type": "item",
+		"cost": 5
+	},
+	"slowbronite": {
+		"name": "Slowbronite",
+		"icon": "Slowbronite",
+		"type": "item",
+		"cost": 5
+	},
+	"smoothrock": {
+		"name": "Smooth Rock",
+		"icon": "Smooth Rock",
+		"type": "item",
+		"cost": 5
+	},
+	"snorliumz": {
+		"name": "Snorlium Z",
+		"icon": "Snorlium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"snowball": {
+		"name": "Snowball",
+		"icon": "Snowball",
+		"type": "item",
+		"cost": 5
+	},
+	"softsand": {
+		"name": "Soft Sand",
+		"icon": "Soft Sand",
+		"type": "item",
+		"cost": 5
+	},
+	"solganiumz": {
+		"name": "Solganium Z",
+		"icon": "Solganium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"souldew": {
+		"name": "Soul Dew",
+		"icon": "Soul Dew",
+		"type": "item",
+		"cost": 5
+	},
+	"spelltag": {
+		"name": "Spell Tag",
+		"icon": "Spell Tag",
+		"type": "item",
+		"cost": 5
+	},
+	"splashplate": {
+		"name": "Splash Plate",
+		"icon": "Splash Plate",
+		"type": "item",
+		"cost": 5
+	},
+	"spookyplate": {
+		"name": "Spooky Plate",
+		"icon": "Spooky Plate",
+		"type": "item",
+		"cost": 5
+	},
+	"sportball": {
+		"name": "Sport Ball",
+		"icon": "Sport Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"starfberry": {
+		"name": "Starf Berry",
+		"icon": "Starf Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"starsweet": {
+		"name": "Star Sweet",
+		"icon": "Star Sweet",
+		"type": "item",
+		"cost": 5
+	},
+	"steelixite": {
+		"name": "Steelixite",
+		"icon": "Steelixite",
+		"type": "item",
+		"cost": 5
+	},
+	"steelgem": {
+		"name": "Steel Gem",
+		"icon": "Steel Gem",
+		"type": "item",
+		"cost": 5
+	},
+	"steelmemory": {
+		"name": "Steel Memory",
+		"icon": "Steel Memory",
+		"type": "item",
+		"cost": 5
+	},
+	"steeliumz": {
+		"name": "Steelium Z",
+		"icon": "Steelium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"stick": {
+		"name": "Stick",
+		"icon": "Stick",
+		"type": "item",
+		"cost": 5
+	},
+	"stickybarb": {
+		"name": "Sticky Barb",
+		"icon": "Sticky Barb",
+		"type": "item",
+		"cost": 5
+	},
+	"stoneplate": {
+		"name": "Stone Plate",
+		"icon": "Stone Plate",
+		"type": "item",
+		"cost": 5
+	},
+	"strawberrysweet": {
+		"name": "Strawberry Sweet",
+		"icon": "Strawberry Sweet",
+		"type": "item",
+		"cost": 5
+	},
+	"sunstone": {
+		"name": "Sun Stone",
+		"icon": "Sun Stone",
+		"type": "item",
+		"cost": 5
+	},
+	"swampertite": {
+		"name": "Swampertite",
+		"icon": "Swampertite",
+		"type": "item",
+		"cost": 5
+	},
+	"sweetapple": {
+		"name": "Sweet Apple",
+		"icon": "Sweet Apple",
+		"type": "item",
+		"cost": 5
+	},
+	"syrupyapple": {
+		"name": "Syrupy Apple",
+		"icon": "Syrupy Apple",
+		"type": "item",
+		"cost": 5
+	},
+	"tamatoberry": {
+		"name": "Tamato Berry",
+		"icon": "Tamato Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"tangaberry": {
+		"name": "Tanga Berry",
+		"icon": "Tanga Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"tapuniumz": {
+		"name": "Tapunium Z",
+		"icon": "Tapunium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"tartapple": {
+		"name": "Tart Apple",
+		"icon": "Tart Apple",
+		"type": "item",
+		"cost": 5
+	},
+	"terrainextender": {
+		"name": "Terrain Extender",
+		"icon": "Terrain Extender",
+		"type": "item",
+		"cost": 5
+	},
+	"thickclub": {
+		"name": "Thick Club",
+		"icon": "Thick Club",
+		"type": "item",
+		"cost": 5
+	},
+	"throatspray": {
+		"name": "Throat Spray",
+		"icon": "Throat Spray",
+		"type": "item",
+		"cost": 5
+	},
+	"thunderstone": {
+		"name": "Thunder Stone",
+		"icon": "Thunder Stone",
+		"type": "item",
+		"cost": 5
+	},
+	"timerball": {
+		"name": "Timer Ball",
+		"icon": "Timer Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"toxicorb": {
+		"name": "Toxic Orb",
+		"icon": "Toxic Orb",
+		"type": "item",
+		"cost": 5
+	},
+	"toxicplate": {
+		"name": "Toxic Plate",
+		"icon": "Toxic Plate",
+		"type": "item",
+		"cost": 5
+	},
+	"twistedspoon": {
+		"name": "Twisted Spoon",
+		"icon": "Twisted Spoon",
+		"type": "item",
+		"cost": 5
+	},
+	"tyranitarite": {
+		"name": "Tyranitarite",
+		"icon": "Tyranitarite",
+		"type": "item",
+		"cost": 5
+	},
+	"ultraball": {
+		"name": "Ultra Ball",
+		"icon": "Ultra Ball",
+		"type": "item",
+		"cost": 5
+	},
+	"ultranecroziumz": {
+		"name": "Ultranecrozium Z",
+		"icon": "Ultranecrozium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"unremarkableteacup": {
+		"name": "Unremarkable Teacup",
+		"icon": "Unremarkable Teacup",
+		"type": "item",
+		"cost": 5
+	},
+	"upgrade": {
+		"name": "Up-Grade",
+		"icon": "Up-Grade",
+		"type": "item",
+		"cost": 5
+	},
+	"utilityumbrella": {
+		"name": "Utility Umbrella",
+		"icon": "Utility Umbrella",
+		"type": "item",
+		"cost": 5
+	},
+	"venusaurite": {
+		"name": "Venusaurite",
+		"icon": "Venusaurite",
+		"type": "item",
+		"cost": 5
+	},
+	"wacanberry": {
+		"name": "Wacan Berry",
+		"icon": "Wacan Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"watergem": {
+		"name": "Water Gem",
+		"icon": "Water Gem",
+		"type": "item",
+		"cost": 5
+	},
+	"watermemory": {
+		"name": "Water Memory",
+		"icon": "Water Memory",
+		"type": "item",
+		"cost": 5
+	},
+	"waterstone": {
+		"name": "Water Stone",
+		"icon": "Water Stone",
+		"type": "item",
+		"cost": 5
+	},
+	"wateriumz": {
+		"name": "Waterium Z",
+		"icon": "Waterium Z",
+		"type": "item",
+		"cost": 5
+	},
+	"weaknesspolicy": {
+		"name": "Weakness Policy",
+		"icon": "Weakness Policy",
+		"type": "item",
+		"cost": 5
+	},
+	"wellspringmask": {
+		"name": "Wellspring Mask",
+		"icon": "Wellspring Mask",
+		"type": "item",
+		"cost": 5
+	},
+	"whiteherb": {
+		"name": "White Herb",
+		"icon": "White Herb",
+		"type": "item",
+		"cost": 5
+	},
+	"widelens": {
+		"name": "Wide Lens",
+		"icon": "Wide Lens",
+		"type": "item",
+		"cost": 5
+	},
+	"wikiberry": {
+		"name": "Wiki Berry",
+		"icon": "Wiki Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"wiseglasses": {
+		"name": "Wise Glasses",
+		"icon": "Wise Glasses",
+		"type": "item",
+		"cost": 5
+	},
+	"yacheberry": {
+		"name": "Yache Berry",
+		"icon": "Yache Berry",
+		"type": "item",
+		"cost": 5
+	},
+	"zapplate": {
+		"name": "Zap Plate",
+		"icon": "Zap Plate",
+		"type": "item",
+		"cost": 5
+	},
+	"zoomlens": {
+		"name": "Zoom Lens",
+		"icon": "Zoom Lens",
+		"type": "item",
+		"cost": 5
+	},
+	"crucibellite": {
+		"name": "Crucibellite",
+		"icon": "Crucibellite",
+		"type": "item",
+		"cost": 5
+	},
+	"vilevial": {
+		"name": "Vile Vial",
+		"icon": "Vile Vial",
+		"type": "item",
+		"cost": 5
+	}
+}
