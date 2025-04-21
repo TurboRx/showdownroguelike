@@ -66,7 +66,7 @@
 	"tm009": {
 		"name": "TM009 (Thunder Fang)",
 		"desc": "Teaches the move Thunder Fang to a Pokemon. Single use.",
-		"icon": "TR00",
+		"icon": "TR08",
 		"type": "TM",
 		"cost": 5,
 		"minStreak": 0
@@ -178,7 +178,7 @@
 	"tm023": {
 		"name": "TM023 (Charge Beam)",
 		"desc": "Teaches the move Charge Beam to a Pokemon. Single use.",
-		"icon": "TR00",
+		"icon": "TR08",
 		"type": "TM",
 		"cost": 5,
 		"minStreak": 0
@@ -378,7 +378,7 @@
 	"tm048": {
 		"name": "TM048 (Volt Switch)",
 		"desc": "Teaches the move Volt Switch to a Pokemon. Single use.",
-		"icon": "TR00",
+		"icon": "TR08",
 		"type": "TM",
 		"cost": 5,
 		"minStreak": 0
@@ -538,7 +538,7 @@
 	"tm068": {
 		"name": "TM068 (Thunder Punch)",
 		"desc": "Teaches the move Thunder Punch to a Pokemon. Single use.",
-		"icon": "TR00",
+		"icon": "TR08",
 		"type": "TM",
 		"cost": 5,
 		"minStreak": 0
@@ -570,7 +570,7 @@
 	"tm072": {
 		"name": "TM072 (Electro Ball)",
 		"desc": "Teaches the move Electro Ball to a Pokemon. Single use.",
-		"icon": "TR00",
+		"icon": "TR08",
 		"type": "TM",
 		"cost": 5,
 		"minStreak": 0
@@ -650,7 +650,7 @@
 	"tm082": {
 		"name": "TM082 (Thunder Wave)",
 		"desc": "Teaches the move Thunder Wave to a Pokemon. Single use.",
-		"icon": "TR00",
+		"icon": "TR08",
 		"type": "TM",
 		"cost": 5,
 		"minStreak": 0
@@ -762,7 +762,7 @@
 	"tm096": {
 		"name": "TM096 (Eerie Impulse)",
 		"desc": "Teaches the move Eerie Impulse to a Pokemon. Single use.",
-		"icon": "TR00",
+		"icon": "TR08",
 		"type": "TM",
 		"cost": 5,
 		"minStreak": 0
@@ -1002,7 +1002,7 @@
 	"tm126": {
 		"name": "TM126 (Thunderbolt)",
 		"desc": "Teaches the move Thunderbolt to a Pokemon. Single use.",
-		"icon": "TR00",
+		"icon": "TR08",
 		"type": "TM",
 		"cost": 5,
 		"minStreak": 0
@@ -1082,7 +1082,7 @@
 	"tm136": {
 		"name": "TM136 (Electric Terrain)",
 		"desc": "Teaches the move Electric Terrain to a Pokemon. Single use.",
-		"icon": "TR00",
+		"icon": "TR08",
 		"type": "TM",
 		"cost": 5,
 		"minStreak": 0
@@ -1170,7 +1170,7 @@
 	"tm147": {
 		"name": "TM147 (Wild Charge)",
 		"desc": "Teaches the move Wild Charge to a Pokemon. Single use.",
-		"icon": "TR00",
+		"icon": "TR08",
 		"type": "TM",
 		"cost": 5,
 		"minStreak": 0
@@ -1322,7 +1322,7 @@
 	"tm166": {
 		"name": "TM166 (Thunder)",
 		"desc": "Teaches the move Thunder to a Pokemon. Single use.",
-		"icon": "TR00",
+		"icon": "TR08",
 		"type": "TM",
 		"cost": 5,
 		"minStreak": 0
@@ -1378,7 +1378,7 @@
 	"tm173": {
 		"name": "TM173 (Charge)",
 		"desc": "Teaches the move Charge to a Pokemon. Single use.",
-		"icon": "TR00",
+		"icon": "TR08",
 		"type": "TM",
 		"cost": 5,
 		"minStreak": 0
@@ -1674,7 +1674,7 @@
 	"tm210": {
 		"name": "TM210 (Supercell Slam)",
 		"desc": "Teaches the move Supercell Slam to a Pokemon. Single use.",
-		"icon": "TR00",
+		"icon": "TR08",
 		"type": "TM",
 		"cost": 5,
 		"minStreak": 0
@@ -1682,7 +1682,7 @@
 	"tm211": {
 		"name": "TM211 (Electroweb)",
 		"desc": "Teaches the move Electroweb to a Pokemon. Single use.",
-		"icon": "TR00",
+		"icon": "TR08",
 		"type": "TM",
 		"cost": 5,
 		"minStreak": 0
