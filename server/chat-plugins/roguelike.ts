@@ -49,7 +49,7 @@ function getMinExpForMonAtLevel(species: string, level: number) {
 	}
 }
 
-type ItemType = 'pokemon' | 'healHP' | 'healPP' | 'TM' | 'key' | 'debug' | 'revive' | 'cureStatus' | 'item';
+type ItemType = 'pokemonPack' | 'healHP' | 'healPP' | 'TM' | 'key' | 'debug' | 'revive' | 'cureStatus' | 'itemPack' | 'item';
 
 type opponentScout = 'revealMon' | 'revealSet' | false;
 
@@ -90,8 +90,8 @@ const ROTATIONAL_ITEM_POOL: { [k: string]: RotationalItem | TMItem } = JSON.pars
 Object.assign(ROTATIONAL_ITEM_POOL, TM_LIST);
 
 const SHOP_ITEMS: { [k: string]: ShopItem } = {
-	pokeballpack: { name: 'Poke Ball Pack', icon: 'Poke Ball', type: 'pokemon', desc: 'Pick 1 of 3 random Pokemon.', cost: 7, minStreak: 0 },
-	helditempack: { name: 'Held Item Pack', icon: 'Leftovers', type: 'item', desc: 'Pick 1 of 3 held items to put on a Pokemon', cost: 3, minStreak: 0 },
+	pokeballpack: { name: 'Poke Ball Pack', icon: 'Poke Ball', type: 'pokemonPack', desc: 'Pick 1 of 3 random Pokemon.', cost: 7, minStreak: 0 },
+	helditempack: { name: 'Held Item Pack', icon: 'Leftovers', type: 'itemPack', desc: 'Pick 1 of 3 held items to put on a Pokemon', cost: 3, minStreak: 0 },
 	maxpotion: { name: 'Max Potion', icon: 'Electirizer', type: 'healHP', desc: 'Heals a pokemon\'s HP fully.', cost: 5, minStreak: 0 },
 	maxelixir: { name: 'Max Elixir', icon: 'Magmarizer', type: 'healPP', desc: 'Heals a pokemon\'s moves fully.', cost: 3, minStreak: 0 },
 	fullheal: { name: 'Full Heal', icon: 'Flower Sweet', type: 'cureStatus', desc: 'Cures a pokemon\'s status.', cost: 3, minStreak: 0 },
@@ -702,12 +702,12 @@ export class Roguelike {
 		let index = 1;
 		for (const mon of this.team) {
 			switch (checkItem) {
-			case 'item':
+			case 'itemPack':
 				failureCondition = false;
 				cmd = 'giveitem ' + index;
 				skip = 'giveitem skip';
 				break;
-			case 'pokemon':
+			case 'pokemonPack':
 				failureCondition = false;
 				cmd = 'replacepoke ' + index;
 				skip = 'replacepoke skip';
@@ -795,7 +795,7 @@ export class Roguelike {
 		let buf = ``;
 		let exitButtonText = 'Leave and go back to shop.';
 		switch ((this.flags.purchasedItem as ShopItem)?.type) {
-		case 'pokemon':
+		case 'pokemonPack':
 			exitButtonText = 'Skip';
 			buf += `<center><h3>Add a Pokemon!</h3></center><br />`;
 			// @ts-ignore
@@ -812,7 +812,7 @@ export class Roguelike {
 			break;
 		case 'key':
 			break;
-		case 'item':
+		case 'itemPack':
 			exitButtonText = 'Skip';
 			buf += `<center><h3>Get an item!</h3><br />`;
 			buf += `<div style="width:100%;">`;
@@ -1039,13 +1039,13 @@ export const commands: Chat.ChatCommands = {
 			if (!item) throw new Chat.ErrorMessage('Does that item even exist?');
 			if (item.cost > userData.battlePoints) return this.popupReply(`You don't have enough BP to buy this!`);
 			switch (item.type) {
-			case 'pokemon':
+			case 'pokemonPack':
 				const scale = [5, 10];
 				scale.forEach((e, i) => scale[i] = Utils.clampIntRange(e + (userData.streak * 5), 1, 100));
 				userData.flags.pokemonOptions = genPokemon(3, scale);
 				userData.battlePoints -= item.cost;
 				break;
-			case 'item':
+			case 'itemPack':
 				userData.flags.itemOptions = genItem(3, userData.team);
 				userData.battlePoints -= item.cost;
 				break;
@@ -1090,7 +1090,7 @@ export const commands: Chat.ChatCommands = {
 			const args = target.split(',');
 			let arg = args.shift();
 			switch (arg) {
-			case 'pokemon':
+			case 'pokemonPack':
 				if (!userData.flags.pokemonOptions) throw new Chat.ErrorMessage(`No Pokemon to add.`);
 				arg = args.shift();
 				if (!arg) throw new Chat.ErrorMessage(`You need to specify a pokemon.`);
@@ -1152,7 +1152,7 @@ export const commands: Chat.ChatCommands = {
 				userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
 				// TODO: More items
 				break;
-			case 'item':
+			case 'itemPack':
 				arg = args.shift();
 				if (!arg) throw new Chat.ErrorMessage(`You need to specify an item.`);
 				const dexItem = Dex.items.get(arg);
@@ -1342,11 +1342,11 @@ export const pages: Chat.PageTable = {
 			switch (gameArgs.shift()) {
 			case 'release':
 				buf = `<center>Choose a pokemon to replace!</center><br />`;
-				buf += userGameData.genQuickSelectHTML('pokemon');
+				buf += userGameData.genQuickSelectHTML('pokemonPack');
 				break;
-			case 'item':
+			case 'itemPack':
 				buf = `<center>Give this item to who?</center><br />`;
-				buf += userGameData.genQuickSelectHTML('item');
+				buf += userGameData.genQuickSelectHTML('itemPack');
 				break;
 			default:
 				buf += userGameData.genPurchaseHTML();
