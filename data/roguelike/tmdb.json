@@ -1,6 +1,6 @@
 {
 	"tm000": {
-		"name": "TM000(Take Down)",
+		"name": "TM000 (Take Down)",
 		"desc": "Teaches the move Take Down to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -8,7 +8,7 @@
 		"minStreak": 0
 	},
 	"tm001": {
-		"name": "TM001(Charm)",
+		"name": "TM001 (Charm)",
 		"desc": "Teaches the move Charm to a Pokemon. Single use.",
 		"icon": "TR90",
 		"type": "TM",
@@ -16,7 +16,7 @@
 		"minStreak": 0
 	},
 	"tm002": {
-		"name": "TM002(Fake Tears)",
+		"name": "TM002 (Fake Tears)",
 		"desc": "Teaches the move Fake Tears to a Pokemon. Single use.",
 		"icon": "TR32",
 		"type": "TM",
@@ -24,7 +24,7 @@
 		"minStreak": 0
 	},
 	"tm003": {
-		"name": "TM003(Agility)",
+		"name": "TM003 (Agility)",
 		"desc": "Teaches the move Agility to a Pokemon. Single use.",
 		"icon": "TR11",
 		"type": "TM",
@@ -32,7 +32,7 @@
 		"minStreak": 0
 	},
 	"tm004": {
-		"name": "TM004(Mud-Slap)",
+		"name": "TM004 (Mud-Slap)",
 		"desc": "Teaches the move Mud-Slap to a Pokemon. Single use.",
 		"icon": "TR10",
 		"type": "TM",
@@ -40,7 +40,7 @@
 		"minStreak": 0
 	},
 	"tm005": {
-		"name": "TM005(Scary Face)",
+		"name": "TM005 (Scary Face)",
 		"desc": "Teaches the move Scary Face to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -48,7 +48,7 @@
 		"minStreak": 0
 	},
 	"tm006": {
-		"name": "TM006(Protect)",
+		"name": "TM006 (Protect)",
 		"desc": "Teaches the move Protect to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -56,7 +56,7 @@
 		"minStreak": 0
 	},
 	"tm007": {
-		"name": "TM007(Fire Fang)",
+		"name": "TM007 (Fire Fang)",
 		"desc": "Teaches the move Fire Fang to a Pokemon. Single use.",
 		"icon": "TR02",
 		"type": "TM",
@@ -64,7 +64,7 @@
 		"minStreak": 0
 	},
 	"tm008": {
-		"name": "TM008(Thunder Fang)",
+		"name": "TM008 (Thunder Fang)",
 		"desc": "Teaches the move Thunder Fang to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -72,7 +72,7 @@
 		"minStreak": 0
 	},
 	"tm009": {
-		"name": "TM009(Ice Fang)",
+		"name": "TM009 (Ice Fang)",
 		"desc": "Teaches the move Ice Fang to a Pokemon. Single use.",
 		"icon": "TR05",
 		"type": "TM",
@@ -80,7 +80,7 @@
 		"minStreak": 0
 	},
 	"tm010": {
-		"name": "TM010(Water Pulse)",
+		"name": "TM010 (Water Pulse)",
 		"desc": "Teaches the move Water Pulse to a Pokemon. Single use.",
 		"icon": "TR04",
 		"type": "TM",
@@ -88,7 +88,7 @@
 		"minStreak": 0
 	},
 	"tm011": {
-		"name": "TM011(Low Kick)",
+		"name": "TM011 (Low Kick)",
 		"desc": "Teaches the move Low Kick to a Pokemon. Single use.",
 		"icon": "TR07",
 		"type": "TM",
@@ -96,7 +96,7 @@
 		"minStreak": 0
 	},
 	"tm012": {
-		"name": "TM012(Acid Spray)",
+		"name": "TM012 (Acid Spray)",
 		"desc": "Teaches the move Acid Spray to a Pokemon. Single use.",
 		"icon": "TR54",
 		"type": "TM",
@@ -104,7 +104,7 @@
 		"minStreak": 0
 	},
 	"tm013": {
-		"name": "TM013(Acrobatics)",
+		"name": "TM013 (Acrobatics)",
 		"desc": "Teaches the move Acrobatics to a Pokemon. Single use.",
 		"icon": "TR66",
 		"type": "TM",
@@ -112,7 +112,7 @@
 		"minStreak": 0
 	},
 	"tm014": {
-		"name": "TM014(Struggle Bug)",
+		"name": "TM014 (Struggle Bug)",
 		"desc": "Teaches the move Struggle Bug to a Pokemon. Single use.",
 		"icon": "TR18",
 		"type": "TM",
@@ -120,7 +120,7 @@
 		"minStreak": 0
 	},
 	"tm015": {
-		"name": "TM015(Psybeam)",
+		"name": "TM015 (Psybeam)",
 		"desc": "Teaches the move Psybeam to a Pokemon. Single use.",
 		"icon": "TR11",
 		"type": "TM",
@@ -128,7 +128,7 @@
 		"minStreak": 0
 	},
 	"tm016": {
-		"name": "TM016(Confuse Ray)",
+		"name": "TM016 (Confuse Ray)",
 		"desc": "Teaches the move Confuse Ray to a Pokemon. Single use.",
 		"icon": "TR33",
 		"type": "TM",
@@ -136,7 +136,7 @@
 		"minStreak": 0
 	},
 	"tm017": {
-		"name": "TM017(Thief)",
+		"name": "TM017 (Thief)",
 		"desc": "Teaches the move Thief to a Pokemon. Single use.",
 		"icon": "TR32",
 		"type": "TM",
@@ -144,7 +144,7 @@
 		"minStreak": 0
 	},
 	"tm018": {
-		"name": "TM018(Disarming Voice)",
+		"name": "TM018 (Disarming Voice)",
 		"desc": "Teaches the move Disarming Voice to a Pokemon. Single use.",
 		"icon": "TR90",
 		"type": "TM",
@@ -152,7 +152,7 @@
 		"minStreak": 0
 	},
 	"tm019": {
-		"name": "TM019(Trailblaze)",
+		"name": "TM019 (Trailblaze)",
 		"desc": "Teaches the move Trailblaze to a Pokemon. Single use.",
 		"icon": "TR50",
 		"type": "TM",
@@ -160,7 +160,7 @@
 		"minStreak": 0
 	},
 	"tm020": {
-		"name": "TM020(Pounce)",
+		"name": "TM020 (Pounce)",
 		"desc": "Teaches the move Pounce to a Pokemon. Single use.",
 		"icon": "TR18",
 		"type": "TM",
@@ -168,7 +168,7 @@
 		"minStreak": 0
 	},
 	"tm021": {
-		"name": "TM021(Chilling Water)",
+		"name": "TM021 (Chilling Water)",
 		"desc": "Teaches the move Chilling Water to a Pokemon. Single use.",
 		"icon": "TR04",
 		"type": "TM",
@@ -176,7 +176,7 @@
 		"minStreak": 0
 	},
 	"tm022": {
-		"name": "TM022(Charge Beam)",
+		"name": "TM022 (Charge Beam)",
 		"desc": "Teaches the move Charge Beam to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -184,7 +184,7 @@
 		"minStreak": 0
 	},
 	"tm023": {
-		"name": "TM023(Fire Spin)",
+		"name": "TM023 (Fire Spin)",
 		"desc": "Teaches the move Fire Spin to a Pokemon. Single use.",
 		"icon": "TR02",
 		"type": "TM",
@@ -192,7 +192,7 @@
 		"minStreak": 0
 	},
 	"tm024": {
-		"name": "TM024(Facade)",
+		"name": "TM024 (Facade)",
 		"desc": "Teaches the move Facade to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -200,7 +200,7 @@
 		"minStreak": 0
 	},
 	"tm025": {
-		"name": "TM025(Poison Tail)",
+		"name": "TM025 (Poison Tail)",
 		"desc": "Teaches the move Poison Tail to a Pokemon. Single use.",
 		"icon": "TR54",
 		"type": "TM",
@@ -208,7 +208,7 @@
 		"minStreak": 0
 	},
 	"tm026": {
-		"name": "TM026(Aerial Ace)",
+		"name": "TM026 (Aerial Ace)",
 		"desc": "Teaches the move Aerial Ace to a Pokemon. Single use.",
 		"icon": "TR66",
 		"type": "TM",
@@ -216,7 +216,7 @@
 		"minStreak": 0
 	},
 	"tm027": {
-		"name": "TM027(Bulldoze)",
+		"name": "TM027 (Bulldoze)",
 		"desc": "Teaches the move Bulldoze to a Pokemon. Single use.",
 		"icon": "TR10",
 		"type": "TM",
@@ -224,7 +224,7 @@
 		"minStreak": 0
 	},
 	"tm028": {
-		"name": "TM028(Hex)",
+		"name": "TM028 (Hex)",
 		"desc": "Teaches the move Hex to a Pokemon. Single use.",
 		"icon": "TR33",
 		"type": "TM",
@@ -232,7 +232,7 @@
 		"minStreak": 0
 	},
 	"tm029": {
-		"name": "TM029(Snarl)",
+		"name": "TM029 (Snarl)",
 		"desc": "Teaches the move Snarl to a Pokemon. Single use.",
 		"icon": "TR32",
 		"type": "TM",
@@ -240,7 +240,7 @@
 		"minStreak": 0
 	},
 	"tm030": {
-		"name": "TM030(Metal Claw)",
+		"name": "TM030 (Metal Claw)",
 		"desc": "Teaches the move Metal Claw to a Pokemon. Single use.",
 		"icon": "TR31",
 		"type": "TM",
@@ -248,7 +248,7 @@
 		"minStreak": 0
 	},
 	"tm031": {
-		"name": "TM031(Swift)",
+		"name": "TM031 (Swift)",
 		"desc": "Teaches the move Swift to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -256,7 +256,7 @@
 		"minStreak": 0
 	},
 	"tm032": {
-		"name": "TM032(Magical Leaf)",
+		"name": "TM032 (Magical Leaf)",
 		"desc": "Teaches the move Magical Leaf to a Pokemon. Single use.",
 		"icon": "TR50",
 		"type": "TM",
@@ -264,7 +264,7 @@
 		"minStreak": 0
 	},
 	"tm033": {
-		"name": "TM033(Icy Wind)",
+		"name": "TM033 (Icy Wind)",
 		"desc": "Teaches the move Icy Wind to a Pokemon. Single use.",
 		"icon": "TR05",
 		"type": "TM",
@@ -272,7 +272,7 @@
 		"minStreak": 0
 	},
 	"tm034": {
-		"name": "TM034(Mud Shot)",
+		"name": "TM034 (Mud Shot)",
 		"desc": "Teaches the move Mud Shot to a Pokemon. Single use.",
 		"icon": "TR10",
 		"type": "TM",
@@ -280,7 +280,7 @@
 		"minStreak": 0
 	},
 	"tm035": {
-		"name": "TM035(Rock Tomb)",
+		"name": "TM035 (Rock Tomb)",
 		"desc": "Teaches the move Rock Tomb to a Pokemon. Single use.",
 		"icon": "TR63",
 		"type": "TM",
@@ -288,7 +288,7 @@
 		"minStreak": 0
 	},
 	"tm036": {
-		"name": "TM036(Draining Kiss)",
+		"name": "TM036 (Draining Kiss)",
 		"desc": "Teaches the move Draining Kiss to a Pokemon. Single use.",
 		"icon": "TR90",
 		"type": "TM",
@@ -296,7 +296,7 @@
 		"minStreak": 0
 	},
 	"tm037": {
-		"name": "TM037(Flame Charge)",
+		"name": "TM037 (Flame Charge)",
 		"desc": "Teaches the move Flame Charge to a Pokemon. Single use.",
 		"icon": "TR02",
 		"type": "TM",
@@ -304,7 +304,7 @@
 		"minStreak": 0
 	},
 	"tm038": {
-		"name": "TM038(Low Sweep)",
+		"name": "TM038 (Low Sweep)",
 		"desc": "Teaches the move Low Sweep to a Pokemon. Single use.",
 		"icon": "TR07",
 		"type": "TM",
@@ -312,7 +312,7 @@
 		"minStreak": 0
 	},
 	"tm039": {
-		"name": "TM039(Air Cutter)",
+		"name": "TM039 (Air Cutter)",
 		"desc": "Teaches the move Air Cutter to a Pokemon. Single use.",
 		"icon": "TR66",
 		"type": "TM",
@@ -320,7 +320,7 @@
 		"minStreak": 0
 	},
 	"tm040": {
-		"name": "TM040(Stored Power)",
+		"name": "TM040 (Stored Power)",
 		"desc": "Teaches the move Stored Power to a Pokemon. Single use.",
 		"icon": "TR11",
 		"type": "TM",
@@ -328,7 +328,7 @@
 		"minStreak": 0
 	},
 	"tm041": {
-		"name": "TM041(Night Shade)",
+		"name": "TM041 (Night Shade)",
 		"desc": "Teaches the move Night Shade to a Pokemon. Single use.",
 		"icon": "TR33",
 		"type": "TM",
@@ -336,7 +336,7 @@
 		"minStreak": 0
 	},
 	"tm042": {
-		"name": "TM042(Fling)",
+		"name": "TM042 (Fling)",
 		"desc": "Teaches the move Fling to a Pokemon. Single use.",
 		"icon": "TR32",
 		"type": "TM",
@@ -344,7 +344,7 @@
 		"minStreak": 0
 	},
 	"tm043": {
-		"name": "TM043(Dragon Tail)",
+		"name": "TM043 (Dragon Tail)",
 		"desc": "Teaches the move Dragon Tail to a Pokemon. Single use.",
 		"icon": "TR24",
 		"type": "TM",
@@ -352,7 +352,7 @@
 		"minStreak": 0
 	},
 	"tm044": {
-		"name": "TM044(Venoshock)",
+		"name": "TM044 (Venoshock)",
 		"desc": "Teaches the move Venoshock to a Pokemon. Single use.",
 		"icon": "TR54",
 		"type": "TM",
@@ -360,7 +360,7 @@
 		"minStreak": 0
 	},
 	"tm045": {
-		"name": "TM045(Avalanche)",
+		"name": "TM045 (Avalanche)",
 		"desc": "Teaches the move Avalanche to a Pokemon. Single use.",
 		"icon": "TR05",
 		"type": "TM",
@@ -368,7 +368,7 @@
 		"minStreak": 0
 	},
 	"tm046": {
-		"name": "TM046(Endure)",
+		"name": "TM046 (Endure)",
 		"desc": "Teaches the move Endure to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -376,7 +376,7 @@
 		"minStreak": 0
 	},
 	"tm047": {
-		"name": "TM047(Volt Switch)",
+		"name": "TM047 (Volt Switch)",
 		"desc": "Teaches the move Volt Switch to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -384,7 +384,7 @@
 		"minStreak": 0
 	},
 	"tm048": {
-		"name": "TM048(Sunny Day)",
+		"name": "TM048 (Sunny Day)",
 		"desc": "Teaches the move Sunny Day to a Pokemon. Single use.",
 		"icon": "TR02",
 		"type": "TM",
@@ -392,7 +392,7 @@
 		"minStreak": 0
 	},
 	"tm049": {
-		"name": "TM049(Rain Dance)",
+		"name": "TM049 (Rain Dance)",
 		"desc": "Teaches the move Rain Dance to a Pokemon. Single use.",
 		"icon": "TR04",
 		"type": "TM",
@@ -400,7 +400,7 @@
 		"minStreak": 0
 	},
 	"tm050": {
-		"name": "TM050(Sandstorm)",
+		"name": "TM050 (Sandstorm)",
 		"desc": "Teaches the move Sandstorm to a Pokemon. Single use.",
 		"icon": "TR63",
 		"type": "TM",
@@ -408,7 +408,7 @@
 		"minStreak": 0
 	},
 	"tm051": {
-		"name": "TM051(Snowscape)",
+		"name": "TM051 (Snowscape)",
 		"desc": "Teaches the move Snowscape to a Pokemon. Single use.",
 		"icon": "TR05",
 		"type": "TM",
@@ -416,7 +416,7 @@
 		"minStreak": 0
 	},
 	"tm052": {
-		"name": "TM052(Smart Strike)",
+		"name": "TM052 (Smart Strike)",
 		"desc": "Teaches the move Smart Strike to a Pokemon. Single use.",
 		"icon": "TR31",
 		"type": "TM",
@@ -424,7 +424,7 @@
 		"minStreak": 0
 	},
 	"tm053": {
-		"name": "TM053(Psyshock)",
+		"name": "TM053 (Psyshock)",
 		"desc": "Teaches the move Psyshock to a Pokemon. Single use.",
 		"icon": "TR11",
 		"type": "TM",
@@ -432,7 +432,7 @@
 		"minStreak": 0
 	},
 	"tm054": {
-		"name": "TM054(Dig)",
+		"name": "TM054 (Dig)",
 		"desc": "Teaches the move Dig to a Pokemon. Single use.",
 		"icon": "TR10",
 		"type": "TM",
@@ -440,7 +440,7 @@
 		"minStreak": 0
 	},
 	"tm055": {
-		"name": "TM055(Bullet Seed)",
+		"name": "TM055 (Bullet Seed)",
 		"desc": "Teaches the move Bullet Seed to a Pokemon. Single use.",
 		"icon": "TR50",
 		"type": "TM",
@@ -448,7 +448,7 @@
 		"minStreak": 0
 	},
 	"tm056": {
-		"name": "TM056(False Swipe)",
+		"name": "TM056 (False Swipe)",
 		"desc": "Teaches the move False Swipe to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -456,7 +456,7 @@
 		"minStreak": 0
 	},
 	"tm057": {
-		"name": "TM057(Brick Break)",
+		"name": "TM057 (Brick Break)",
 		"desc": "Teaches the move Brick Break to a Pokemon. Single use.",
 		"icon": "TR07",
 		"type": "TM",
@@ -464,7 +464,7 @@
 		"minStreak": 0
 	},
 	"tm058": {
-		"name": "TM058(Zen Headbutt)",
+		"name": "TM058 (Zen Headbutt)",
 		"desc": "Teaches the move Zen Headbutt to a Pokemon. Single use.",
 		"icon": "TR11",
 		"type": "TM",
@@ -472,7 +472,7 @@
 		"minStreak": 0
 	},
 	"tm059": {
-		"name": "TM059(U-turn)",
+		"name": "TM059 (U-turn)",
 		"desc": "Teaches the move U-turn to a Pokemon. Single use.",
 		"icon": "TR18",
 		"type": "TM",
@@ -480,7 +480,7 @@
 		"minStreak": 0
 	},
 	"tm060": {
-		"name": "TM060(Shadow Claw)",
+		"name": "TM060 (Shadow Claw)",
 		"desc": "Teaches the move Shadow Claw to a Pokemon. Single use.",
 		"icon": "TR33",
 		"type": "TM",
@@ -488,7 +488,7 @@
 		"minStreak": 0
 	},
 	"tm061": {
-		"name": "TM061(Foul Play)",
+		"name": "TM061 (Foul Play)",
 		"desc": "Teaches the move Foul Play to a Pokemon. Single use.",
 		"icon": "TR32",
 		"type": "TM",
@@ -496,7 +496,7 @@
 		"minStreak": 0
 	},
 	"tm062": {
-		"name": "TM062(Psychic Fangs)",
+		"name": "TM062 (Psychic Fangs)",
 		"desc": "Teaches the move Psychic Fangs to a Pokemon. Single use.",
 		"icon": "TR11",
 		"type": "TM",
@@ -504,7 +504,7 @@
 		"minStreak": 0
 	},
 	"tm063": {
-		"name": "TM063(Bulk Up)",
+		"name": "TM063 (Bulk Up)",
 		"desc": "Teaches the move Bulk Up to a Pokemon. Single use.",
 		"icon": "TR07",
 		"type": "TM",
@@ -512,7 +512,7 @@
 		"minStreak": 0
 	},
 	"tm064": {
-		"name": "TM064(Air Slash)",
+		"name": "TM064 (Air Slash)",
 		"desc": "Teaches the move Air Slash to a Pokemon. Single use.",
 		"icon": "TR66",
 		"type": "TM",
@@ -520,7 +520,7 @@
 		"minStreak": 0
 	},
 	"tm065": {
-		"name": "TM065(Body Slam)",
+		"name": "TM065 (Body Slam)",
 		"desc": "Teaches the move Body Slam to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -528,7 +528,7 @@
 		"minStreak": 0
 	},
 	"tm066": {
-		"name": "TM066(Fire Punch)",
+		"name": "TM066 (Fire Punch)",
 		"desc": "Teaches the move Fire Punch to a Pokemon. Single use.",
 		"icon": "TR02",
 		"type": "TM",
@@ -536,7 +536,7 @@
 		"minStreak": 0
 	},
 	"tm067": {
-		"name": "TM067(Thunder Punch)",
+		"name": "TM067 (Thunder Punch)",
 		"desc": "Teaches the move Thunder Punch to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -544,7 +544,7 @@
 		"minStreak": 0
 	},
 	"tm068": {
-		"name": "TM068(Ice Punch)",
+		"name": "TM068 (Ice Punch)",
 		"desc": "Teaches the move Ice Punch to a Pokemon. Single use.",
 		"icon": "TR05",
 		"type": "TM",
@@ -552,7 +552,7 @@
 		"minStreak": 0
 	},
 	"tm069": {
-		"name": "TM069(Sleep Talk)",
+		"name": "TM069 (Sleep Talk)",
 		"desc": "Teaches the move Sleep Talk to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -560,7 +560,7 @@
 		"minStreak": 0
 	},
 	"tm070": {
-		"name": "TM070(Seed Bomb)",
+		"name": "TM070 (Seed Bomb)",
 		"desc": "Teaches the move Seed Bomb to a Pokemon. Single use.",
 		"icon": "TR50",
 		"type": "TM",
@@ -568,7 +568,7 @@
 		"minStreak": 0
 	},
 	"tm071": {
-		"name": "TM071(Electro Ball)",
+		"name": "TM071 (Electro Ball)",
 		"desc": "Teaches the move Electro Ball to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -576,7 +576,7 @@
 		"minStreak": 0
 	},
 	"tm072": {
-		"name": "TM072(Drain Punch)",
+		"name": "TM072 (Drain Punch)",
 		"desc": "Teaches the move Drain Punch to a Pokemon. Single use.",
 		"icon": "TR07",
 		"type": "TM",
@@ -584,7 +584,7 @@
 		"minStreak": 0
 	},
 	"tm073": {
-		"name": "TM073(Reflect)",
+		"name": "TM073 (Reflect)",
 		"desc": "Teaches the move Reflect to a Pokemon. Single use.",
 		"icon": "TR11",
 		"type": "TM",
@@ -592,7 +592,7 @@
 		"minStreak": 0
 	},
 	"tm074": {
-		"name": "TM074(Light Screen)",
+		"name": "TM074 (Light Screen)",
 		"desc": "Teaches the move Light Screen to a Pokemon. Single use.",
 		"icon": "TR11",
 		"type": "TM",
@@ -600,7 +600,7 @@
 		"minStreak": 0
 	},
 	"tm075": {
-		"name": "TM075(Rock Blast)",
+		"name": "TM075 (Rock Blast)",
 		"desc": "Teaches the move Rock Blast to a Pokemon. Single use.",
 		"icon": "TR63",
 		"type": "TM",
@@ -608,7 +608,7 @@
 		"minStreak": 0
 	},
 	"tm076": {
-		"name": "TM076(Waterfall)",
+		"name": "TM076 (Waterfall)",
 		"desc": "Teaches the move Waterfall to a Pokemon. Single use.",
 		"icon": "TR04",
 		"type": "TM",
@@ -616,7 +616,7 @@
 		"minStreak": 0
 	},
 	"tm077": {
-		"name": "TM077(Dragon Claw)",
+		"name": "TM077 (Dragon Claw)",
 		"desc": "Teaches the move Dragon Claw to a Pokemon. Single use.",
 		"icon": "TR24",
 		"type": "TM",
@@ -624,7 +624,7 @@
 		"minStreak": 0
 	},
 	"tm078": {
-		"name": "TM078(Dazzling Gleam)",
+		"name": "TM078 (Dazzling Gleam)",
 		"desc": "Teaches the move Dazzling Gleam to a Pokemon. Single use.",
 		"icon": "TR90",
 		"type": "TM",
@@ -632,7 +632,7 @@
 		"minStreak": 0
 	},
 	"tm079": {
-		"name": "TM079(Metronome)",
+		"name": "TM079 (Metronome)",
 		"desc": "Teaches the move Metronome to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -640,7 +640,7 @@
 		"minStreak": 0
 	},
 	"tm080": {
-		"name": "TM080(Grass Knot)",
+		"name": "TM080 (Grass Knot)",
 		"desc": "Teaches the move Grass Knot to a Pokemon. Single use.",
 		"icon": "TR50",
 		"type": "TM",
@@ -648,7 +648,7 @@
 		"minStreak": 0
 	},
 	"tm081": {
-		"name": "TM081(Thunder Wave)",
+		"name": "TM081 (Thunder Wave)",
 		"desc": "Teaches the move Thunder Wave to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -656,7 +656,7 @@
 		"minStreak": 0
 	},
 	"tm082": {
-		"name": "TM082(Poison Jab)",
+		"name": "TM082 (Poison Jab)",
 		"desc": "Teaches the move Poison Jab to a Pokemon. Single use.",
 		"icon": "TR54",
 		"type": "TM",
@@ -664,7 +664,7 @@
 		"minStreak": 0
 	},
 	"tm083": {
-		"name": "TM083(Stomping Tantrum)",
+		"name": "TM083 (Stomping Tantrum)",
 		"desc": "Teaches the move Stomping Tantrum to a Pokemon. Single use.",
 		"icon": "TR10",
 		"type": "TM",
@@ -672,7 +672,7 @@
 		"minStreak": 0
 	},
 	"tm084": {
-		"name": "TM084(Rest)",
+		"name": "TM084 (Rest)",
 		"desc": "Teaches the move Rest to a Pokemon. Single use.",
 		"icon": "TR11",
 		"type": "TM",
@@ -680,7 +680,7 @@
 		"minStreak": 0
 	},
 	"tm085": {
-		"name": "TM085(Rock Slide)",
+		"name": "TM085 (Rock Slide)",
 		"desc": "Teaches the move Rock Slide to a Pokemon. Single use.",
 		"icon": "TR63",
 		"type": "TM",
@@ -688,7 +688,7 @@
 		"minStreak": 0
 	},
 	"tm086": {
-		"name": "TM086(Taunt)",
+		"name": "TM086 (Taunt)",
 		"desc": "Teaches the move Taunt to a Pokemon. Single use.",
 		"icon": "TR32",
 		"type": "TM",
@@ -696,7 +696,7 @@
 		"minStreak": 0
 	},
 	"tm087": {
-		"name": "TM087(Swords Dance)",
+		"name": "TM087 (Swords Dance)",
 		"desc": "Teaches the move Swords Dance to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -704,7 +704,7 @@
 		"minStreak": 0
 	},
 	"tm088": {
-		"name": "TM088(Body Press)",
+		"name": "TM088 (Body Press)",
 		"desc": "Teaches the move Body Press to a Pokemon. Single use.",
 		"icon": "TR07",
 		"type": "TM",
@@ -712,7 +712,7 @@
 		"minStreak": 0
 	},
 	"tm089": {
-		"name": "TM089(Spikes)",
+		"name": "TM089 (Spikes)",
 		"desc": "Teaches the move Spikes to a Pokemon. Single use.",
 		"icon": "TR10",
 		"type": "TM",
@@ -720,7 +720,7 @@
 		"minStreak": 0
 	},
 	"tm090": {
-		"name": "TM090(Toxic Spikes)",
+		"name": "TM090 (Toxic Spikes)",
 		"desc": "Teaches the move Toxic Spikes to a Pokemon. Single use.",
 		"icon": "TR54",
 		"type": "TM",
@@ -728,7 +728,7 @@
 		"minStreak": 0
 	},
 	"tm091": {
-		"name": "TM091(Imprison)",
+		"name": "TM091 (Imprison)",
 		"desc": "Teaches the move Imprison to a Pokemon. Single use.",
 		"icon": "TR11",
 		"type": "TM",
@@ -736,7 +736,7 @@
 		"minStreak": 0
 	},
 	"tm092": {
-		"name": "TM092(Flash Cannon)",
+		"name": "TM092 (Flash Cannon)",
 		"desc": "Teaches the move Flash Cannon to a Pokemon. Single use.",
 		"icon": "TR31",
 		"type": "TM",
@@ -744,7 +744,7 @@
 		"minStreak": 0
 	},
 	"tm093": {
-		"name": "TM093(Dark Pulse)",
+		"name": "TM093 (Dark Pulse)",
 		"desc": "Teaches the move Dark Pulse to a Pokemon. Single use.",
 		"icon": "TR32",
 		"type": "TM",
@@ -752,7 +752,7 @@
 		"minStreak": 0
 	},
 	"tm094": {
-		"name": "TM094(Leech Life)",
+		"name": "TM094 (Leech Life)",
 		"desc": "Teaches the move Leech Life to a Pokemon. Single use.",
 		"icon": "TR18",
 		"type": "TM",
@@ -760,7 +760,7 @@
 		"minStreak": 0
 	},
 	"tm095": {
-		"name": "TM095(Eerie Impulse)",
+		"name": "TM095 (Eerie Impulse)",
 		"desc": "Teaches the move Eerie Impulse to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -768,7 +768,7 @@
 		"minStreak": 0
 	},
 	"tm096": {
-		"name": "TM096(Fly)",
+		"name": "TM096 (Fly)",
 		"desc": "Teaches the move Fly to a Pokemon. Single use.",
 		"icon": "TR66",
 		"type": "TM",
@@ -776,7 +776,7 @@
 		"minStreak": 0
 	},
 	"tm097": {
-		"name": "TM097(Skill Swap)",
+		"name": "TM097 (Skill Swap)",
 		"desc": "Teaches the move Skill Swap to a Pokemon. Single use.",
 		"icon": "TR11",
 		"type": "TM",
@@ -784,7 +784,7 @@
 		"minStreak": 0
 	},
 	"tm098": {
-		"name": "TM098(Iron Head)",
+		"name": "TM098 (Iron Head)",
 		"desc": "Teaches the move Iron Head to a Pokemon. Single use.",
 		"icon": "TR31",
 		"type": "TM",
@@ -792,7 +792,7 @@
 		"minStreak": 0
 	},
 	"tm099": {
-		"name": "TM099(Dragon Dance)",
+		"name": "TM099 (Dragon Dance)",
 		"desc": "Teaches the move Dragon Dance to a Pokemon. Single use.",
 		"icon": "TR24",
 		"type": "TM",
@@ -800,7 +800,7 @@
 		"minStreak": 0
 	},
 	"tm100": {
-		"name": "TM100(Power Gem)",
+		"name": "TM100 (Power Gem)",
 		"desc": "Teaches the move Power Gem to a Pokemon. Single use.",
 		"icon": "TR63",
 		"type": "TM",
@@ -808,7 +808,7 @@
 		"minStreak": 0
 	},
 	"tm101": {
-		"name": "TM101(Gunk Shot)",
+		"name": "TM101 (Gunk Shot)",
 		"desc": "Teaches the move Gunk Shot to a Pokemon. Single use.",
 		"icon": "TR54",
 		"type": "TM",
@@ -816,7 +816,7 @@
 		"minStreak": 0
 	},
 	"tm102": {
-		"name": "TM102(Substitute)",
+		"name": "TM102 (Substitute)",
 		"desc": "Teaches the move Substitute to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -824,7 +824,7 @@
 		"minStreak": 0
 	},
 	"tm103": {
-		"name": "TM103(Iron Defense)",
+		"name": "TM103 (Iron Defense)",
 		"desc": "Teaches the move Iron Defense to a Pokemon. Single use.",
 		"icon": "TR31",
 		"type": "TM",
@@ -832,7 +832,7 @@
 		"minStreak": 0
 	},
 	"tm104": {
-		"name": "TM104(X-Scissor)",
+		"name": "TM104 (X-Scissor)",
 		"desc": "Teaches the move X-Scissor to a Pokemon. Single use.",
 		"icon": "TR18",
 		"type": "TM",
@@ -840,7 +840,7 @@
 		"minStreak": 0
 	},
 	"tm105": {
-		"name": "TM105(Drill Run)",
+		"name": "TM105 (Drill Run)",
 		"desc": "Teaches the move Drill Run to a Pokemon. Single use.",
 		"icon": "TR10",
 		"type": "TM",
@@ -848,7 +848,7 @@
 		"minStreak": 0
 	},
 	"tm106": {
-		"name": "TM106(Will-O-Wisp)",
+		"name": "TM106 (Will-O-Wisp)",
 		"desc": "Teaches the move Will-O-Wisp to a Pokemon. Single use.",
 		"icon": "TR02",
 		"type": "TM",
@@ -856,7 +856,7 @@
 		"minStreak": 0
 	},
 	"tm107": {
-		"name": "TM107(Crunch)",
+		"name": "TM107 (Crunch)",
 		"desc": "Teaches the move Crunch to a Pokemon. Single use.",
 		"icon": "TR32",
 		"type": "TM",
@@ -864,7 +864,7 @@
 		"minStreak": 0
 	},
 	"tm108": {
-		"name": "TM108(Trick)",
+		"name": "TM108 (Trick)",
 		"desc": "Teaches the move Trick to a Pokemon. Single use.",
 		"icon": "TR11",
 		"type": "TM",
@@ -872,7 +872,7 @@
 		"minStreak": 0
 	},
 	"tm109": {
-		"name": "TM109(Liquidation)",
+		"name": "TM109 (Liquidation)",
 		"desc": "Teaches the move Liquidation to a Pokemon. Single use.",
 		"icon": "TR04",
 		"type": "TM",
@@ -880,7 +880,7 @@
 		"minStreak": 0
 	},
 	"tm110": {
-		"name": "TM110(Giga Drain)",
+		"name": "TM110 (Giga Drain)",
 		"desc": "Teaches the move Giga Drain to a Pokemon. Single use.",
 		"icon": "TR50",
 		"type": "TM",
@@ -888,7 +888,7 @@
 		"minStreak": 0
 	},
 	"tm111": {
-		"name": "TM111(Aura Sphere)",
+		"name": "TM111 (Aura Sphere)",
 		"desc": "Teaches the move Aura Sphere to a Pokemon. Single use.",
 		"icon": "TR07",
 		"type": "TM",
@@ -896,7 +896,7 @@
 		"minStreak": 0
 	},
 	"tm112": {
-		"name": "TM112(Tailwind)",
+		"name": "TM112 (Tailwind)",
 		"desc": "Teaches the move Tailwind to a Pokemon. Single use.",
 		"icon": "TR66",
 		"type": "TM",
@@ -904,7 +904,7 @@
 		"minStreak": 0
 	},
 	"tm113": {
-		"name": "TM113(Shadow Ball)",
+		"name": "TM113 (Shadow Ball)",
 		"desc": "Teaches the move Shadow Ball to a Pokemon. Single use.",
 		"icon": "TR33",
 		"type": "TM",
@@ -912,7 +912,7 @@
 		"minStreak": 0
 	},
 	"tm114": {
-		"name": "TM114(Dragon Pulse)",
+		"name": "TM114 (Dragon Pulse)",
 		"desc": "Teaches the move Dragon Pulse to a Pokemon. Single use.",
 		"icon": "TR24",
 		"type": "TM",
@@ -920,7 +920,7 @@
 		"minStreak": 0
 	},
 	"tm115": {
-		"name": "TM115(Stealth Rock)",
+		"name": "TM115 (Stealth Rock)",
 		"desc": "Teaches the move Stealth Rock to a Pokemon. Single use.",
 		"icon": "TR63",
 		"type": "TM",
@@ -928,7 +928,7 @@
 		"minStreak": 0
 	},
 	"tm116": {
-		"name": "TM116(Hyper Voice)",
+		"name": "TM116 (Hyper Voice)",
 		"desc": "Teaches the move Hyper Voice to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -936,7 +936,7 @@
 		"minStreak": 0
 	},
 	"tm117": {
-		"name": "TM117(Heat Wave)",
+		"name": "TM117 (Heat Wave)",
 		"desc": "Teaches the move Heat Wave to a Pokemon. Single use.",
 		"icon": "TR02",
 		"type": "TM",
@@ -944,7 +944,7 @@
 		"minStreak": 0
 	},
 	"tm118": {
-		"name": "TM118(Energy Ball)",
+		"name": "TM118 (Energy Ball)",
 		"desc": "Teaches the move Energy Ball to a Pokemon. Single use.",
 		"icon": "TR50",
 		"type": "TM",
@@ -952,7 +952,7 @@
 		"minStreak": 0
 	},
 	"tm119": {
-		"name": "TM119(Psychic)",
+		"name": "TM119 (Psychic)",
 		"desc": "Teaches the move Psychic to a Pokemon. Single use.",
 		"icon": "TR11",
 		"type": "TM",
@@ -960,7 +960,7 @@
 		"minStreak": 0
 	},
 	"tm120": {
-		"name": "TM120(Heavy Slam)",
+		"name": "TM120 (Heavy Slam)",
 		"desc": "Teaches the move Heavy Slam to a Pokemon. Single use.",
 		"icon": "TR31",
 		"type": "TM",
@@ -968,7 +968,7 @@
 		"minStreak": 0
 	},
 	"tm121": {
-		"name": "TM121(Encore)",
+		"name": "TM121 (Encore)",
 		"desc": "Teaches the move Encore to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -976,7 +976,7 @@
 		"minStreak": 0
 	},
 	"tm122": {
-		"name": "TM122(Surf)",
+		"name": "TM122 (Surf)",
 		"desc": "Teaches the move Surf to a Pokemon. Single use.",
 		"icon": "TR04",
 		"type": "TM",
@@ -984,7 +984,7 @@
 		"minStreak": 0
 	},
 	"tm123": {
-		"name": "TM123(Ice Spinner)",
+		"name": "TM123 (Ice Spinner)",
 		"desc": "Teaches the move Ice Spinner to a Pokemon. Single use.",
 		"icon": "TR05",
 		"type": "TM",
@@ -992,7 +992,7 @@
 		"minStreak": 0
 	},
 	"tm124": {
-		"name": "TM124(Flamethrower)",
+		"name": "TM124 (Flamethrower)",
 		"desc": "Teaches the move Flamethrower to a Pokemon. Single use.",
 		"icon": "TR02",
 		"type": "TM",
@@ -1000,7 +1000,7 @@
 		"minStreak": 0
 	},
 	"tm125": {
-		"name": "TM125(Thunderbolt)",
+		"name": "TM125 (Thunderbolt)",
 		"desc": "Teaches the move Thunderbolt to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -1008,7 +1008,7 @@
 		"minStreak": 0
 	},
 	"tm126": {
-		"name": "TM126(Play Rough)",
+		"name": "TM126 (Play Rough)",
 		"desc": "Teaches the move Play Rough to a Pokemon. Single use.",
 		"icon": "TR90",
 		"type": "TM",
@@ -1016,7 +1016,7 @@
 		"minStreak": 0
 	},
 	"tm127": {
-		"name": "TM127(Amnesia)",
+		"name": "TM127 (Amnesia)",
 		"desc": "Teaches the move Amnesia to a Pokemon. Single use.",
 		"icon": "TR11",
 		"type": "TM",
@@ -1024,7 +1024,7 @@
 		"minStreak": 0
 	},
 	"tm128": {
-		"name": "TM128(Calm Mind)",
+		"name": "TM128 (Calm Mind)",
 		"desc": "Teaches the move Calm Mind to a Pokemon. Single use.",
 		"icon": "TR11",
 		"type": "TM",
@@ -1032,7 +1032,7 @@
 		"minStreak": 0
 	},
 	"tm129": {
-		"name": "TM129(Helping Hand)",
+		"name": "TM129 (Helping Hand)",
 		"desc": "Teaches the move Helping Hand to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -1040,7 +1040,7 @@
 		"minStreak": 0
 	},
 	"tm130": {
-		"name": "TM130(Pollen Puff)",
+		"name": "TM130 (Pollen Puff)",
 		"desc": "Teaches the move Pollen Puff to a Pokemon. Single use.",
 		"icon": "TR18",
 		"type": "TM",
@@ -1048,7 +1048,7 @@
 		"minStreak": 0
 	},
 	"tm131": {
-		"name": "TM131(Baton Pass)",
+		"name": "TM131 (Baton Pass)",
 		"desc": "Teaches the move Baton Pass to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -1056,7 +1056,7 @@
 		"minStreak": 0
 	},
 	"tm132": {
-		"name": "TM132(Earth Power)",
+		"name": "TM132 (Earth Power)",
 		"desc": "Teaches the move Earth Power to a Pokemon. Single use.",
 		"icon": "TR10",
 		"type": "TM",
@@ -1064,7 +1064,7 @@
 		"minStreak": 0
 	},
 	"tm133": {
-		"name": "TM133(Reversal)",
+		"name": "TM133 (Reversal)",
 		"desc": "Teaches the move Reversal to a Pokemon. Single use.",
 		"icon": "TR07",
 		"type": "TM",
@@ -1072,7 +1072,7 @@
 		"minStreak": 0
 	},
 	"tm134": {
-		"name": "TM134(Ice Beam)",
+		"name": "TM134 (Ice Beam)",
 		"desc": "Teaches the move Ice Beam to a Pokemon. Single use.",
 		"icon": "TR05",
 		"type": "TM",
@@ -1080,7 +1080,7 @@
 		"minStreak": 0
 	},
 	"tm135": {
-		"name": "TM135(Electric Terrain)",
+		"name": "TM135 (Electric Terrain)",
 		"desc": "Teaches the move Electric Terrain to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -1088,7 +1088,7 @@
 		"minStreak": 0
 	},
 	"tm136": {
-		"name": "TM136(Grassy Terrain)",
+		"name": "TM136 (Grassy Terrain)",
 		"desc": "Teaches the move Grassy Terrain to a Pokemon. Single use.",
 		"icon": "TR50",
 		"type": "TM",
@@ -1096,7 +1096,7 @@
 		"minStreak": 0
 	},
 	"tm137": {
-		"name": "TM137(Psychic Terrain)",
+		"name": "TM137 (Psychic Terrain)",
 		"desc": "Teaches the move Psychic Terrain to a Pokemon. Single use.",
 		"icon": "TR11",
 		"type": "TM",
@@ -1104,7 +1104,7 @@
 		"minStreak": 0
 	},
 	"tm138": {
-		"name": "TM138(Misty Terrain)",
+		"name": "TM138 (Misty Terrain)",
 		"desc": "Teaches the move Misty Terrain to a Pokemon. Single use.",
 		"icon": "TR90",
 		"type": "TM",
@@ -1112,7 +1112,7 @@
 		"minStreak": 0
 	},
 	"tm139": {
-		"name": "TM139(Nasty Plot)",
+		"name": "TM139 (Nasty Plot)",
 		"desc": "Teaches the move Nasty Plot to a Pokemon. Single use.",
 		"icon": "TR32",
 		"type": "TM",
@@ -1120,7 +1120,7 @@
 		"minStreak": 0
 	},
 	"tm140": {
-		"name": "TM140(Fire Blast)",
+		"name": "TM140 (Fire Blast)",
 		"desc": "Teaches the move Fire Blast to a Pokemon. Single use.",
 		"icon": "TR02",
 		"type": "TM",
@@ -1128,7 +1128,7 @@
 		"minStreak": 0
 	},
 	"tm141": {
-		"name": "TM141(Hydro Pump)",
+		"name": "TM141 (Hydro Pump)",
 		"desc": "Teaches the move Hydro Pump to a Pokemon. Single use.",
 		"icon": "TR04",
 		"type": "TM",
@@ -1136,7 +1136,7 @@
 		"minStreak": 0
 	},
 	"tm142": {
-		"name": "TM142(Blizzard)",
+		"name": "TM142 (Blizzard)",
 		"desc": "Teaches the move Blizzard to a Pokemon. Single use.",
 		"icon": "TR05",
 		"type": "TM",
@@ -1144,7 +1144,7 @@
 		"minStreak": 0
 	},
 	"tm143": {
-		"name": "TM143(Fire Pledge)",
+		"name": "TM143 (Fire Pledge)",
 		"desc": "Teaches the move Fire Pledge to a Pokemon. Single use.",
 		"icon": "TR02",
 		"type": "TM",
@@ -1152,7 +1152,7 @@
 		"minStreak": 0
 	},
 	"tm144": {
-		"name": "TM144(Water Pledge)",
+		"name": "TM144 (Water Pledge)",
 		"desc": "Teaches the move Water Pledge to a Pokemon. Single use.",
 		"icon": "TR04",
 		"type": "TM",
@@ -1160,7 +1160,7 @@
 		"minStreak": 0
 	},
 	"tm145": {
-		"name": "TM145(Grass Pledge)",
+		"name": "TM145 (Grass Pledge)",
 		"desc": "Teaches the move Grass Pledge to a Pokemon. Single use.",
 		"icon": "TR50",
 		"type": "TM",
@@ -1168,7 +1168,7 @@
 		"minStreak": 0
 	},
 	"tm146": {
-		"name": "TM146(Wild Charge)",
+		"name": "TM146 (Wild Charge)",
 		"desc": "Teaches the move Wild Charge to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -1176,7 +1176,7 @@
 		"minStreak": 0
 	},
 	"tm147": {
-		"name": "TM147(Sludge Bomb)",
+		"name": "TM147 (Sludge Bomb)",
 		"desc": "Teaches the move Sludge Bomb to a Pokemon. Single use.",
 		"icon": "TR54",
 		"type": "TM",
@@ -1184,7 +1184,7 @@
 		"minStreak": 0
 	},
 	"tm148": {
-		"name": "TM148(Earthquake)",
+		"name": "TM148 (Earthquake)",
 		"desc": "Teaches the move Earthquake to a Pokemon. Single use.",
 		"icon": "TR10",
 		"type": "TM",
@@ -1192,7 +1192,7 @@
 		"minStreak": 0
 	},
 	"tm149": {
-		"name": "TM149(Stone Edge)",
+		"name": "TM149 (Stone Edge)",
 		"desc": "Teaches the move Stone Edge to a Pokemon. Single use.",
 		"icon": "TR63",
 		"type": "TM",
@@ -1200,7 +1200,7 @@
 		"minStreak": 0
 	},
 	"tm150": {
-		"name": "TM150(Phantom Force)",
+		"name": "TM150 (Phantom Force)",
 		"desc": "Teaches the move Phantom Force to a Pokemon. Single use.",
 		"icon": "TR33",
 		"type": "TM",
@@ -1208,7 +1208,7 @@
 		"minStreak": 0
 	},
 	"tm151": {
-		"name": "TM151(Giga Impact)",
+		"name": "TM151 (Giga Impact)",
 		"desc": "Teaches the move Giga Impact to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -1216,7 +1216,7 @@
 		"minStreak": 0
 	},
 	"tm152": {
-		"name": "TM152(Blast Burn)",
+		"name": "TM152 (Blast Burn)",
 		"desc": "Teaches the move Blast Burn to a Pokemon. Single use.",
 		"icon": "TR02",
 		"type": "TM",
@@ -1224,7 +1224,7 @@
 		"minStreak": 0
 	},
 	"tm153": {
-		"name": "TM153(Hydro Cannon)",
+		"name": "TM153 (Hydro Cannon)",
 		"desc": "Teaches the move Hydro Cannon to a Pokemon. Single use.",
 		"icon": "TR04",
 		"type": "TM",
@@ -1232,7 +1232,7 @@
 		"minStreak": 0
 	},
 	"tm154": {
-		"name": "TM154(Frenzy Plant)",
+		"name": "TM154 (Frenzy Plant)",
 		"desc": "Teaches the move Frenzy Plant to a Pokemon. Single use.",
 		"icon": "TR50",
 		"type": "TM",
@@ -1240,7 +1240,7 @@
 		"minStreak": 0
 	},
 	"tm155": {
-		"name": "TM155(Outrage)",
+		"name": "TM155 (Outrage)",
 		"desc": "Teaches the move Outrage to a Pokemon. Single use.",
 		"icon": "TR24",
 		"type": "TM",
@@ -1248,7 +1248,7 @@
 		"minStreak": 0
 	},
 	"tm156": {
-		"name": "TM156(Overheat)",
+		"name": "TM156 (Overheat)",
 		"desc": "Teaches the move Overheat to a Pokemon. Single use.",
 		"icon": "TR02",
 		"type": "TM",
@@ -1256,7 +1256,7 @@
 		"minStreak": 0
 	},
 	"tm157": {
-		"name": "TM157(Focus Blast)",
+		"name": "TM157 (Focus Blast)",
 		"desc": "Teaches the move Focus Blast to a Pokemon. Single use.",
 		"icon": "TR07",
 		"type": "TM",
@@ -1264,7 +1264,7 @@
 		"minStreak": 0
 	},
 	"tm158": {
-		"name": "TM158(Leaf Storm)",
+		"name": "TM158 (Leaf Storm)",
 		"desc": "Teaches the move Leaf Storm to a Pokemon. Single use.",
 		"icon": "TR50",
 		"type": "TM",
@@ -1272,7 +1272,7 @@
 		"minStreak": 0
 	},
 	"tm159": {
-		"name": "TM159(Hurricane)",
+		"name": "TM159 (Hurricane)",
 		"desc": "Teaches the move Hurricane to a Pokemon. Single use.",
 		"icon": "TR66",
 		"type": "TM",
@@ -1280,7 +1280,7 @@
 		"minStreak": 0
 	},
 	"tm160": {
-		"name": "TM160(Trick Room)",
+		"name": "TM160 (Trick Room)",
 		"desc": "Teaches the move Trick Room to a Pokemon. Single use.",
 		"icon": "TR11",
 		"type": "TM",
@@ -1288,7 +1288,7 @@
 		"minStreak": 0
 	},
 	"tm161": {
-		"name": "TM161(Bug Buzz)",
+		"name": "TM161 (Bug Buzz)",
 		"desc": "Teaches the move Bug Buzz to a Pokemon. Single use.",
 		"icon": "TR18",
 		"type": "TM",
@@ -1296,7 +1296,7 @@
 		"minStreak": 0
 	},
 	"tm162": {
-		"name": "TM162(Hyper Beam)",
+		"name": "TM162 (Hyper Beam)",
 		"desc": "Teaches the move Hyper Beam to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -1304,7 +1304,7 @@
 		"minStreak": 0
 	},
 	"tm163": {
-		"name": "TM163(Brave Bird)",
+		"name": "TM163 (Brave Bird)",
 		"desc": "Teaches the move Brave Bird to a Pokemon. Single use.",
 		"icon": "TR66",
 		"type": "TM",
@@ -1312,7 +1312,7 @@
 		"minStreak": 0
 	},
 	"tm164": {
-		"name": "TM164(Flare Blitz)",
+		"name": "TM164 (Flare Blitz)",
 		"desc": "Teaches the move Flare Blitz to a Pokemon. Single use.",
 		"icon": "TR02",
 		"type": "TM",
@@ -1320,7 +1320,7 @@
 		"minStreak": 0
 	},
 	"tm165": {
-		"name": "TM165(Thunder)",
+		"name": "TM165 (Thunder)",
 		"desc": "Teaches the move Thunder to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -1328,7 +1328,7 @@
 		"minStreak": 0
 	},
 	"tm166": {
-		"name": "TM166(Close Combat)",
+		"name": "TM166 (Close Combat)",
 		"desc": "Teaches the move Close Combat to a Pokemon. Single use.",
 		"icon": "TR07",
 		"type": "TM",
@@ -1336,7 +1336,7 @@
 		"minStreak": 0
 	},
 	"tm167": {
-		"name": "TM167(Solar Beam)",
+		"name": "TM167 (Solar Beam)",
 		"desc": "Teaches the move Solar Beam to a Pokemon. Single use.",
 		"icon": "TR50",
 		"type": "TM",
@@ -1344,7 +1344,7 @@
 		"minStreak": 0
 	},
 	"tm168": {
-		"name": "TM168(Draco Meteor)",
+		"name": "TM168 (Draco Meteor)",
 		"desc": "Teaches the move Draco Meteor to a Pokemon. Single use.",
 		"icon": "TR24",
 		"type": "TM",
@@ -1352,7 +1352,7 @@
 		"minStreak": 0
 	},
 	"tm169": {
-		"name": "TM169(Steel Beam)",
+		"name": "TM169 (Steel Beam)",
 		"desc": "Teaches the move Steel Beam to a Pokemon. Single use.",
 		"icon": "TR31",
 		"type": "TM",
@@ -1360,7 +1360,7 @@
 		"minStreak": 0
 	},
 	"tm170": {
-		"name": "TM170(Tera Blast)",
+		"name": "TM170 (Tera Blast)",
 		"desc": "Teaches the move Tera Blast to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -1368,7 +1368,7 @@
 		"minStreak": 0
 	},
 	"tm171": {
-		"name": "TM171(Roar)",
+		"name": "TM171 (Roar)",
 		"desc": "Teaches the move Roar to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -1376,7 +1376,7 @@
 		"minStreak": 0
 	},
 	"tm172": {
-		"name": "TM172(Charge)",
+		"name": "TM172 (Charge)",
 		"desc": "Teaches the move Charge to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -1384,7 +1384,7 @@
 		"minStreak": 0
 	},
 	"tm173": {
-		"name": "TM173(Haze)",
+		"name": "TM173 (Haze)",
 		"desc": "Teaches the move Haze to a Pokemon. Single use.",
 		"icon": "TR05",
 		"type": "TM",
@@ -1392,7 +1392,7 @@
 		"minStreak": 0
 	},
 	"tm174": {
-		"name": "TM174(Toxic)",
+		"name": "TM174 (Toxic)",
 		"desc": "Teaches the move Toxic to a Pokemon. Single use.",
 		"icon": "TR54",
 		"type": "TM",
@@ -1400,7 +1400,7 @@
 		"minStreak": 0
 	},
 	"tm175": {
-		"name": "TM175(Sand Tomb)",
+		"name": "TM175 (Sand Tomb)",
 		"desc": "Teaches the move Sand Tomb to a Pokemon. Single use.",
 		"icon": "TR10",
 		"type": "TM",
@@ -1408,7 +1408,7 @@
 		"minStreak": 0
 	},
 	"tm176": {
-		"name": "TM176(Spite)",
+		"name": "TM176 (Spite)",
 		"desc": "Teaches the move Spite to a Pokemon. Single use.",
 		"icon": "TR33",
 		"type": "TM",
@@ -1416,7 +1416,7 @@
 		"minStreak": 0
 	},
 	"tm177": {
-		"name": "TM177(Gravity)",
+		"name": "TM177 (Gravity)",
 		"desc": "Teaches the move Gravity to a Pokemon. Single use.",
 		"icon": "TR11",
 		"type": "TM",
@@ -1424,7 +1424,7 @@
 		"minStreak": 0
 	},
 	"tm178": {
-		"name": "TM178(Smack Down)",
+		"name": "TM178 (Smack Down)",
 		"desc": "Teaches the move Smack Down to a Pokemon. Single use.",
 		"icon": "TR63",
 		"type": "TM",
@@ -1432,7 +1432,7 @@
 		"minStreak": 0
 	},
 	"tm179": {
-		"name": "TM179(Gyro Ball)",
+		"name": "TM179 (Gyro Ball)",
 		"desc": "Teaches the move Gyro Ball to a Pokemon. Single use.",
 		"icon": "TR31",
 		"type": "TM",
@@ -1440,7 +1440,7 @@
 		"minStreak": 0
 	},
 	"tm180": {
-		"name": "TM180(Knock Off)",
+		"name": "TM180 (Knock Off)",
 		"desc": "Teaches the move Knock Off to a Pokemon. Single use.",
 		"icon": "TR32",
 		"type": "TM",
@@ -1448,7 +1448,7 @@
 		"minStreak": 0
 	},
 	"tm181": {
-		"name": "TM181(Bug Bite)",
+		"name": "TM181 (Bug Bite)",
 		"desc": "Teaches the move Bug Bite to a Pokemon. Single use.",
 		"icon": "TR18",
 		"type": "TM",
@@ -1456,7 +1456,7 @@
 		"minStreak": 0
 	},
 	"tm182": {
-		"name": "TM182(Super Fang)",
+		"name": "TM182 (Super Fang)",
 		"desc": "Teaches the move Super Fang to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -1464,7 +1464,7 @@
 		"minStreak": 0
 	},
 	"tm183": {
-		"name": "TM183(Vacuum Wave)",
+		"name": "TM183 (Vacuum Wave)",
 		"desc": "Teaches the move Vacuum Wave to a Pokemon. Single use.",
 		"icon": "TR07",
 		"type": "TM",
@@ -1472,7 +1472,7 @@
 		"minStreak": 0
 	},
 	"tm184": {
-		"name": "TM184(Lunge)",
+		"name": "TM184 (Lunge)",
 		"desc": "Teaches the move Lunge to a Pokemon. Single use.",
 		"icon": "TR18",
 		"type": "TM",
@@ -1480,7 +1480,7 @@
 		"minStreak": 0
 	},
 	"tm185": {
-		"name": "TM185(High Horsepower)",
+		"name": "TM185 (High Horsepower)",
 		"desc": "Teaches the move High Horsepower to a Pokemon. Single use.",
 		"icon": "TR10",
 		"type": "TM",
@@ -1488,7 +1488,7 @@
 		"minStreak": 0
 	},
 	"tm186": {
-		"name": "TM186(Icicle Spear)",
+		"name": "TM186 (Icicle Spear)",
 		"desc": "Teaches the move Icicle Spear to a Pokemon. Single use.",
 		"icon": "TR05",
 		"type": "TM",
@@ -1496,7 +1496,7 @@
 		"minStreak": 0
 	},
 	"tm187": {
-		"name": "TM187(Scald)",
+		"name": "TM187 (Scald)",
 		"desc": "Teaches the move Scald to a Pokemon. Single use.",
 		"icon": "TR04",
 		"type": "TM",
@@ -1504,7 +1504,7 @@
 		"minStreak": 0
 	},
 	"tm188": {
-		"name": "TM188(Heat Crash)",
+		"name": "TM188 (Heat Crash)",
 		"desc": "Teaches the move Heat Crash to a Pokemon. Single use.",
 		"icon": "TR02",
 		"type": "TM",
@@ -1512,7 +1512,7 @@
 		"minStreak": 0
 	},
 	"tm189": {
-		"name": "TM189(Solar Blade)",
+		"name": "TM189 (Solar Blade)",
 		"desc": "Teaches the move Solar Blade to a Pokemon. Single use.",
 		"icon": "TR50",
 		"type": "TM",
@@ -1520,7 +1520,7 @@
 		"minStreak": 0
 	},
 	"tm190": {
-		"name": "TM190(Uproar)",
+		"name": "TM190 (Uproar)",
 		"desc": "Teaches the move Uproar to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -1528,7 +1528,7 @@
 		"minStreak": 0
 	},
 	"tm191": {
-		"name": "TM191(Focus Punch)",
+		"name": "TM191 (Focus Punch)",
 		"desc": "Teaches the move Focus Punch to a Pokemon. Single use.",
 		"icon": "TR07",
 		"type": "TM",
@@ -1536,7 +1536,7 @@
 		"minStreak": 0
 	},
 	"tm192": {
-		"name": "TM192(Weather Ball)",
+		"name": "TM192 (Weather Ball)",
 		"desc": "Teaches the move Weather Ball to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -1544,7 +1544,7 @@
 		"minStreak": 0
 	},
 	"tm193": {
-		"name": "TM193(Grassy Glide)",
+		"name": "TM193 (Grassy Glide)",
 		"desc": "Teaches the move Grassy Glide to a Pokemon. Single use.",
 		"icon": "TR50",
 		"type": "TM",
@@ -1552,7 +1552,7 @@
 		"minStreak": 0
 	},
 	"tm194": {
-		"name": "TM194(Burning Jealousy)",
+		"name": "TM194 (Burning Jealousy)",
 		"desc": "Teaches the move Burning Jealousy to a Pokemon. Single use.",
 		"icon": "TR02",
 		"type": "TM",
@@ -1560,7 +1560,7 @@
 		"minStreak": 0
 	},
 	"tm195": {
-		"name": "TM195(Flip Turn)",
+		"name": "TM195 (Flip Turn)",
 		"desc": "Teaches the move Flip Turn to a Pokemon. Single use.",
 		"icon": "TR04",
 		"type": "TM",
@@ -1568,7 +1568,7 @@
 		"minStreak": 0
 	},
 	"tm196": {
-		"name": "TM196(Dual Wingbeat)",
+		"name": "TM196 (Dual Wingbeat)",
 		"desc": "Teaches the move Dual Wingbeat to a Pokemon. Single use.",
 		"icon": "TR66",
 		"type": "TM",
@@ -1576,7 +1576,7 @@
 		"minStreak": 0
 	},
 	"tm197": {
-		"name": "TM197(Poltergeist)",
+		"name": "TM197 (Poltergeist)",
 		"desc": "Teaches the move Poltergeist to a Pokemon. Single use.",
 		"icon": "TR33",
 		"type": "TM",
@@ -1584,7 +1584,7 @@
 		"minStreak": 0
 	},
 	"tm198": {
-		"name": "TM198(Lash Out)",
+		"name": "TM198 (Lash Out)",
 		"desc": "Teaches the move Lash Out to a Pokemon. Single use.",
 		"icon": "TR32",
 		"type": "TM",
@@ -1592,7 +1592,7 @@
 		"minStreak": 0
 	},
 	"tm199": {
-		"name": "TM199(Scale Shot)",
+		"name": "TM199 (Scale Shot)",
 		"desc": "Teaches the move Scale Shot to a Pokemon. Single use.",
 		"icon": "TR24",
 		"type": "TM",
@@ -1600,7 +1600,7 @@
 		"minStreak": 0
 	},
 	"tm200": {
-		"name": "TM200(Misty Explosion)",
+		"name": "TM200 (Misty Explosion)",
 		"desc": "Teaches the move Misty Explosion to a Pokemon. Single use.",
 		"icon": "TR90",
 		"type": "TM",
@@ -1608,7 +1608,7 @@
 		"minStreak": 0
 	},
 	"tm201": {
-		"name": "TM201(Pain Split)",
+		"name": "TM201 (Pain Split)",
 		"desc": "Teaches the move Pain Split to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -1616,7 +1616,7 @@
 		"minStreak": 0
 	},
 	"tm202": {
-		"name": "TM202(Psych Up)",
+		"name": "TM202 (Psych Up)",
 		"desc": "Teaches the move Psych Up to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -1624,7 +1624,7 @@
 		"minStreak": 0
 	},
 	"tm203": {
-		"name": "TM203(Double-Edge)",
+		"name": "TM203 (Double-Edge)",
 		"desc": "Teaches the move Double-Edge to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -1632,7 +1632,7 @@
 		"minStreak": 0
 	},
 	"tm204": {
-		"name": "TM204(Endeavor)",
+		"name": "TM204 (Endeavor)",
 		"desc": "Teaches the move Endeavor to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -1640,7 +1640,7 @@
 		"minStreak": 0
 	},
 	"tm205": {
-		"name": "TM205(Petal Blizzard)",
+		"name": "TM205 (Petal Blizzard)",
 		"desc": "Teaches the move Petal Blizzard to a Pokemon. Single use.",
 		"icon": "TR50",
 		"type": "TM",
@@ -1648,7 +1648,7 @@
 		"minStreak": 0
 	},
 	"tm206": {
-		"name": "TM206(Temper Flare)",
+		"name": "TM206 (Temper Flare)",
 		"desc": "Teaches the move Temper Flare to a Pokemon. Single use.",
 		"icon": "TR02",
 		"type": "TM",
@@ -1656,7 +1656,7 @@
 		"minStreak": 0
 	},
 	"tm207": {
-		"name": "TM207(Whirlpool)",
+		"name": "TM207 (Whirlpool)",
 		"desc": "Teaches the move Whirlpool to a Pokemon. Single use.",
 		"icon": "TR04",
 		"type": "TM",
@@ -1664,7 +1664,7 @@
 		"minStreak": 0
 	},
 	"tm208": {
-		"name": "TM208(Muddy Water)",
+		"name": "TM208 (Muddy Water)",
 		"desc": "Teaches the move Muddy Water to a Pokemon. Single use.",
 		"icon": "TR04",
 		"type": "TM",
@@ -1672,7 +1672,7 @@
 		"minStreak": 0
 	},
 	"tm209": {
-		"name": "TM209(Supercell Slam)",
+		"name": "TM209 (Supercell Slam)",
 		"desc": "Teaches the move Supercell Slam to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -1680,7 +1680,7 @@
 		"minStreak": 0
 	},
 	"tm210": {
-		"name": "TM210(Electroweb)",
+		"name": "TM210 (Electroweb)",
 		"desc": "Teaches the move Electroweb to a Pokemon. Single use.",
 		"icon": "TR00",
 		"type": "TM",
@@ -1688,7 +1688,7 @@
 		"minStreak": 0
 	},
 	"tm211": {
-		"name": "TM211(Triple Axel)",
+		"name": "TM211 (Triple Axel)",
 		"desc": "Teaches the move Triple Axel to a Pokemon. Single use.",
 		"icon": "TR05",
 		"type": "TM",
@@ -1696,7 +1696,7 @@
 		"minStreak": 0
 	},
 	"tm212": {
-		"name": "TM212(Coaching)",
+		"name": "TM212 (Coaching)",
 		"desc": "Teaches the move Coaching to a Pokemon. Single use.",
 		"icon": "TR07",
 		"type": "TM",
@@ -1704,7 +1704,7 @@
 		"minStreak": 0
 	},
 	"tm213": {
-		"name": "TM213(Sludge Wave)",
+		"name": "TM213 (Sludge Wave)",
 		"desc": "Teaches the move Sludge Wave to a Pokemon. Single use.",
 		"icon": "TR54",
 		"type": "TM",
@@ -1712,7 +1712,7 @@
 		"minStreak": 0
 	},
 	"tm214": {
-		"name": "TM214(Scorching Sands)",
+		"name": "TM214 (Scorching Sands)",
 		"desc": "Teaches the move Scorching Sands to a Pokemon. Single use.",
 		"icon": "TR10",
 		"type": "TM",
@@ -1720,7 +1720,7 @@
 		"minStreak": 0
 	},
 	"tm215": {
-		"name": "TM215(Feather Dance)",
+		"name": "TM215 (Feather Dance)",
 		"desc": "Teaches the move Feather Dance to a Pokemon. Single use.",
 		"icon": "TR66",
 		"type": "TM",
@@ -1728,7 +1728,7 @@
 		"minStreak": 0
 	},
 	"tm216": {
-		"name": "TM216(Future Sight)",
+		"name": "TM216 (Future Sight)",
 		"desc": "Teaches the move Future Sight to a Pokemon. Single use.",
 		"icon": "TR11",
 		"type": "TM",
@@ -1736,7 +1736,7 @@
 		"minStreak": 0
 	},
 	"tm217": {
-		"name": "TM217(Expanding Force)",
+		"name": "TM217 (Expanding Force)",
 		"desc": "Teaches the move Expanding Force to a Pokemon. Single use.",
 		"icon": "TR11",
 		"type": "TM",
@@ -1744,7 +1744,7 @@
 		"minStreak": 0
 	},
 	"tm218": {
-		"name": "TM218(Skitter Smack)",
+		"name": "TM218 (Skitter Smack)",
 		"desc": "Teaches the move Skitter Smack to a Pokemon. Single use.",
 		"icon": "TR18",
 		"type": "TM",
@@ -1752,7 +1752,7 @@
 		"minStreak": 0
 	},
 	"tm219": {
-		"name": "TM219(Meteor Beam)",
+		"name": "TM219 (Meteor Beam)",
 		"desc": "Teaches the move Meteor Beam to a Pokemon. Single use.",
 		"icon": "TR63",
 		"type": "TM",
@@ -1760,7 +1760,7 @@
 		"minStreak": 0
 	},
 	"tm220": {
-		"name": "TM220(Throat Chop)",
+		"name": "TM220 (Throat Chop)",
 		"desc": "Teaches the move Throat Chop to a Pokemon. Single use.",
 		"icon": "TR32",
 		"type": "TM",
@@ -1768,7 +1768,7 @@
 		"minStreak": 0
 	},
 	"tm221": {
-		"name": "TM221(Breaking Swipe)",
+		"name": "TM221 (Breaking Swipe)",
 		"desc": "Teaches the move Breaking Swipe to a Pokemon. Single use.",
 		"icon": "TR24",
 		"type": "TM",
@@ -1776,7 +1776,7 @@
 		"minStreak": 0
 	},
 	"tm222": {
-		"name": "TM222(Metal Sound)",
+		"name": "TM222 (Metal Sound)",
 		"desc": "Teaches the move Metal Sound to a Pokemon. Single use.",
 		"icon": "TR31",
 		"type": "TM",
@@ -1784,7 +1784,7 @@
 		"minStreak": 0
 	},
 	"tm223": {
-		"name": "TM223(Curse)",
+		"name": "TM223 (Curse)",
 		"desc": "Teaches the move Curse to a Pokemon. Single use.",
 		"icon": "TR33",
 		"type": "TM",
@@ -1792,7 +1792,7 @@
 		"minStreak": 0
 	},
 	"tm224": {
-		"name": "TM224(Hard Press)",
+		"name": "TM224 (Hard Press)",
 		"desc": "Teaches the move Hard Press to a Pokemon. Single use.",
 		"icon": "TR31",
 		"type": "TM",
@@ -1800,7 +1800,7 @@
 		"minStreak": 0
 	},
 	"tm225": {
-		"name": "TM225(Dragon Cheer)",
+		"name": "TM225 (Dragon Cheer)",
 		"desc": "Teaches the move Dragon Cheer to a Pokemon. Single use.",
 		"icon": "TR24",
 		"type": "TM",
@@ -1808,7 +1808,7 @@
 		"minStreak": 0
 	},
 	"tm226": {
-		"name": "TM226(Alluring Voice)",
+		"name": "TM226 (Alluring Voice)",
 		"desc": "Teaches the move Alluring Voice to a Pokemon. Single use.",
 		"icon": "TR90",
 		"type": "TM",
@@ -1816,7 +1816,7 @@
 		"minStreak": 0
 	},
 	"tm227": {
-		"name": "TM227(Psychic Noise)",
+		"name": "TM227 (Psychic Noise)",
 		"desc": "Teaches the move Psychic Noise to a Pokemon. Single use.",
 		"icon": "TR11",
 		"type": "TM",
@@ -1824,7 +1824,7 @@
 		"minStreak": 0
 	},
 	"tm228": {
-		"name": "TM228(Upper Hand)",
+		"name": "TM228 (Upper Hand)",
 		"desc": "Teaches the move Upper Hand to a Pokemon. Single use.",
 		"icon": "TR07",
 		"type": "TM",
