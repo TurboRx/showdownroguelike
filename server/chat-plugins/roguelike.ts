@@ -82,9 +82,7 @@ interface TMItem extends RotationalItem {
 	move: string;
 }
 // TODO: make a list of tm sprites to pull from for doing this
-const TM_LIST: { [k: string]: TMItem } = {
-	// tm001: { name: 'TM001', move: 'Take Down', type: 'TM', icon: 'TM00', cost: 5 }
-};
+const TM_LIST: { [k: string]: TMItem } = JSON.parse(FS('data/roguelike/tmdb.json').readSync());
 
 
 const ROTATIONAL_ITEM_POOL: { [k: string]: RotationalItem | TMItem } = JSON.parse(FS('data/roguelike/itemdb.json').readSync());
@@ -903,22 +901,6 @@ function checkSequence(before: string, after: string) {
 }
 
 export const commands: Chat.ChatCommands = {
-	// scream(target, room) {
-	// 	let owo = Object.create(null);
-	// 	let allPossibleItems = Dex.items.all().filter(s => (s.isGem || s.itemUser || s.zMove) || !s.isNonstandard);
-	//
-	// 	for (const item of allPossibleItems) {
-	// 		owo[toID(item.name)] = {
-	// 			name: item.name,
-	// 			desc: item.desc,
-	// 			icon: item.name,
-	// 			type: 'item',
-	// 			cost: 5,
-	// 			minStreak: 0,
-	// 		} as RotationalItem;
-	// 	}
-	// 	FS('data/roguelike/itemdb.json').safeWriteSync(JSON.stringify(owo, null, '\t'));
-	// },
 	extractsave(target, room, user) {
 		this.checkCan('console');
 		if (!target) return this.parse('/help extractsave');
