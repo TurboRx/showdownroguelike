@@ -69,15 +69,27 @@ interface ShopItem {
 	minStreak: number;
 }
 
-interface UserTeamData {
-	linkedTeamIndex: number;
-	curHP: number;
-	status: string | false;
-	ppLeft: number[];
-	exp: number;
-	expAtNextLevel: number;
-	maxHP: number;
+interface RotationalItem {
+	name: string;
+	cost: number;
+	icon: string;
+	type: ItemType;
+	desc: string;
+	minStreak: number;
 }
+
+interface TMItem extends RotationalItem {
+	move: string;
+}
+// TODO: make a list of tm sprites to pull from for doing this
+const TM_LIST: { [k: string]: TMItem } = {
+	// tm001: { name: 'TM001', move: 'Take Down', type: 'TM', icon: 'TM00', cost: 5 }
+};
+
+
+const ROTATIONAL_ITEM_POOL: { [k: string]: RotationalItem | TMItem } = JSON.parse(FS('data/roguelike/itemdb.json').readSync());
+
+Object.assign(ROTATIONAL_ITEM_POOL, TM_LIST);
 
 const SHOP_ITEMS: { [k: string]: ShopItem } = {
 	pokeballpack: { name: 'Poke Ball Pack', icon: 'Poke Ball', type: 'pokemon', desc: 'Pick 1 of 3 random Pokemon.', cost: 7, minStreak: 0 },
@@ -89,6 +101,16 @@ const SHOP_ITEMS: { [k: string]: ShopItem } = {
 	expall: { name: 'Exp. All', icon: 'Ribbon Sweet', type: 'key', desc: 'Gives 50% Exp. to all non-fainted Pokemon not in the battle', cost: 1, minStreak: 0 },
 	// debug2: { name: 'Debug 2', icon: 'berserk gene', type: 'debug', desc: 'Bans HoeenHero from this server twice.', cost: 999, minStreak: 1 },
 };
+
+interface UserTeamData {
+	linkedTeamIndex: number;
+	curHP: number;
+	status: string | false;
+	ppLeft: number[];
+	exp: number;
+	expAtNextLevel: number;
+	maxHP: number;
+}
 
 interface AITrainer {
 	name: string;
@@ -103,6 +125,7 @@ interface BackupData {
 	team: PokemonSet[];
 	teamData: UserTeamData[];
 	keyItems: string[];
+	rotationalShop: string[];
 	flags: {
 		[k: string]: any,
 	};
@@ -334,6 +357,7 @@ export class Roguelike {
 	team: PokemonSet[];
 	teamData: UserTeamData[];
 	keyItems: string[];
+	rotationalShop: string[];
 	flags: {
 		pokemonOptions?: PokemonSet[],
 		opponentTeamScout?: opponentScout[],
@@ -353,6 +377,7 @@ export class Roguelike {
 		this.teamData = backup?.teamData || [];
 		this.flags = backup?.flags || [];
 		this.keyItems = backup?.keyItems || [];
+		this.rotationalShop = backup?.rotationalShop || [];
 		this.opponentTeam = backup?.opponentTeam || [];
 		this.curRoom = backup?.curRoom || 'intro';
 		this.runEnded = backup?.runEnded || false;
@@ -407,6 +432,11 @@ export class Roguelike {
 		this.opponentTeam.sort((a, b) => a.level - b.level);
 		for (let x = 0; x < this.opponentTeam.length; x++) {
 			this.flags.opponentTeamScout.push(false);
+		}
+		this.rotationalShop = [];
+		let shuffled = Utils.shuffle(Object.keys(ROTATIONAL_ITEM_POOL));
+		for (let x = 0; x < 5; x++) {
+			this.rotationalShop.push(shuffled[x]);
 		}
 	}
 
@@ -730,6 +760,22 @@ export class Roguelike {
 
 	genShopHTML() {
 		let buf = `<center><h3>Shop</h3></center><br />`;
+		if (this.rotationalShop.length) {
+			buf += `<center><strong>Current Deals<strong></center><br />`;
+			buf += `<table style="width:100%; border-collapse: collapse;"border="1"><tr><th>Item</th><th>Description</th><th>Price</th></tr>`;
+			for (const key of this.rotationalShop) {
+				const item = ROTATIONAL_ITEM_POOL[key];
+				if (item.minStreak > this.streak) continue;
+				buf += `<tr><td><psicon item ="${item.icon}"> ${item.name}</td><td>${item.desc}</td><td>${item.cost} BP</td>`;
+				if (item.cost > this.battlePoints) {
+					buf += `<td><button class="button disabled">Not enough BP!</button>`;
+				} else {
+					buf += `<td><button class="button" name="send" value="/roguelike buy ${key}">Purchase</button>`;
+				}
+				buf += `</tr>`;
+			}
+			buf += `</table><br />`;
+		}
 		buf += `<table style="width:100%; border-collapse: collapse;"border="1"><tr><th>Item</th><th>Description</th><th>Price</th></tr>`;
 		for (const key in SHOP_ITEMS) {
 			const item = SHOP_ITEMS[key];
@@ -857,6 +903,22 @@ function checkSequence(before: string, after: string) {
 }
 
 export const commands: Chat.ChatCommands = {
+	// scream(target, room) {
+	// 	let owo = Object.create(null);
+	// 	let allPossibleItems = Dex.items.all().filter(s => (s.isGem || s.itemUser || s.zMove) || !s.isNonstandard);
+	//
+	// 	for (const item of allPossibleItems) {
+	// 		owo[toID(item.name)] = {
+	// 			name: item.name,
+	// 			desc: item.desc,
+	// 			icon: item.name,
+	// 			type: 'item',
+	// 			cost: 5,
+	// 			minStreak: 0,
+	// 		} as RotationalItem;
+	// 	}
+	// 	FS('data/roguelike/itemdb.json').safeWriteSync(JSON.stringify(owo, null, '\t'));
+	// },
 	extractsave(target, room, user) {
 		this.checkCan('console');
 		if (!target) return this.parse('/help extractsave');
@@ -1286,7 +1348,7 @@ export const pages: Chat.PageTable = {
 				buf += `<button class="button" name="send" value="/roguelike checkteam">Check your team</button>`;
 				buf += `<button class="button" style="float: right;" name="send" value="/roguelike scout">Scout your next opponent</button>`;
 				buf += userGameData.genShopHTML();
-				buf += `<br /><button class="button" name="send" value="/roguelike next">Start the next battle!</button>`;
+				buf += `<br /><center><button class="button" name="send" value="/roguelike next">Start the next battle!</button></center>`;
 			}
 			break;
 		case 'purchase':
