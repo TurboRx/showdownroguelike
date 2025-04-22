@@ -84,7 +84,6 @@ interface TMItem extends RotationalItem {
 
 const TM_LIST: { [k: string]: TMItem } = JSON.parse(FS('data/roguelike/tmdb.json').readSync());
 
-
 const ROTATIONAL_ITEM_POOL: { [k: string]: RotationalItem | TMItem } = JSON.parse(FS('data/roguelike/itemdb.json').readSync());
 
 Object.assign(ROTATIONAL_ITEM_POOL, TM_LIST);
@@ -432,7 +431,7 @@ export class Roguelike {
 			this.flags.opponentTeamScout.push(false);
 		}
 		this.rotationalShop = [];
-		let shuffled = Utils.shuffle(Object.keys(ROTATIONAL_ITEM_POOL));
+		const shuffled = Utils.shuffle(Object.keys(ROTATIONAL_ITEM_POOL));
 		for (let x = 0; x < 5; x++) {
 			this.rotationalShop.push(shuffled[x]);
 		}
