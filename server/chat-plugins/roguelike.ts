@@ -1416,9 +1416,10 @@ export const handlers: Chat.Handlers = {
 		const human = players[0];
 		const humanGameData = roguelikeGames.get(human);
 		if (!humanGameData) return;
-		humanGameData.inBattle = false;
-		refreshPage(humanGameData.user);
+		humanGameData.lose();
+		humanGameData.goToPage('results');
 	},
+
 	onRename(user, oldID, newID) {
 		const humanGameData = roguelikeGames.get(oldID);
 		if (humanGameData?.inBattle) humanGameData.inBattle = false;
