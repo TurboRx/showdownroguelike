@@ -466,6 +466,7 @@ export class Roguelike {
 				ppLeft: ppArr,
 				exp: getMinExpForMonAtLevel(species.name, pokemon.level),
 				expAtNextLevel: getMinExpForMonAtLevel(species.name, pokemon.level + 1),
+				evoFlag: false,
 			};
 		} else {
 			let newHpData;
@@ -490,6 +491,7 @@ export class Roguelike {
 				ppLeft: ppArr,
 				exp: getMinExpForMonAtLevel(species.name, pokemon.level),
 				expAtNextLevel: getMinExpForMonAtLevel(species.name, pokemon.level + 1),
+				evoFlag: false,
 			});
 		}
 	}
@@ -702,7 +704,7 @@ export class Roguelike {
 		let index = 1;
 		for (const mon of this.team) {
 			switch (checkItem) {
-			case 'itemPack':
+			case 'item':
 				failureCondition = false;
 				cmd = 'giveitem ' + index;
 				skip = 'giveitem skip';
@@ -1035,10 +1037,15 @@ export const commands: Chat.ChatCommands = {
 			const userData = roguelikeGames.get(user.id);
 			if (!userData || userData.runEnded) throw new Chat.ErrorMessage(`You need to make a new run first.`);
 			if (userData.curRoom !== 'shop') throw new Chat.ErrorMessage(`Can't buy stuff yet!`);
-			const item = SHOP_ITEMS[target] || false;
-			if (!item) throw new Chat.ErrorMessage('Does that item even exist?');
+			const item = SHOP_ITEMS[target] || ROTATIONAL_ITEM_POOL[target] || false;
+			// if (!item || !userData.rotationalShop.includes(target) || item.minStreak > userData.streak) throw new Chat.ErrorMessage('Does that item even exist?');
 			if (item.cost > userData.battlePoints) return this.popupReply(`You don't have enough BP to buy this!`);
 			switch (item.type) {
+			case 'key':
+				userData.keyItems.push(item.name);
+				userData.battlePoints -= item.cost;
+				userData.goToPage('shop');
+				return;
 			case 'pokemonPack':
 				const scale = [5, 10];
 				scale.forEach((e, i) => scale[i] = Utils.clampIntRange(e + (userData.streak * 5), 1, 100));
@@ -1049,16 +1056,20 @@ export const commands: Chat.ChatCommands = {
 				userData.flags.itemOptions = genItem(3, userData.team);
 				userData.battlePoints -= item.cost;
 				break;
+			case 'TM':
+				userData.flags.moveToLearn = item.move;
+				userData.flags.isRotationalItem = true;
+				userData.goToPage('purchase-item');
+			case 'item':
+				userData.flags.newItem = item.name;
+				userData.flags.isRotationalItem = true;
+				userData.flags.purchasedItem = item.name;
+				userData.goToPage('purchase-item');
+				return;
 			case 'healHP':
 			case 'healPP':
 			case 'revive':
 			case 'cureStatus':
-			case 'TM':
-			case 'key':
-				userData.keyItems.push(item.name);
-				userData.battlePoints -= item.cost;
-				userData.goToPage('shop');
-				return;
 			case 'debug':
 			}
 			userData.flags.purchasedItem = item;
@@ -1152,7 +1163,7 @@ export const commands: Chat.ChatCommands = {
 				userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
 				// TODO: More items
 				break;
-			case 'itemPack':
+			case 'item':
 				arg = args.shift();
 				if (!arg) throw new Chat.ErrorMessage(`You need to specify an item.`);
 				const dexItem = Dex.items.get(arg);
@@ -1230,6 +1241,11 @@ export const commands: Chat.ChatCommands = {
 			}
 			const index = parseInt(target);
 			if (index && index <= 6) {
+				if (userData.flags.isRotationalItem) {
+					userData.battlePoints -= ROTATIONAL_ITEM_POOL[toID(userData.flags.newItem)].cost;
+					userData.rotationalShop.splice(userData.rotationalShop.indexOf(toID(userData.flags.newItem)), 1);
+					delete userData.flags.isRotationalItem;
+				}
 				userData.team[index - 1].item = userData.flags.newItem;
 				delete userData.flags.newItem;
 				if (userData.flags.purchasedItem) delete userData.flags.purchasedItem;
@@ -1344,9 +1360,9 @@ export const pages: Chat.PageTable = {
 				buf = `<center>Choose a pokemon to replace!</center><br />`;
 				buf += userGameData.genQuickSelectHTML('pokemonPack');
 				break;
-			case 'itemPack':
+			case 'item':
 				buf = `<center>Give this item to who?</center><br />`;
-				buf += userGameData.genQuickSelectHTML('itemPack');
+				buf += userGameData.genQuickSelectHTML('item');
 				break;
 			default:
 				buf += userGameData.genPurchaseHTML();
