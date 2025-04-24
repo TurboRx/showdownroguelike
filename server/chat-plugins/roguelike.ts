@@ -1458,7 +1458,7 @@ export const pages: Chat.PageTable = {
 				buf += `<psicon pokemon=${relevantMoveLearner.species}><br /><br />`;
 				buf += `<button class="button" name="send" value="/roguelike learnmove done">Go back to shop</button></center>`;
 			} else {
-				buf = `<center><psicon pokemon=${relevantMoveLearner.species}>Choose a move to forget!</center><br />`;
+				buf = `<center><psicon pokemon=${relevantMoveLearner.species}>Choose a move to forget to make room for ${userGameData.flags.moveToLearn}!</center><br />`;
 				buf += userGameData.genMoveSelectHTML(relevantMoveLearner);
 			}
 			break;
