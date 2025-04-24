@@ -1340,7 +1340,7 @@ export const pages: Chat.PageTable = {
 		if (!userGameData) {
 			let buf = `<div class = "pad"><center>`;
 			buf += `Hello, I am <username>HiZo</username>, and welcome to my Roguelike. It is based on a combination of Balatro and the Gen 4 Battle Castle. You just gotta keep winning fights, get new Pokemon, and try for a high score!<br /><br />`;
-			buf += `However, keep in mind this game is in <strong>Alpha</strong>, which means that: there may be bugs, there are features that may not be present compared to a real Pokemon (fan)game, and there could be updates which might break your save file and I may need to remove your current run in the event that happens.<br /><br />`;
+			buf += `However, keep in mind this game is STILL in <strong>Alpha</strong>, which means that: there may be bugs, there are features that may not be present compared to a real Pokemon (fan)game, and there could be updates which might break your save file and I may need to remove your current run in the event that happens.<br /><br />`;
 			buf += `If there are bugs you encounter, please let me know. Best ways to contact me are on Smogon (HiZo), Pokemon Showdown (HiZo or Misao) or Discord (hisuianzoroark).<br /><br />`;
 			buf += `Special thanks to <username>HoeenHero</username> for tech support and <username>Swagn</username>, <username>Smudge</username>, <username>April</username>, <username>Lumii</username>, <username>Clas</username>, and a LOT of other people who made me motivated to keep working on this.<br /><br />`;
 			buf += `Now without further ado...<br /><br />`;
