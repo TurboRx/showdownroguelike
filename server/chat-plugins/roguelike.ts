@@ -695,6 +695,19 @@ export class Roguelike {
 		return buf;
 	}
 
+	genMoveSelectHTML(pokemon: PokemonSet) {
+		let buf = `<div style="width:100%;"><center>`;
+		let index = 0;
+		for (const move of pokemon.moves) {
+			if (index > 0) buf += `&nbsp;&nbsp;&nbsp;&nbsp;`;
+			buf += `<button class="button" name="send" value="/roguelike learnmove ${index}">${move}</button>`;
+			index++;
+		}
+		buf += `<br /><br /><button class="button" name="send" value="/roguelike learnmove done">Cancel</button>`;
+		buf += `</center></div>`;
+		return buf;
+	}
+
 	genQuickSelectHTML(checkItem: ItemType | "switch", targetIndex?: number) {
 		let buf = `<div style="width:100%;"><center>`;
 		let cmd;
@@ -742,10 +755,12 @@ export class Roguelike {
 				cmd = `switch ${targetIndex}, ` + index;
 				skip = 'switch undo';
 				skipmsg = 'Undo';
+				break;
 			case 'TM':
 				failureCondition = (!getMovesAtTarget(mon.species, 'M').includes(toID(this.flags.moveToLearn)) || mon.moves.includes(this.flags.moveToLearn));
 				cmd = 'redeem tm, ' + index;
 				skipmsg = 'Undo';
+				break;
 			case 'key':
 			case 'debug':
 			}
@@ -1072,7 +1087,7 @@ export const commands: Chat.ChatCommands = {
 				return;
 			case 'TM':
 				userData.flags.moveToLearn = item.move;
-				// userData.flags.isRotationalItem = true;
+				userData.flags.isRotationalItem = true;
 				userData.flags.purchasedItem = item;
 			case 'healHP':
 			case 'healPP':
@@ -1187,9 +1202,9 @@ export const commands: Chat.ChatCommands = {
 				index--;
 				if (!userData.team[index]) throw new Chat.ErrorMessage(`You need to specify a pokemon on your team.`);
 				if (!getMovesAtTarget(userData.team[index].species, 'M').includes(toID(userData.flags.moveToLearn)) || userData.team[index].moves.includes(userData.flags.moveToLearn)) throw new Chat.ErrorMessage(`You can't use this on that pokemon.`);
+				userData.flags.pokemonForTM = index;
 				if (userData.team[index].moves.length >= 4) {
 					userData.goToPage('forgetmove');
-					userData.flags.pokemonForTM = userData.team[index];
 				} else {
 					userData.team[index].moves.push(userData.flags.moveToLearn);
 					userData.teamData[index].ppLeft.push(Dex.moves.get(userData.flags.moveToLearn).pp * (8 / 5));
@@ -1202,6 +1217,35 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (userData.flags.purchasedItem) delete userData.flags.purchasedItem;
 			userData.goToPage('shop');
+		},
+		learnmove(target, room, user) {
+			const userData = roguelikeGames.get(user.id);
+			if (!userData || userData.runEnded) throw new Chat.ErrorMessage(`You need to make a new run first.`);
+			if (!target) throw new Chat.ErrorMessage(`You need to specify a move to forget!`);
+			if (target === 'done') {
+				delete userData.flags.pokemonForTM;
+				delete userData.flags.moveToLearn;
+				delete userData.flags.moveForgotten;
+				if (userData.flags.isRotationalItem) {
+					let TMName = userData.flags.purchasedItem.name.substring(0, 5);
+					userData.rotationalShop.splice(userData.rotationalShop.indexOf(TMName), 1);
+					delete userData.flags.isRotationalItem;
+				}
+				if (userData.flags.purchasedItem) {
+					userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
+					delete userData.flags.purchasedItem;
+				}
+				userData.goToPage('shop');
+				return;
+			}
+			const index = parseInt(target);
+			if (userData.flags.pokemonForTM === undefined || !userData.flags.moveToLearn) throw new Chat.ErrorMessage(`You need to have a Pokemon learning a move!`);
+			let teamIndex = userData.flags.pokemonForTM;
+			userData.flags.moveForgotten = userData.team[teamIndex].moves[index];
+			userData.team[teamIndex].moves[index] = userData.flags.moveToLearn;
+			userData.teamData[teamIndex].ppLeft[index] = Dex.moves.get(userData.flags.moveToLearn).pp * (8 / 5);
+			userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
+			userData.goToPage('forgetmove-done');
 		},
 		replacepoke(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
@@ -1391,11 +1435,6 @@ export const pages: Chat.PageTable = {
 				let type = userGameData.flags.purchasedItem?.type || 'itemPack';
 				buf += userGameData.genQuickSelectHTML(type);
 				break;
-			case 'tm':
-				buf = `<center>Give this item to who?</center><br />`;
-				let type = userGameData.flags.purchasedItem?.type || 'itemPack';
-				buf += userGameData.genQuickSelectHTML(type);
-				break;
 			default:
 				buf += userGameData.genPurchaseHTML();
 			}
@@ -1409,6 +1448,18 @@ export const pages: Chat.PageTable = {
 			buf += `<center><h3>Choose a starter!</h3><br />`;
 			// @ts-ignore
 			buf += userGameData.genMiscTeamHTML(userGameData.flags.pokemonOptions, 'starter');
+			break;
+		case 'forgetmove':
+			let relevantMoveLearner = userGameData.team[userGameData.flags.pokemonForTM];
+			if (gameArgs.shift() === 'done') {
+				let forgotblurb = userGameData.flags.moveForgotten ? `forgot ${userGameData.flags.moveForgotten} and ` : ``;
+				buf += `<center><h3>Your ${relevantMoveLearner.name} ${forgotblurb}learned ${userGameData.flags.moveToLearn}!</h3><br />`;
+				buf += `<psicon pokemon=${relevantMoveLearner.species}><br /><br />`;
+				buf += `<button class="button" name="send" value="/roguelike learnmove done">Go back to shop</button></center>`;
+			} else {
+				buf = `<center><psicon pokemon=${relevantMoveLearner.species}>Choose a move to forget!</center><br />`;
+				buf += userGameData.genMoveSelectHTML(relevantMoveLearner);
+			}
 			break;
 		case 'other':
 			// TODO: ????
