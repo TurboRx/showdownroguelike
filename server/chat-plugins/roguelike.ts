@@ -705,6 +705,9 @@ export class Roguelike {
 		for (const mon of this.team) {
 			switch (checkItem) {
 			case 'item':
+				skipmsg = 'Undo';
+				// Falls through
+			case 'itemPack':
 				failureCondition = false;
 				cmd = 'giveitem ' + index;
 				skip = 'giveitem skip';
@@ -740,6 +743,9 @@ export class Roguelike {
 				skip = 'switch undo';
 				skipmsg = 'Undo';
 			case 'TM':
+				failureCondition = (!getMovesAtTarget(mon.species, 'M').includes(toID(this.flags.moveToLearn)) || mon.moves.includes(this.flags.moveToLearn));
+				cmd = 'redeem tm, ' + index;
+				skipmsg = 'Undo';
 			case 'key':
 			case 'debug':
 			}
@@ -811,7 +817,9 @@ export class Roguelike {
 			buf += this.genQuickSelectHTML((this.flags.purchasedItem as ShopItem)?.type);
 			return buf;
 		case 'TM':
-			break;
+			buf = `<center>Teach ${this.flags.moveToLearn} to what Pokemon?</h3></center><br />`;
+			buf += this.genQuickSelectHTML((this.flags.purchasedItem as ShopItem)?.type);
+			return buf;
 		case 'key':
 			break;
 		case 'itemPack':
@@ -1056,16 +1064,16 @@ export const commands: Chat.ChatCommands = {
 				userData.flags.itemOptions = genItem(3, userData.team);
 				userData.battlePoints -= item.cost;
 				break;
-			case 'TM':
-				userData.flags.moveToLearn = item.move;
-				userData.flags.isRotationalItem = true;
-				userData.goToPage('purchase-item');
 			case 'item':
 				userData.flags.newItem = item.name;
 				userData.flags.isRotationalItem = true;
-				userData.flags.purchasedItem = item.name;
+				userData.flags.purchasedItem = item;
 				userData.goToPage('purchase-item');
 				return;
+			case 'TM':
+				userData.flags.moveToLearn = item.move;
+				// userData.flags.isRotationalItem = true;
+				userData.flags.purchasedItem = item;
 			case 'healHP':
 			case 'healPP':
 			case 'revive':
@@ -1172,6 +1180,23 @@ export const commands: Chat.ChatCommands = {
 				userData.goToPage('purchase-item');
 				delete userData.flags.itemOptions;
 				return;
+			case 'tm':
+				arg = args.shift();
+				if (!arg) throw new Chat.ErrorMessage(`You need to specify a pokemon.`);
+				index = parseInt(arg);
+				index--;
+				if (!userData.team[index]) throw new Chat.ErrorMessage(`You need to specify a pokemon on your team.`);
+				if (!getMovesAtTarget(userData.team[index].species, 'M').includes(toID(userData.flags.moveToLearn)) || userData.team[index].moves.includes(userData.flags.moveToLearn)) throw new Chat.ErrorMessage(`You can't use this on that pokemon.`);
+				if (userData.team[index].moves.length >= 4) {
+					userData.goToPage('forgetmove');
+					userData.flags.pokemonForTM = userData.team[index];
+				} else {
+					userData.team[index].moves.push(userData.flags.moveToLearn);
+					userData.teamData[index].ppLeft.push(Dex.moves.get(userData.flags.moveToLearn).pp * (8 / 5));
+					userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
+					userData.goToPage('forgetmove-done');
+				}
+				return;
 			default:
 				throw new Chat.ErrorMessage(`Your command is too vague.`);
 			}
@@ -1236,6 +1261,7 @@ export const commands: Chat.ChatCommands = {
 			if (target === 'skip') {
 				delete userData.flags.newItem;
 				if (userData.flags.purchasedItem) delete userData.flags.purchasedItem;
+				if (userData.flags.isRotationalItem) delete userData.flags.isRotationalItem;
 				userData.goToPage('shop');
 				return;
 			}
@@ -1362,7 +1388,13 @@ export const pages: Chat.PageTable = {
 				break;
 			case 'item':
 				buf = `<center>Give this item to who?</center><br />`;
-				buf += userGameData.genQuickSelectHTML('item');
+				let type = userGameData.flags.purchasedItem?.type || 'itemPack';
+				buf += userGameData.genQuickSelectHTML(type);
+				break;
+			case 'tm':
+				buf = `<center>Give this item to who?</center><br />`;
+				let type = userGameData.flags.purchasedItem?.type || 'itemPack';
+				buf += userGameData.genQuickSelectHTML(type);
 				break;
 			default:
 				buf += userGameData.genPurchaseHTML();
@@ -1438,7 +1470,10 @@ export const handlers: Chat.Handlers = {
 
 	onRename(user, oldID, newID) {
 		const humanGameData = roguelikeGames.get(oldID);
-		if (humanGameData?.inBattle) humanGameData.inBattle = false;
+		if (humanGameData?.inBattle) {
+			humanGameData.lose();
+			humanGameData.goToPage('results');
+		}
 		refreshPage(user.id);
 	},
 };
