@@ -1225,15 +1225,17 @@ export const commands: Chat.ChatCommands = {
 			if (target === 'done') {
 				delete userData.flags.pokemonForTM;
 				delete userData.flags.moveToLearn;
-				delete userData.flags.moveForgotten;
-				if (userData.flags.isRotationalItem) {
-					let TMName = userData.flags.purchasedItem.name.substring(0, 5);
-					userData.rotationalShop.splice(userData.rotationalShop.indexOf(TMName), 1);
-					delete userData.flags.isRotationalItem;
-				}
-				if (userData.flags.purchasedItem) {
-					userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
-					delete userData.flags.purchasedItem;
+				if (userData.curRoom.endsWith(`-done`)) {
+					delete userData.flags.moveForgotten;
+					if (userData.flags.isRotationalItem) {
+						let TMName = userData.flags.purchasedItem.name.substring(0, 5);
+						userData.rotationalShop.splice(userData.rotationalShop.indexOf(toID(TMName)), 1);
+						delete userData.flags.isRotationalItem;
+					}
+					if (userData.flags.purchasedItem) {
+						userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
+						delete userData.flags.purchasedItem;
+					}
 				}
 				userData.goToPage('shop');
 				return;
@@ -1244,7 +1246,6 @@ export const commands: Chat.ChatCommands = {
 			userData.flags.moveForgotten = userData.team[teamIndex].moves[index];
 			userData.team[teamIndex].moves[index] = userData.flags.moveToLearn;
 			userData.teamData[teamIndex].ppLeft[index] = Dex.moves.get(userData.flags.moveToLearn).pp * (8 / 5);
-			userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
 			userData.goToPage('forgetmove-done');
 		},
 		replacepoke(target, room, user) {
