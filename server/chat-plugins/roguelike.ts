@@ -96,7 +96,7 @@ const SHOP_ITEMS: { [k: string]: ShopItem } = {
 	maxelixir: { name: 'Max Elixir', icon: 'Magmarizer', type: 'healPP', desc: 'Heals a pokemon\'s moves fully.', cost: 3, minStreak: 0 },
 	fullheal: { name: 'Full Heal', icon: 'Flower Sweet', type: 'cureStatus', desc: 'Cures a pokemon\'s status.', cost: 3, minStreak: 0 },
 	revive: { name: 'Revive', icon: 'Star Sweet', type: 'revive', desc: 'Revives a Pokemon to half its maximum HP.', cost: 5, minStreak: 1 },
-	expall: { name: 'Exp. All', icon: 'Ribbon Sweet', type: 'key', desc: 'Gives 50% Exp. to all non-fainted Pokemon not in the battle', cost: 1, minStreak: 0 },
+	expall: { name: 'Exp. All', icon: 'Ribbon Sweet', type: 'key', desc: 'Gives 50% Exp. to all non-fainted Pokemon not in the battle', cost: 20, minStreak: 2 },
 	// debug2: { name: 'Debug 2', icon: 'berserk gene', type: 'debug', desc: 'Bans HoeenHero from this server twice.', cost: 999, minStreak: 1 },
 };
 
@@ -108,6 +108,7 @@ interface UserTeamData {
 	exp: number;
 	expAtNextLevel: number;
 	maxHP: number;
+	evoFlag: any; // Have mercy on my soul
 }
 
 interface AITrainer {
