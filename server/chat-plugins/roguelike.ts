@@ -1,7 +1,7 @@
 /**
 * HiZo's Untitled Roguelike
 * @author HiZo
-* @version Alpha 3 (Codename: Eevee)
+* @version Alpha 3 (Codename: Porygon2)
 */
 
 import { FS, Utils } from '../../lib';
