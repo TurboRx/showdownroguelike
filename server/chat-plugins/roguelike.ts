@@ -1130,7 +1130,7 @@ export const commands: Chat.ChatCommands = {
 			const args = target.split(',');
 			let arg = args.shift();
 			switch (arg) {
-			case 'pokemonPack':
+			case 'pokemon':
 				if (!userData.flags.pokemonOptions) throw new Chat.ErrorMessage(`No Pokemon to add.`);
 				arg = args.shift();
 				if (!arg) throw new Chat.ErrorMessage(`You need to specify a pokemon.`);
