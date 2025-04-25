@@ -91,11 +91,14 @@ Object.assign(ROTATIONAL_ITEM_POOL, TM_LIST);
 const SHOP_ITEMS: { [k: string]: ShopItem } = {
 	pokeballpack: { name: 'Poke Ball Pack', icon: 'Poke Ball', type: 'pokemonPack', desc: 'Pick 1 of 3 random Pokemon.', cost: 7, minStreak: 0 },
 	helditempack: { name: 'Held Item Pack', icon: 'Leftovers', type: 'itemPack', desc: 'Pick 1 of 3 held items to put on a Pokemon', cost: 3, minStreak: 0 },
-	maxpotion: { name: 'Max Potion', icon: 'Electirizer', type: 'healHP', desc: 'Heals a pokemon\'s HP fully.', cost: 5, minStreak: 0 },
-	maxelixir: { name: 'Max Elixir', icon: 'Magmarizer', type: 'healPP', desc: 'Heals a pokemon\'s moves fully.', cost: 3, minStreak: 0 },
+	potion: { name: 'Potion', icon: 'Electirizer', type: 'healHP', desc: 'Heals a 20 HP.', cost: 3, minStreak: 0 },
+	superpotion: { name: 'Super Potion', icon: 'Electirizer', type: 'healHP', desc: 'Heals a 50 HP.', cost: 5, minStreak: 1 },
+	hyperpotion: { name: 'Hyper Potion', icon: 'Electirizer', type: 'healHP', desc: 'Heals a 120 HP.', cost: 7, minStreak: 4 },
+	maxpotion: { name: 'Max Potion', icon: 'Electirizer', type: 'healHP', desc: 'Heals a pokemon\'s HP fully.', cost: 10, minStreak: 6 },
+	maxelixir: { name: 'Max Elixir', icon: 'Magmarizer', type: 'healPP', desc: 'Heals a pokemon\'s moves fully.', cost: 5, minStreak: 0 },
 	fullheal: { name: 'Full Heal', icon: 'Flower Sweet', type: 'cureStatus', desc: 'Cures a pokemon\'s status.', cost: 3, minStreak: 0 },
-	revive: { name: 'Revive', icon: 'Star Sweet', type: 'revive', desc: 'Revives a Pokemon to half its maximum HP.', cost: 5, minStreak: 1 },
-	expall: { name: 'Exp. All', icon: 'Ribbon Sweet', type: 'key', desc: 'Gives 50% Exp. to all non-fainted Pokemon not in the battle', cost: 20, minStreak: 2 },
+	revive: { name: 'Revive', icon: 'Star Sweet', type: 'revive', desc: 'Revives a Pokemon to half its maximum HP.', cost: 7, minStreak: 1 },
+	expall: { name: 'Exp. All', icon: 'Ribbon Sweet', type: 'key', desc: 'Gives 50% Exp. to all non-fainted Pokemon not in the battle', cost: 25, minStreak: 2 },
 	// debug2: { name: 'Debug 2', icon: 'berserk gene', type: 'debug', desc: 'Bans HoeenHero from this server twice.', cost: 999, minStreak: 1 },
 };
 
@@ -1148,9 +1151,22 @@ export const commands: Chat.ChatCommands = {
 				index--;
 				if (!userData.team[index]) throw new Chat.ErrorMessage(`You need to specify a pokemon on your team.`);
 				if (userData.teamData[index].curHP === userData.teamData[index].maxHP) throw new Chat.ErrorMessage(`You can't use this on that pokemon.`);
-				userData.teamData[index].curHP = userData.teamData[index].maxHP;
+
 				userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
-				// TODO: More items
+				switch ((userData.flags.purchasedItem as ShopItem).name) {
+					case 'Potion':
+						userData.teamData[index].curHP = Utils.clampIntRange(userData.teamData[index].curHP + 20, 1, userData.teamData[index].maxHP);
+						break;
+					case 'Super Potion':
+						userData.teamData[index].curHP = Utils.clampIntRange(userData.teamData[index].curHP + 50, 1, userData.teamData[index].maxHP);
+						break;
+					case 'Hyper Potion':
+						userData.teamData[index].curHP = Utils.clampIntRange(userData.teamData[index].curHP + 120, 1, userData.teamData[index].maxHP);
+						break;
+					case 'Max Potion':
+						userData.teamData[index].curHP = userData.teamData[index].maxHP;
+						break;
+				}
 				break;
 			case 'healpp':
 				arg = args.shift();
@@ -1460,6 +1476,13 @@ export const pages: Chat.PageTable = {
 			} else {
 				buf = `<center><psicon pokemon=${relevantMoveLearner.species}>Choose a move to forget to make room for ${userGameData.flags.moveToLearn}!</center><br />`;
 				buf += userGameData.genMoveSelectHTML(relevantMoveLearner);
+			}
+			break;
+		case 'evolution':
+			if (gameArgs.shift() === 'success') {
+				// TODO
+			} else {
+				// TODO
 			}
 			break;
 		case 'other':
