@@ -1109,13 +1109,16 @@ export const commands: Chat.ChatCommands = {
 			const pokes = userData.flags.pokemonOptions;
 			const poke = pokes.find(p => toID(p.species) === toID(target));
 			if (!poke) throw new Chat.ErrorMessage(`You can't choose that pokemon.`);
+			let pokeIndex = pokes.indexOf(poke);
+			pokeIndex = (pokeIndex + 1) > 2 ? 0 : pokeIndex + 1;
 			if (userData.team.length >= 6) {
 				// TODO: Figure out releasing pokemon.
 			} else {
 				userData.addPokemon(poke);
 			}
+			userData.opponentTeam = [];
+			userData.opponentTeam.push(userData.flags.pokemonOptions[pokeIndex]);
 			delete userData.flags.pokemonOptions;
-			userData.opponentTeam = genPokemon(1, 5, true);
 			const newFoe = userData.createAITrainer();
 			createAIBattle(userData.user, newFoe);
 		},
