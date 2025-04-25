@@ -953,18 +953,6 @@ export const commands: Chat.ChatCommands = {
 		throw new Chat.ErrorMessage(`User not found.`);
 	},
 	extractsavehelp: [`/extractsave [user] - Gets the user's save data as a JSON, if applicable. Requires: ~`],
-	peek(target, room, user) {
-		this.checkCan('lock');
-		if (!target) return this.parse('/help peek');
-		let leak = true;
-		if (user.id === toID(target)) leak = false;
-		const gameData = roguelikeGames.get(toID(target));
-		if (gameData) {
-			return this.sendReplyBox(`<b>User</b>: ${gameData.user}<br /><b>Battle #</b>: ${gameData.battle}<br /><b>Streak #</b>: ${gameData.streak}<br /><b>BP</b>: ${gameData.battlePoints}<br /><b>Team</b>: ${Teams.export(gameData.team).replaceAll('\n', '<br />') || '<br />'}<b>Oppnent Team</b>: ${leak ? Teams.export(gameData.opponentTeam).replaceAll('\n', '<br />') : `[REDACTED]<br />`}<b>Team Data</b>: ${JSON.stringify(gameData.teamData)}<br /><b>Flags</b>: ${JSON.stringify(gameData.flags)}`);
-		}
-		throw new Chat.ErrorMessage(`User not found`);
-	},
-	peekhelp: [`/peek [user] - Gets the user's current game data, if applicable. Requires: % @ ~`],
 	transfer: 'transferdata',
 	transferdata(target, room, user) {
 		this.checkCan('lock');
