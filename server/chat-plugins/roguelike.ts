@@ -1145,18 +1145,18 @@ export const commands: Chat.ChatCommands = {
 
 				userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
 				switch ((userData.flags.purchasedItem as ShopItem).name) {
-					case 'Potion':
-						userData.teamData[index].curHP = Utils.clampIntRange(userData.teamData[index].curHP + 20, 1, userData.teamData[index].maxHP);
-						break;
-					case 'Super Potion':
-						userData.teamData[index].curHP = Utils.clampIntRange(userData.teamData[index].curHP + 50, 1, userData.teamData[index].maxHP);
-						break;
-					case 'Hyper Potion':
-						userData.teamData[index].curHP = Utils.clampIntRange(userData.teamData[index].curHP + 120, 1, userData.teamData[index].maxHP);
-						break;
-					case 'Max Potion':
-						userData.teamData[index].curHP = userData.teamData[index].maxHP;
-						break;
+				case 'Potion':
+					userData.teamData[index].curHP = Utils.clampIntRange(userData.teamData[index].curHP + 20, 1, userData.teamData[index].maxHP);
+					break;
+				case 'Super Potion':
+					userData.teamData[index].curHP = Utils.clampIntRange(userData.teamData[index].curHP + 50, 1, userData.teamData[index].maxHP);
+					break;
+				case 'Hyper Potion':
+					userData.teamData[index].curHP = Utils.clampIntRange(userData.teamData[index].curHP + 120, 1, userData.teamData[index].maxHP);
+					break;
+				case 'Max Potion':
+					userData.teamData[index].curHP = userData.teamData[index].maxHP;
+					break;
 				}
 				break;
 			case 'healpp':
@@ -1235,7 +1235,7 @@ export const commands: Chat.ChatCommands = {
 				if (userData.curRoom.endsWith(`-done`)) {
 					delete userData.flags.moveForgotten;
 					if (userData.flags.isRotationalItem) {
-						let TMName = userData.flags.purchasedItem.name.substring(0, 5);
+						const TMName = userData.flags.purchasedItem.name.substring(0, 5);
 						userData.rotationalShop.splice(userData.rotationalShop.indexOf(toID(TMName)), 1);
 						delete userData.flags.isRotationalItem;
 					}
@@ -1249,7 +1249,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			const index = parseInt(target);
 			if (userData.flags.pokemonForTM === undefined || !userData.flags.moveToLearn) throw new Chat.ErrorMessage(`You need to have a Pokemon learning a move!`);
-			let teamIndex = userData.flags.pokemonForTM;
+			const teamIndex = userData.flags.pokemonForTM;
 			userData.flags.moveForgotten = userData.team[teamIndex].moves[index];
 			userData.team[teamIndex].moves[index] = userData.flags.moveToLearn;
 			userData.teamData[teamIndex].ppLeft[index] = Dex.moves.get(userData.flags.moveToLearn).pp * (8 / 5);
@@ -1440,7 +1440,7 @@ export const pages: Chat.PageTable = {
 				break;
 			case 'item':
 				buf = `<center>Give this item to who?</center><br />`;
-				let type = userGameData.flags.purchasedItem?.type || 'itemPack';
+				const type = userGameData.flags.purchasedItem?.type || 'itemPack';
 				buf += userGameData.genQuickSelectHTML(type);
 				break;
 			default:
@@ -1458,9 +1458,9 @@ export const pages: Chat.PageTable = {
 			buf += userGameData.genMiscTeamHTML(userGameData.flags.pokemonOptions, 'starter');
 			break;
 		case 'forgetmove':
-			let relevantMoveLearner = userGameData.team[userGameData.flags.pokemonForTM];
+			const relevantMoveLearner = userGameData.team[userGameData.flags.pokemonForTM];
 			if (gameArgs.shift() === 'done') {
-				let forgotblurb = userGameData.flags.moveForgotten ? `forgot ${userGameData.flags.moveForgotten} and ` : ``;
+				const forgotblurb = userGameData.flags.moveForgotten ? `forgot ${userGameData.flags.moveForgotten} and ` : ``;
 				buf += `<center><h3>Your ${relevantMoveLearner.name} ${forgotblurb}learned ${userGameData.flags.moveToLearn}!</h3><br />`;
 				buf += `<psicon pokemon=${relevantMoveLearner.species}><br /><br />`;
 				buf += `<button class="button" name="send" value="/roguelike learnmove done">Go back to shop</button></center>`;
