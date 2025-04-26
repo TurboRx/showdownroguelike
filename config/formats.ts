@@ -4621,6 +4621,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		desc: `Randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
 		mod: 'gen9',
 		// team: 'random',
+		challengeShow: false,
+		searchShow: false,
 		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod'],
 		onValidateTeam() {
 			return [`This format cannot be battled via challenge or ladder.`];
