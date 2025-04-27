@@ -3400,6 +3400,8 @@ export class Battle {
 					// @ts-ignore
 					monData.level = mon.set.level;
 					// @ts-ignore
+					monData.evoFlag = mon.m.willEvolve || false;
+					// @ts-ignore
 					monData.item = mon.item.length ? Dex.items.get(mon.item).name : mon.item;
 					// @ts-ignore
 					monData.linkedTeamIndex = mon.m.roguelikeIndex;
@@ -3546,6 +3548,18 @@ export class Battle {
 		}
 		return 'default';
 	}
+	// I will regret this function later
+	checkForlevelUpEvolution(pokemon: Pokemon) {
+		let evoList = Dex.species.get(pokemon.species).evos
+		if (!evoList) return;
+		for (const newEvo of evoList) {
+			let newEvoLevel = Dex.species.get(newEvo).evoLevel || Infinity;
+			if (newEvoLevel <= pokemon.level) {
+				pokemon.m.willEvolve = newEvo;
+				return;
+			}
+		}
+	}
 	// @ts-expect-error
 	giveExpAndEVs(target: Pokemon, source: Pokemon) {
 		const mult = (source.m.expAll && !source.m.willGetEXP) ? 0.5 : this.expMult;
@@ -3601,6 +3615,7 @@ export class Battle {
 			this.add('message', `${source.name} leveled up!`);
 		}
 		const nextLevel = source.level + 1;
+		this.checkForlevelUpEvolution(source);
 		source.m.expAtNextLevel = this.getMinExpForMonAtLevel(this.toID(source.species.name), nextLevel);
 		source.m.levelUpMoves = this.getMovesAtTarget(source.species.name, 'L', source.level);
 		if (source.m.levelUpMoves.length) {

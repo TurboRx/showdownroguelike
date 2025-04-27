@@ -398,6 +398,8 @@ export class Roguelike {
 			// @ts-ignore
 			mon.ppLeft = newMon.ppLeft;
 			mon.exp = newMon.exp;
+			// @ts-ignore
+			mon.evoFlag = newMon.evoFlag;
 			teamSet.evs = newMon.evs;
 			teamSet.item = newMon.item;
 			teamSet.moves = newMon.moves;
@@ -1458,6 +1460,7 @@ export const pages: Chat.PageTable = {
 			buf += userGameData.genMiscTeamHTML(userGameData.flags.pokemonOptions, 'starter');
 			break;
 		case 'forgetmove':
+			subtitle = 'Forget a move';
 			const relevantMoveLearner = userGameData.team[userGameData.flags.pokemonForTM];
 			if (gameArgs.shift() === 'done') {
 				const forgotblurb = userGameData.flags.moveForgotten ? `forgot ${userGameData.flags.moveForgotten} and ` : ``;
@@ -1470,10 +1473,17 @@ export const pages: Chat.PageTable = {
 			}
 			break;
 		case 'evolution':
+			subtitle = 'Evolution';
 			if (gameArgs.shift() === 'success') {
-				// TODO
+
 			} else {
-				// TODO
+				let evolutionFlag = userGameData.teamData.find(t => !!t.evoFlag);
+				if (!evolutionFlag) {
+					this.title = '[Roguelike] Error';
+					throw new Chat.ErrorMessage('If you reached this error, you should contact HiZo.');
+				}
+				let evolvingPokemon = userGameData.team[evolutionFlag.linkedTeamIndex];
+				
 			}
 			break;
 		case 'other':
@@ -1521,7 +1531,11 @@ export const handlers: Chat.Handlers = {
 		} else {
 			humanGameData.lose();
 		}
-		humanGameData.goToPage('results');
+		if (humanGameData.teamData.some(poke => !!poke.evoFlag)) {
+			humanGameData.goToPage('evolution');
+		} else {
+			humanGameData.goToPage('results');
+		}
 	},
 
 	onAbandondedBattleDestroy(battle, players) {
