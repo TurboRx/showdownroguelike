@@ -1308,6 +1308,9 @@ export const commands: Chat.ChatCommands = {
 			let evolvedForm = userData.teamData[index].evoFlag;
 			if (!evolvedForm) throw new Chat.ErrorMessage(`This Pokemon can't evolve yet!`);
 			if (choice === 'accept') {
+				// TODO: Pupitar
+				let abilPool = Object.values(Dex.species.get(userData.team[index].species).abilities).indexOf(userData.team[index].ability);
+				if (abilPool >= 0) userData.team[index].ability = Object.values(Dex.species.get(evolvedForm).abilities)[abilPool];
 				userData.team[index].species = evolvedForm;
 				userData.flags.prevoName = userData.team[index].name;
 				userData.team[index].name = evolvedForm;
