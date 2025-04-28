@@ -1315,6 +1315,7 @@ export const commands: Chat.ChatCommands = {
 				userData.goToPage(`evolution-success-${index}`);
 				return;
 			} else if (choice === 'reject') {
+				userData.teamData[index].evoFlag = false;
 				if (userData.teamData.some(t => !!t.evoFlag)) {
 					userData.goToPage('evolution');
 				} else {
