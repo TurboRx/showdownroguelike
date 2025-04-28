@@ -1286,6 +1286,44 @@ export const commands: Chat.ChatCommands = {
 			}
 			userData.goToPage('shop');
 		},
+		evolution(target, room, user) {
+			const userData = roguelikeGames.get(user.id);
+			if (!userData || userData.runEnded) throw new Chat.ErrorMessage(`You need to make a new run first.`);
+			if (!target) throw new Chat.ErrorMessage(`You need to specify a decision!`);
+			let args = target.split(',');
+			let choice = args.shift()?.trim().toLowerCase();
+			if (choice === 'continue') {
+				if (!userData.curRoom.includes('success')) throw new Chat.ErrorMessage(`You can't use that command yet!`);
+				delete userData.flags.prevoName;
+				if (userData.teamData.some(t => !!t.evoFlag)) {
+					userData.goToPage('evolution');
+				} else {
+					userData.goToPage('results');
+				}
+				return;
+			}
+			if (!args.length) throw new Chat.ErrorMessage(`You need to specify a decision!`);
+			const index = parseInt(args.shift());
+			if (index === undefined) throw new Chat.ErrorMessage(`You need to specify a decision!`);
+			let evolvedForm = userData.teamData[index].evoFlag;
+			if (!evolvedForm) throw new Chat.ErrorMessage(`This Pokemon can't evolve yet!`);
+			if (choice === 'accept') {
+				userData.team[index].species = evolvedForm;
+				userData.flags.prevoName = userData.team[index].name;
+				userData.team[index].name = evolvedForm;
+				userData.teamData[index].evoFlag = false;
+				userData.goToPage(`evolution-success-${index}`);
+				return;
+			} else if (choice === 'reject') {
+				if (userData.teamData.some(t => !!t.evoFlag)) {
+					userData.goToPage('evolution');
+				} else {
+					userData.goToPage('results');
+				}
+				return;
+			}
+			throw new Chat.ErrorMessage(`You need to specify a decision!`);
+		},
 		switch(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
 			if (!userData || userData.runEnded) throw new Chat.ErrorMessage(`You need to make a new run first.`);
@@ -1486,7 +1524,11 @@ export const pages: Chat.PageTable = {
 		case 'evolution':
 			subtitle = 'Evolution';
 			if (gameArgs.shift() === 'success') {
-
+				let justEvolvedIndex = parseInt(gameArgs.shift());
+				let justEvolved = userGameData.team[justEvolvedIndex];
+				buf += `<center><h3>Your ${userGameData.flags.prevoName} evolved into ${justEvolved.name}!</h3><br />`;
+				buf += `<psicon pokemon=${justEvolved.species}><br /><br />`;
+				buf += `<button class="button" name="send" value="/roguelike evolution continue,">Continue</button></center>`;
 			} else {
 				let evolutionFlag = userGameData.teamData.find(t => !!t.evoFlag);
 				if (!evolutionFlag) {
