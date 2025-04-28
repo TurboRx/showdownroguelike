@@ -984,6 +984,17 @@ export const commands: Chat.ChatCommands = {
 		throw new Chat.ErrorMessage(`User not found`);
 	},
 	transferdatahelp: [`/transferdata [old username], [new username] - Transfers a user's data from between usernames. Requires: % @ ~`],
+	getteam: 'getrogueliketeam',
+	exportteam: 'getrogueliketeam',
+	getrogueliketeam(target, room, user) {
+		const data = roguelikeGames.get(user.id);
+		if (data) {
+			let buf = `<b>Your team in the Roguelike (as of now):</b><br /><br />`;
+			return this.sendReplyBox(buf + Teams.export(data.team).replaceAll(`\n`, `<br />`));
+		}
+		throw new Chat.ErrorMessage(`Do you have save data on this account?`);
+	},
+	getrogueliketeamhelp: [`/transferdata [old username], [new username] - Gives you your team as of your current roguelike save data.`],
 	game: {
 		'': 'getpage',
 		getpage(target, room, user) {
@@ -1483,7 +1494,9 @@ export const pages: Chat.PageTable = {
 					throw new Chat.ErrorMessage('If you reached this error, you should contact HiZo.');
 				}
 				let evolvingPokemon = userGameData.team[evolutionFlag.linkedTeamIndex];
-				
+				buf += `<center><h3>Do you want your ${evolvingPokemon.name} to evolve into ${evolutionFlag.evoFlag}?</h3><br />`;
+				buf += `<psicon pokemon=${evolvingPokemon.species}><br /><br />`;
+				buf += `<button class="button" name="send" value="/roguelike evolution accept, ${evolutionFlag.linkedTeamIndex}">Yes</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="button" name="send" value="/roguelike evolution reject, ${evolutionFlag.linkedTeamIndex}">No</button></center>`;
 			}
 			break;
 		case 'other':
