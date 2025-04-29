@@ -989,7 +989,7 @@ export const commands: Chat.ChatCommands = {
 	getrogueliketeam(target, room, user) {
 		const data = roguelikeGames.get(user.id);
 		if (data) {
-			let buf = `<b>Your team in the Roguelike (as of now):</b><br /><br />`;
+			const buf = `<b>Your team in the Roguelike (as of now):</b><br /><br />`;
 			return this.sendReplyBox(buf + Teams.export(data.team).replaceAll(`\n`, `<br />`));
 		}
 		throw new Chat.ErrorMessage(`Do you have save data on this account?`);
@@ -1290,8 +1290,8 @@ export const commands: Chat.ChatCommands = {
 			const userData = roguelikeGames.get(user.id);
 			if (!userData || userData.runEnded) throw new Chat.ErrorMessage(`You need to make a new run first.`);
 			if (!target) throw new Chat.ErrorMessage(`You need to specify a decision!`);
-			let args = target.split(',');
-			let choice = args.shift()?.trim().toLowerCase();
+			const args = target.split(',');
+			const choice = args.shift()?.trim().toLowerCase();
 			if (choice === 'continue') {
 				if (!userData.curRoom.includes('success')) throw new Chat.ErrorMessage(`You can't use that command yet!`);
 				delete userData.flags.prevoName;
@@ -1305,11 +1305,11 @@ export const commands: Chat.ChatCommands = {
 			if (!args.length) throw new Chat.ErrorMessage(`You need to specify a decision!`);
 			const index = parseInt(args.shift());
 			if (index === undefined) throw new Chat.ErrorMessage(`You need to specify a decision!`);
-			let evolvedForm = userData.teamData[index].evoFlag;
+			const evolvedForm = userData.teamData[index].evoFlag;
 			if (!evolvedForm) throw new Chat.ErrorMessage(`This Pokemon can't evolve yet!`);
 			if (choice === 'accept') {
 				// TODO: Pupitar
-				let abilPool = Object.values(Dex.species.get(userData.team[index].species).abilities).indexOf(userData.team[index].ability);
+				const abilPool = Object.values(Dex.species.get(userData.team[index].species).abilities).indexOf(userData.team[index].ability);
 				if (abilPool >= 0) userData.team[index].ability = Object.values(Dex.species.get(evolvedForm).abilities)[abilPool];
 				userData.team[index].species = evolvedForm;
 				userData.flags.prevoName = userData.team[index].name;
@@ -1528,18 +1528,18 @@ export const pages: Chat.PageTable = {
 		case 'evolution':
 			subtitle = 'Evolution';
 			if (gameArgs.shift() === 'success') {
-				let justEvolvedIndex = parseInt(gameArgs.shift());
-				let justEvolved = userGameData.team[justEvolvedIndex];
+				const justEvolvedIndex = parseInt(gameArgs.shift());
+				const justEvolved = userGameData.team[justEvolvedIndex];
 				buf += `<center><h3>Your ${userGameData.flags.prevoName} evolved into ${justEvolved.name}!</h3><br />`;
 				buf += `<psicon pokemon=${justEvolved.species}><br /><br />`;
 				buf += `<button class="button" name="send" value="/roguelike evolution continue,">Continue</button></center>`;
 			} else {
-				let evolutionFlag = userGameData.teamData.find(t => !!t.evoFlag);
+				const evolutionFlag = userGameData.teamData.find(t => !!t.evoFlag);
 				if (!evolutionFlag) {
 					this.title = '[Roguelike] Error';
 					throw new Chat.ErrorMessage('If you reached this error, you should contact HiZo.');
 				}
-				let evolvingPokemon = userGameData.team[evolutionFlag.linkedTeamIndex];
+				const evolvingPokemon = userGameData.team[evolutionFlag.linkedTeamIndex];
 				buf += `<center><h3>Do you want your ${evolvingPokemon.name} to evolve into ${evolutionFlag.evoFlag}?</h3><br />`;
 				buf += `<psicon pokemon=${evolvingPokemon.species}><br /><br />`;
 				buf += `<button class="button" name="send" value="/roguelike evolution accept, ${evolutionFlag.linkedTeamIndex}">Yes</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="button" name="send" value="/roguelike evolution reject, ${evolutionFlag.linkedTeamIndex}">No</button></center>`;
