@@ -3550,10 +3550,10 @@ export class Battle {
 	}
 	// I will regret this function later
 	checkForlevelUpEvolution(pokemon: Pokemon) {
-		let evoList = Dex.species.get(pokemon.species).evos
+		const evoList = Dex.species.get(pokemon.species).evos;
 		if (!evoList) return;
 		for (const newEvo of evoList) {
-			let newEvoLevel = Dex.species.get(newEvo).evoLevel || Infinity;
+			const newEvoLevel = Dex.species.get(newEvo).evoLevel || Infinity;
 			if (newEvoLevel <= pokemon.level) {
 				pokemon.m.willEvolve = newEvo;
 				return;
