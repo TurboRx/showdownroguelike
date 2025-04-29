@@ -277,7 +277,7 @@ function genPokemon(quantity: number, level: number | number[], weighting?: Poke
 		let newScore = 1;
 		if (weighting) {
 			let probWeight = (-1/weighting.range) * Math.pow((contender.bst - weighting.midpoint), 2) + (weighting.weightcap + weighting.range);
-			let newScore = Utils.clampIntRange(probWeight, 0, weighting.weightcap);
+			newScore = Utils.clampIntRange(probWeight, 0, weighting.weightcap);
 		}
 		pokePool.push({specie: contender, score: newScore});
 	}
@@ -1108,7 +1108,7 @@ export const commands: Chat.ChatCommands = {
 				const scale = [5, 10];
 				scale.forEach((e, i) => scale[i] = Utils.clampIntRange(e + (userData.streak * 5), 1, 100));
 				let weighting = {range: 0, midpoint: 0, weightcap: 0} as PokePackWeighting;
-				switch ((userData.flags.purchasedItem as ShopItem).name) {
+				switch (item.name) {
 					case 'Poke Ball Pack':
 						weighting.range = 100;
 						weighting.midpoint = 263;
