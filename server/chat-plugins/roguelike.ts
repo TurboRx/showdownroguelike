@@ -82,6 +82,13 @@ interface TMItem extends RotationalItem {
 	move: string;
 }
 
+interface PokePackWeighting {
+	range: number;
+	midpoint: number;
+	weightcap: number;
+	special?: string;
+}
+
 const TM_LIST: { [k: string]: TMItem } = JSON.parse(FS('data/roguelike/tmdb.json').readSync());
 
 const ROTATIONAL_ITEM_POOL: { [k: string]: RotationalItem | TMItem } = JSON.parse(FS('data/roguelike/itemdb.json').readSync());
@@ -89,7 +96,10 @@ const ROTATIONAL_ITEM_POOL: { [k: string]: RotationalItem | TMItem } = JSON.pars
 Object.assign(ROTATIONAL_ITEM_POOL, TM_LIST);
 
 const SHOP_ITEMS: { [k: string]: ShopItem } = {
-	pokeballpack: { name: 'Poke Ball Pack', icon: 'Poke Ball', type: 'pokemonPack', desc: 'Pick 1 of 3 random Pokemon.', cost: 7, minStreak: 0 },
+	pokeballpack: { name: 'Poke Ball Pack', icon: 'Poke Ball', type: 'pokemonPack', desc: 'Pick 1 of 3 random Pokemon.', cost: 5, minStreak: 0 },
+	greatballpack: { name: 'Great Ball Pack', icon: 'Great Ball', type: 'pokemonPack', desc: 'Pick 1 of 3 random Pokemon.', cost: 8, minStreak: 1 },
+	ultraballpack: { name: 'Ultra Ball Pack', icon: 'Ultra Ball', type: 'pokemonPack', desc: 'Pick 1 of 3 random Pokemon.', cost: 14, minStreak: 4 },
+	masterballpack: { name: 'Master Ball Pack', icon: 'Master Ball', type: 'pokemonPack', desc: 'Pick 1 of 3 random Pokemon.', cost: 25, minStreak: 8 },
 	helditempack: { name: 'Held Item Pack', icon: 'Leftovers', type: 'itemPack', desc: 'Pick 1 of 3 held items to put on a Pokemon', cost: 3, minStreak: 0 },
 	potion: { name: 'Potion', icon: 'Electirizer', type: 'healHP', desc: 'Heals 20 HP for a Pokemon.', cost: 3, minStreak: 0 },
 	superpotion: { name: 'Super Potion', icon: 'Electirizer', type: 'healHP', desc: 'Heals 50 HP for a Pokemon.', cost: 5, minStreak: 1 },
@@ -239,7 +249,7 @@ function getMovesAtTarget(pokemon: string, target: 'M' | 'T' | 'L' | 'R' | 'E' |
 	return movesAtlevel;
 }
 
-function genPokemon(quantity: number, level: number | number[], starter?: boolean) {
+function genPokemon(quantity: number, level: number | number[], weighting?: PokePackWeighting, starter?: boolean) {
 	let minLevel;
 	let maxLevel;
 	if (typeof level === 'number') {
@@ -262,13 +272,34 @@ function genPokemon(quantity: number, level: number | number[], starter?: boolea
 		all = all.filter(s => !s.tags.includes('Ultra Beast') || s.name === 'Poipole');
 		all = all.filter(s => !['Ursaluna-Bloodmoon', 'Floette-Eternal'].includes(s.name));
 	}
-	// TODO: BST weighting?
+	let pokePool = [];
+	for (const contender of all) {
+		let newScore = 1;
+		if (weighting) {
+			let probWeight = (-1/weighting.range) * Math.pow((contender.bst - weighting.midpoint), 2) + (weighting.weightcap + weighting.range);
+			let newScore = Utils.clampIntRange(probWeight, 0, weighting.weightcap);
+		}
+		pokePool.push({specie: contender, score: newScore});
+	}
+	pokePool = pokePool.filter(i => i.score > 0);
 	let depth = 0;
 	while (gennedMons.length < quantity) {
-		const specie = Utils.shuffle(all).shift();
+		let index = -1;
+		let maxVal = pokePool.reduce((a, b) => a + b.score, 0);
+		let randomValue = Math.floor(Math.random() * maxVal);
+		let curValue = 0;
+		for (const contender of pokePool) {
+			curValue += contender.score;
+			if (curValue > randomValue) {
+				index = pokePool.indexOf(contender);
+				break;
+			}
+		}
+		const specie = pokePool[index].specie;
 		if (!specie) {
 			throw new Error('Somehow there is no Pokemon');
 		}
+		pokePool.splice(index, 1);
 		let setAbil;
 		// TODO: Assess the Pupitar problem
 		if (specie.abilities.S && Math.floor(Math.random() * 50) === 1) {
@@ -899,7 +930,7 @@ function saveRoguelikeData() {
 function createSaveData(user: User) {
 	const rl = new Roguelike(user.id);
 	// Gen starters here
-	rl.flags.pokemonOptions = genPokemon(3, 5, true);
+	rl.flags.pokemonOptions = genPokemon(3, 5, undefined, true);
 	roguelikeGames.set(user.id, rl);
 	saveRoguelikeData();
 	return rl;
@@ -1076,7 +1107,34 @@ export const commands: Chat.ChatCommands = {
 			case 'pokemonPack':
 				const scale = [5, 10];
 				scale.forEach((e, i) => scale[i] = Utils.clampIntRange(e + (userData.streak * 5), 1, 100));
-				userData.flags.pokemonOptions = genPokemon(3, scale);
+				let weighting = {range: 0, midpoint: 0, weightcap: 0} as PokePackWeighting;
+				switch ((userData.flags.purchasedItem as ShopItem).name) {
+					case 'Poke Ball Pack':
+						weighting.range = 100;
+						weighting.midpoint = 263;
+						weighting.weightcap = 100;
+						break;
+					case 'Great Ball Pack':
+						weighting.range = 40;
+						weighting.midpoint = 450;
+						weighting.weightcap = 100;
+						break;
+					case 'Ultra Ball Pack':
+						weighting.range = 40;
+						weighting.midpoint = 520;
+						weighting.weightcap = 100;
+						break;
+					case 'Master Ball Pack':
+						weighting.range = 50;
+						weighting.midpoint = 650;
+						weighting.weightcap = 100;
+						break;
+				}
+				if (weighting.range > 0) {
+					userData.flags.pokemonOptions = genPokemon(3, scale, weighting);
+				} else {
+					userData.flags.pokemonOptions = genPokemon(3, scale);
+				}
 				userData.battlePoints -= item.cost;
 				break;
 			case 'itemPack':
