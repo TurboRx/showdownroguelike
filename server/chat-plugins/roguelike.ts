@@ -462,8 +462,8 @@ export class Roguelike {
 		this.battlePoints += 5;
 		scale.forEach((e, i) => scale[i] = Utils.clampIntRange(e + (this.streak * 5), 1, 100));
 		const num = RECOMMENDED_TEAM_LENGTH[Utils.clampIntRange(this.streak, 0, 6)];
-		RECOMMENDED_WEIGHTING.midpoint = Utils.clampIntRange(RECOMMENDED_WEIGHTING.midpoint + (this.streak * 50))
-		this.opponentTeam = genPokemon(num, scale);
+		RECOMMENDED_WEIGHTING.midpoint = Utils.clampIntRange(RECOMMENDED_WEIGHTING.midpoint + (this.streak * 50), 0, 650);
+		this.opponentTeam = genPokemon(num, scale, RECOMMENDED_WEIGHTING);
 		this.flags.opponentTeamScout = [];
 		this.opponentTeam = this.opponentTeam.sort((a, b) => a.level - b.level);
 		for (let x = 0; x < this.opponentTeam.length; x++) {
