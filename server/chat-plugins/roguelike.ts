@@ -86,7 +86,7 @@ interface PokePackWeighting {
 	range: number;
 	midpoint: number;
 	weightcap: number;
-	special?: string;
+	special?: string; // TODO: 'Fun' packs
 }
 
 const TM_LIST: { [k: string]: TMItem } = JSON.parse(FS('data/roguelike/tmdb.json').readSync());
