@@ -276,17 +276,17 @@ function genPokemon(quantity: number, level: number | number[], weighting?: Poke
 	for (const contender of all) {
 		let newScore = 1;
 		if (weighting) {
-			let probWeight = (-1/weighting.range) * Math.pow((contender.bst - weighting.midpoint), 2) + (weighting.weightcap + weighting.range);
+			const probWeight = (-1 / weighting.range) * (contender.bst - weighting.midpoint) ** 2 + (weighting.weightcap + weighting.range);
 			newScore = Utils.clampIntRange(probWeight, 0, weighting.weightcap);
 		}
-		pokePool.push({specie: contender, score: newScore});
+		pokePool.push({ specie: contender, score: newScore });
 	}
 	pokePool = pokePool.filter(i => i.score > 0);
 	let depth = 0;
 	while (gennedMons.length < quantity) {
 		let index = -1;
-		let maxVal = pokePool.reduce((a, b) => a + b.score, 0);
-		let randomValue = Math.floor(Math.random() * maxVal);
+		const maxVal = pokePool.reduce((a, b) => a + b.score, 0);
+		const randomValue = Math.floor(Math.random() * maxVal);
 		let curValue = 0;
 		for (const contender of pokePool) {
 			curValue += contender.score;
@@ -448,7 +448,7 @@ export class Roguelike {
 	}
 
 	win() {
-		const RECOMMENDED_WEIGHTING = {midpoint: 300, range: 50, weightcap: 100} as PokePackWeighting;
+		const RECOMMENDED_WEIGHTING = { midpoint: 300, range: 50, weightcap: 100 } as PokePackWeighting;
 		const RECOMMENDED_TEAM_LENGTH = [2, 3, 3, 4, 4, 5, 6];
 		const scale = [5, 10];
 		if (this.battle % 7 === 0) {
@@ -478,8 +478,8 @@ export class Roguelike {
 		let index = 0;
 		while (this.rotationalShop.length < 5 && index < shuffled.length) {
 			if (ROTATIONAL_ITEM_POOL[shuffled[index]].type === 'item') {
-				let dexItem = Dex.items.get(ROTATIONAL_ITEM_POOL[shuffled[index]].name);
-				let isViable = dexItem.itemUser || dexItem.zMove || Object.keys(dexItem).some(k => {
+				const dexItem = Dex.items.get(ROTATIONAL_ITEM_POOL[shuffled[index]].name);
+				const isViable = dexItem.itemUser || dexItem.zMove || Object.keys(dexItem).some(k => {
 					if (typeof dexItem[k] === 'function') {
 						return true;
 					}
@@ -1128,28 +1128,28 @@ export const commands: Chat.ChatCommands = {
 			case 'pokemonPack':
 				const scale = [5, 10];
 				scale.forEach((e, i) => scale[i] = Utils.clampIntRange(e + (userData.streak * 5), 1, 100));
-				let weighting = {range: 0, midpoint: 0, weightcap: 0} as PokePackWeighting;
+				const weighting = { range: 0, midpoint: 0, weightcap: 0 } as PokePackWeighting;
 				switch (item.name) {
-					case 'Poke Ball Pack':
-						weighting.range = 100;
-						weighting.midpoint = 263;
-						weighting.weightcap = 100;
-						break;
-					case 'Great Ball Pack':
-						weighting.range = 40;
-						weighting.midpoint = 450;
-						weighting.weightcap = 100;
-						break;
-					case 'Ultra Ball Pack':
-						weighting.range = 40;
-						weighting.midpoint = 520;
-						weighting.weightcap = 100;
-						break;
-					case 'Master Ball Pack':
-						weighting.range = 50;
-						weighting.midpoint = 625;
-						weighting.weightcap = 100;
-						break;
+				case 'Poke Ball Pack':
+					weighting.range = 100;
+					weighting.midpoint = 263;
+					weighting.weightcap = 100;
+					break;
+				case 'Great Ball Pack':
+					weighting.range = 40;
+					weighting.midpoint = 450;
+					weighting.weightcap = 100;
+					break;
+				case 'Ultra Ball Pack':
+					weighting.range = 40;
+					weighting.midpoint = 520;
+					weighting.weightcap = 100;
+					break;
+				case 'Master Ball Pack':
+					weighting.range = 50;
+					weighting.midpoint = 625;
+					weighting.weightcap = 100;
+					break;
 				}
 				if (weighting.range > 0) {
 					userData.flags.pokemonOptions = genPokemon(3, scale, weighting);
