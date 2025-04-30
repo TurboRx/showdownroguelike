@@ -1126,7 +1126,7 @@ export const commands: Chat.ChatCommands = {
 						break;
 					case 'Master Ball Pack':
 						weighting.range = 50;
-						weighting.midpoint = 650;
+						weighting.midpoint = 625;
 						weighting.weightcap = 100;
 						break;
 				}
