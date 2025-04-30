@@ -951,7 +951,7 @@ function saveRoguelikeData() {
 function createSaveData(user: User) {
 	const rl = new Roguelike(user.id);
 	// Gen starters here
-	rl.flags.pokemonOptions = genPokemon(3, 5, undefined, true);
+	rl.flags.pokemonOptions = genPokemon(3, 5, { midpoint: 315, range: 65, weightcap: 100 }, true);
 	roguelikeGames.set(user.id, rl);
 	saveRoguelikeData();
 	return rl;
