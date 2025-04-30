@@ -438,7 +438,11 @@ export class Roguelike {
 				teamSet.level = newMon.level;
 				mon.expAtNextLevel = getMinExpForMonAtLevel(teamSet.species, teamSet.level + 1);
 			}
-			mon.maxHP = Math.floor((((teamSet.ivs['hp'] + (2 * dexSpecies.baseStats['hp']) + Math.floor(teamSet.evs['hp'] / 4) + 100) * teamSet.level) / 100) + 10);
+			if (dexSpecies.maxHP) {
+				mon.maxHP = dexSpecies.maxHP;
+			} else {
+				mon.maxHP = Math.floor((((teamSet.ivs['hp'] + (2 * dexSpecies.baseStats['hp']) + Math.floor(teamSet.evs['hp'] / 4) + 100) * teamSet.level) / 100) + 10);
+			}
 			index++;
 		}
 	}
