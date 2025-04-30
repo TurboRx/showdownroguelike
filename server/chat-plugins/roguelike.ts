@@ -471,8 +471,23 @@ export class Roguelike {
 		}
 		this.rotationalShop = [];
 		const shuffled = Utils.shuffle(Object.keys(ROTATIONAL_ITEM_POOL));
-		for (let x = 0; x < 5; x++) {
-			this.rotationalShop.push(shuffled[x]);
+		let index = 0;
+		while (this.rotationalShop.length < 5 && index < shuffled.length) {
+			if (ROTATIONAL_ITEM_POOL[shuffled[index]].type === 'item') {
+				let dexItem = Dex.items.get(ROTATIONAL_ITEM_POOL[shuffled[index]].name);
+				let isViable = dexItem.itemUser || dexItem.zMove || Object.keys(dexItem).some(k => {
+					if (typeof dexItem[k] === 'function') {
+						return true;
+					}
+					return false;
+				});
+				if (!isViable) {
+					index++;
+					continue;
+				}
+			}
+			this.rotationalShop.push(shuffled[index]);
+			index++;
 		}
 	}
 
