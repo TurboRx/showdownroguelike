@@ -1468,6 +1468,12 @@ export const commands: Chat.ChatCommands = {
 					delete userData.flags.isRotationalItem;
 				}
 				userData.team[index - 1].item = userData.flags.newItem;
+				let dexItem = Dex.items.get(userData.team[index - 1].item);
+				let dexSpecies = Dex.species.get(userData.team[index - 1].species);
+				if (dexItem.forcedForme && dexSpecies.otherFormes?.includes(dexItem.forcedForme)) {
+					userData.team[index - 1].species = dexItem.forcedForme;
+					userData.team[index - 1].ability = Dex.species.get(dexItem.forcedForme).abilities[0];
+				}
 				delete userData.flags.newItem;
 				if (userData.flags.purchasedItem) delete userData.flags.purchasedItem;
 			}
