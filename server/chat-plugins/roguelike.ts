@@ -262,7 +262,7 @@ function genPokemon(quantity: number, level: number | number[], weighting?: Poke
 	const validate = new TeamValidator('gen9roguelikebattle');
 	const gennedMons: PokemonSet[] = [];
 
-	let all = Dex.species.all().filter(s => !s.battleOnly && !s.requiredItems && s.forme !== 'Gmax' && s.forme !== 'Eternamax' && !s.forme.includes('Totem') && s.forme !== 'Dusk' && s.forme !== 'Bond' && !(s.isNonstandard && s.isNonstandard !== 'Past'));
+	let all = Dex.species.all().filter(s => !s.battleOnly && !s.requiredItems && s.forme !== 'Gmax' && !s.forme.includes('Totem') && s.forme !== 'Dusk' && s.forme !== 'Bond' && !(s.isNonstandard && s.isNonstandard !== 'Past'));
 	if (starter) {
 		all = all.filter(s => !s.prevo);
 
@@ -276,7 +276,16 @@ function genPokemon(quantity: number, level: number | number[], weighting?: Poke
 	for (const contender of all) {
 		let newScore = 1;
 		if (weighting) {
-			let probWeight = (-1/weighting.range) * Math.pow((contender.bst - weighting.midpoint), 2) + (weighting.weightcap + weighting.range);
+			let x_value = contender.bst;
+			switch(contender.id) {
+				case 'shedinja':
+					x_value = 500;
+					break;
+				case 'eternatuseternamax':
+					x_value = 725; // Unfeasible to appear otherwise
+					break;
+			}
+			let probWeight = (-1/weighting.range) * Math.pow((x_value - weighting.midpoint), 2) + (weighting.weightcap + weighting.range);
 			newScore = Utils.clampIntRange(probWeight, 0, weighting.weightcap);
 		}
 		pokePool.push({specie: contender, score: newScore});
@@ -1147,7 +1156,7 @@ export const commands: Chat.ChatCommands = {
 						break;
 					case 'Master Ball Pack':
 						weighting.range = 50;
-						weighting.midpoint = 625;
+						weighting.midpoint = 640;
 						weighting.weightcap = 100;
 						break;
 				}
