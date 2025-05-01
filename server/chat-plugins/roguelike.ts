@@ -277,15 +277,15 @@ function genPokemon(quantity: number, level: number | number[], weighting?: Poke
 		let newScore = 1;
 		if (weighting) {
 			let x_value = contender.bst;
-			switch(contender.id) {
-				case 'shedinja':
-					x_value = 500;
-					break;
-				case 'eternatuseternamax':
-					x_value = 725; // Unfeasible to appear otherwise
-					break;
+			switch (contender.id) {
+			case 'shedinja':
+				x_value = 500;
+				break;
+			case 'eternatuseternamax':
+				x_value = 725; // Unfeasible to appear otherwise
+				break;
 			}
-			const probWeight = (-1/weighting.range) * Math.pow((x_value - weighting.midpoint), 2) + (weighting.weightcap + weighting.range);
+			const probWeight = (-1 / weighting.range) * (x_value - weighting.midpoint) ** 2 + (weighting.weightcap + weighting.range);
 			newScore = Utils.clampIntRange(probWeight, 0, weighting.weightcap);
 		}
 		pokePool.push({ specie: contender, score: newScore });
