@@ -1467,15 +1467,15 @@ export const commands: Chat.ChatCommands = {
 					userData.rotationalShop.splice(userData.rotationalShop.indexOf(toID(userData.flags.newItem)), 1);
 					delete userData.flags.isRotationalItem;
 				}
-				let dexNewItem = Dex.items.get(userData.flags.newItem);
-				let dexOldItem = Dex.items.get(userData.team[index - 1].item);
-				let dexSpecies = Dex.species.get(userData.team[index - 1].species);
+				const dexNewItem = Dex.items.get(userData.flags.newItem);
+				const dexOldItem = Dex.items.get(userData.team[index - 1].item);
+				const dexSpecies = Dex.species.get(userData.team[index - 1].species);
 				if (dexNewItem.forcedForme && dexSpecies.otherFormes?.includes(dexNewItem.forcedForme)) {
 					userData.team[index - 1].species = dexNewItem.forcedForme;
 					userData.team[index - 1].ability = Dex.species.get(dexNewItem.forcedForme).abilities[0];
 				} else if (dexOldItem.forcedForme && dexSpecies.otherFormes?.includes(dexOldItem.forcedForme)) {
 					userData.team[index - 1].species = dexSpecies.changesFrom!; // Should always be possible
-					userData.team[index - 1].ability = Dex.species.get(dexSpecies.changesFrom!).abilities[0];
+					userData.team[index - 1].ability = Dex.species.get(dexSpecies.changesFrom).abilities[0];
 				}
 				userData.team[index - 1].item = userData.flags.newItem;
 				delete userData.flags.newItem;
