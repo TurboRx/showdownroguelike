@@ -1934,6 +1934,12 @@ export class Battle {
 			this.checkEVBalance();
 		}
 
+		if (format.customRules) {
+			const plural = format.customRules.length === 1 ? '' : 's';
+			const open = format.customRules.length <= 5 ? ' open' : '';
+			this.add(`raw|<div class="infobox"><details class="readmore"${open}><summary><strong>${format.customRules.length} custom rule${plural}:</strong></summary> ${format.customRules.join(', ')}</details></div>`);
+		}
+
 		format.onTeamPreview?.call(this);
 		for (const rule of this.ruleTable.keys()) {
 			if ('+*-!'.includes(rule.charAt(0))) continue;
@@ -2517,8 +2523,8 @@ export class Battle {
 				if (pokemon.side.pokemonLeft) pokemon.side.pokemonLeft--;
 				if (pokemon.side.totalFainted < 100) pokemon.side.totalFainted++;
 				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
-				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
-				this.singleEvent('End', pokemon.getItem(), pokemon.itemState, pokemon);
+				if (pokemon.isActive) this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
+				if (pokemon.isActive) this.singleEvent('End', pokemon.getItem(), pokemon.itemState, pokemon);
 				if (pokemon.regressionForme) {
 					// before clearing volatiles
 					pokemon.baseSpecies = this.dex.species.get(pokemon.set.species || pokemon.set.name);
@@ -3375,7 +3381,6 @@ export class Battle {
 					// @ts-ignore shut up
 					monData.curHP = mon.hp;
 					const pokemon = mon.set;
-					monData.maxHP = Math.floor(((pokemon.ivs.hp + (2 * this.dex.species.get(mon.baseSpecies).baseStats['hp']) + Math.floor(pokemon.evs.hp / 4) + 100) * pokemon.level) / 100) + 10;
 					// @ts-ignore
 					monData.status = mon.status.length ? mon.status : false;
 					// @ts-ignore
@@ -3394,6 +3399,8 @@ export class Battle {
 					monData.evs = mon.set.evs;
 					// @ts-ignore
 					monData.level = mon.set.level;
+					// @ts-ignore
+					monData.evoFlag = mon.m.willEvolve || false;
 					// @ts-ignore
 					monData.item = mon.item.length ? Dex.items.get(mon.item).name : mon.item;
 					// @ts-ignore
@@ -3496,9 +3503,24 @@ export class Battle {
 			break;
 		}
 		if (toID(pokemon) === 'floetteeternal') genNumber = 6;
+		const prevoList = [];
+		let dexSpecies = Dex.species.get(pokemon);
+		while (dexSpecies.prevo) {
+			prevoList.push(dexSpecies.prevo);
+			dexSpecies = Dex.species.get(dexSpecies.prevo);
+		}
 		const fullLearn = Dex.species.getFullLearnset(toID(pokemon));
 		const movesAtlevel: string[] = [];
 		for (const learnsetIndex of fullLearn) {
+			if (prevoList) {
+				prevoList.forEach(p => {
+					const learnset = Dex.species.getLearnsetData(toID(p));
+					if (learnset.species.name !== p) p = learnset.species.name;
+				});
+				if (prevoList.includes(learnsetIndex.species.name)) {
+					continue;
+				}
+			}
 			const learnset = learnsetIndex.learnset;
 			for (const move in learnset) {
 				const learnSetstring = target === 'L' ? `${genNumber}${target}${level}` : genNumber + target;
@@ -3526,11 +3548,25 @@ export class Battle {
 		}
 		return 'default';
 	}
+	// I will regret this function later
+	checkForlevelUpEvolution(pokemon: Pokemon) {
+		const evoList = Dex.species.get(pokemon.species).evos;
+		if (!evoList) return;
+		for (const newEvo of evoList) {
+			const newEvoLevel = Dex.species.get(newEvo).evoLevel || Infinity;
+			if (newEvoLevel <= pokemon.level) {
+				pokemon.m.willEvolve = newEvo;
+				return;
+			}
+		}
+	}
 	// @ts-expect-error
 	giveExpAndEVs(target: Pokemon, source: Pokemon) {
+		const mult = (source.m.expAll && !source.m.willGetEXP) ? 0.5 : this.expMult;
 		const species = this.toID(target.species.name);
 		const speciesData = EXP_TABLE[species] || EXP_TABLE[this.toID(Dex.species.get(species).baseSpecies)];
 		source.m.willGetEXP = false;
+		source.m.giveExpAll = false;
 		for (const stat of Object.keys(speciesData['evYield'])) {
 			const num = speciesData['evYield'][stat];
 			for (let x = speciesData['evYield'][stat]; x > 0; x--) {
@@ -3539,7 +3575,7 @@ export class Battle {
 			}
 		}
 		if (source.level < 100) {
-			const newEXP = Math.floor(((speciesData['expYield'] * target.level) / 7) * 1.5 * this.expMult);
+			const newEXP = Math.floor(((speciesData['expYield'] * target.level) / 7) * 1.5 * mult);
 			this.add('-message', `${source.name} gained ${newEXP} EXP!`);
 			source.m.exp += newEXP;
 			if (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {
@@ -3557,7 +3593,7 @@ export class Battle {
 
 	findNextMonForEXP() {
 		// P1 is always the Human
-		return this.p1.pokemon.find(p => p.m.willGetEXP);
+		return this.p1.pokemon.find(p => p.m.willGetEXP || (p.m.expAll && p.m.giveExpAll && !p.fainted));
 	}
 
 	// @ts-expect-error
@@ -3573,10 +3609,13 @@ export class Battle {
 			source.hp = Math.floor(source.baseMaxhp * percent);
 		}
 		source.details = source.getUpdatedDetails();
-		this.add('detailschange', source, source.details);
-		this.add('-heal', source, source.getHealth, '[silent]');
-		this.add('message', `${source.name} leveled up!`);
+		if (source.isActive) {
+			this.add('detailschange', source, source.details);
+			this.add('-heal', source, source.getHealth, '[silent]');
+			this.add('message', `${source.name} leveled up!`);
+		}
 		const nextLevel = source.level + 1;
+		this.checkForlevelUpEvolution(source);
 		source.m.expAtNextLevel = this.getMinExpForMonAtLevel(this.toID(source.species.name), nextLevel);
 		source.m.levelUpMoves = this.getMovesAtTarget(source.species.name, 'L', source.level);
 		if (source.m.levelUpMoves.length) {
