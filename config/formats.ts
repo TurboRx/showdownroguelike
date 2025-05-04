@@ -4721,15 +4721,15 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		onSwitchIn(pokemon) {
 			if (pokemon.side.isAI) {
 				pokemon.side.foe.active[0].m.willGetEXP = true;
+				if (pokemon.side.foe.roguelikeTeamData.keyItems.includes('Exp. All')) {
+					pokemon.side.foe.pokemon.forEach(p => {
+						p.m.giveExpAll = true;
+						p.m.expAll = true;
+					});
+				}
 				return;
 			}
 			pokemon.m.willGetEXP = true;
-			if (pokemon.side.roguelikeTeamData.keyItems.includes('Exp. All')) {
-				pokemon.side.pokemon.forEach(p => {
-					p.m.giveExpAll = true;
-					p.m.expAll = true;
-				});
-			}
 		},
 		onFaint(target, source, effect) {
 			if (target.side.isAI) {
