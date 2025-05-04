@@ -98,8 +98,8 @@ Object.assign(ROTATIONAL_ITEM_POOL, TM_LIST);
 const SHOP_ITEMS: { [k: string]: ShopItem } = {
 	pokeballpack: { name: 'Poke Ball Pack', icon: 'Poke Ball', type: 'pokemonPack', desc: 'Pick 1 of 3 random Pokemon.', cost: 5, minStreak: 0 },
 	greatballpack: { name: 'Great Ball Pack', icon: 'Great Ball', type: 'pokemonPack', desc: 'Pick 1 of 3 random Pokemon.', cost: 8, minStreak: 1 },
-	ultraballpack: { name: 'Ultra Ball Pack', icon: 'Ultra Ball', type: 'pokemonPack', desc: 'Pick 1 of 3 random Pokemon.', cost: 14, minStreak: 4 },
-	masterballpack: { name: 'Master Ball Pack', icon: 'Master Ball', type: 'pokemonPack', desc: 'Pick 1 of 3 random Pokemon.', cost: 25, minStreak: 8 },
+	ultraballpack: { name: 'Ultra Ball Pack', icon: 'Ultra Ball', type: 'pokemonPack', desc: 'Pick 1 of 3 random Pokemon.', cost: 14, minStreak: 3 },
+	masterballpack: { name: 'Master Ball Pack', icon: 'Master Ball', type: 'pokemonPack', desc: 'Pick 1 of 3 random Pokemon.', cost: 25, minStreak: 7 },
 	helditempack: { name: 'Held Item Pack', icon: 'Leftovers', type: 'itemPack', desc: 'Pick 1 of 3 held items to put on a Pokemon', cost: 3, minStreak: 0 },
 	potion: { name: 'Potion', icon: 'Electirizer', type: 'healHP', desc: 'Heals 20 HP for a Pokemon.', cost: 3, minStreak: 0 },
 	superpotion: { name: 'Super Potion', icon: 'Electirizer', type: 'healHP', desc: 'Heals 50 HP for a Pokemon.', cost: 5, minStreak: 1 },
