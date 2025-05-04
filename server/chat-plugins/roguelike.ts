@@ -215,7 +215,11 @@ function getMovesAtTarget(pokemon: string, target: 'M' | 'T' | 'L' | 'R' | 'E' |
 		}
 		break;
 	}
-	if (toID(pokemon) === 'floetteeternal') genNumber = 6;
+	if (toID(pokemon) === 'floetteeternal') {
+		genNumber = 6;
+	} else if (toID(pokemon) === 'eternatuseternamax') {
+		genNumber = 8;
+	}
 	const prevoList = [];
 	let dexSpecies = Dex.species.get(pokemon);
 	while (dexSpecies.prevo) {
