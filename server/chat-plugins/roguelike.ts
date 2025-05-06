@@ -990,6 +990,7 @@ try {
 function checkSequence(before: string, after: string) {
 	const currentMainRoom = before.split('-')[0] || before;
 	const targetMainRoom = after.split('-')[0] || after;
+	if (!currentMainRoom || !targetMainRoom) throw new Error(`Tried to go from ${before} to ${after}!`);
 	if (SEQUENCE_CHECK[currentMainRoom].includes(after)) return true;
 	if (currentMainRoom === targetMainRoom) return true;
 	return false;
