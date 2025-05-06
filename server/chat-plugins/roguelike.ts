@@ -1072,6 +1072,24 @@ export const commands: Chat.ChatCommands = {
 		getpage(target, room, user) {
 			return this.parse(`/join view-roguelike`);
 		},
+		top: 'leaderboard',
+		lb: 'leaderboard',
+		leaderboard(target, room, user) {
+			room = this.requireRoom();
+			this.runBroadcast();
+			let leaderboard = Array.from(roguelikeGames.values());
+			leaderboard = leaderboard.sort((a, b) => b.battle - a.battle);
+
+			let buf = `|raw|<div class="ladder"><table><tr><th>Rank</th><th>Player</th><th>Current battle</th><th>Streaks won</th></tr>`;
+
+			for (let x = 0; x < 10; x++) {
+				let gamer = leaderboard[x] as Roguelike;
+				if (!gamer) break;
+				buf += `<tr><td>${x + 1}</td><td>${gamer.user}</td><td>${gamer.battle}</td><td>${gamer.streak}</td>`;
+			}
+			buf += `</table></div>`;
+			this.sendReply(buf);
+		},
 		restart: 'start',
 		start(target, room, user, connections, cmd) {
 			if (cmd.includes('restart') && user.lastCommand !== 'roguelike restart') {
