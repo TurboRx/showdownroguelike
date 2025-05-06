@@ -1083,7 +1083,7 @@ export const commands: Chat.ChatCommands = {
 			let buf = `|raw|<div class="ladder"><table><tr><th>Rank</th><th>Player</th><th>Current battle</th><th>Streaks won</th></tr>`;
 
 			for (let x = 0; x < 10; x++) {
-				let gamer = leaderboard[x] as Roguelike;
+				const gamer = leaderboard[x];
 				if (!gamer) break;
 				buf += `<tr><td>${x + 1}</td><td>${gamer.user}</td><td>${gamer.battle}</td><td>${gamer.streak}</td>`;
 			}
