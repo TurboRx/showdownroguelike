@@ -519,15 +519,15 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: [
 			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Deoxys-Base', 'Deoxys-Attack', 'Dialga', 'Dialga-Origin', 'Eternatus', 'Flutter Mane', 'Giratina',
 			'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyurem-Black', 'Kyurem-White', 'Koraidon', 'Kyogre', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon',
-			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Regigigas', 'Reshiram', 'Slaking', 'Sneasler', 'Solgaleo',
-			'Spectrier', 'Urshifu-Base', 'Urshifu-Rapid-Strike', 'Zacian', 'Zacian-Crowned', 'Zekrom', 'Arena Trap', 'Magnet Pull', 'Moody', 'Shadow Tag',
-			'Baton Pass', 'Last Respects', 'Revival Blessing',
+			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Palkia-Origin', 'Raging Bolt', 'Rayquaza', 'Regigigas', 'Reshiram', 'Slaking', 'Sneasler',
+			'Solgaleo', 'Spectrier', 'Urshifu-Base', 'Urshifu-Rapid-Strike', 'Volcarona', 'Zacian', 'Zacian-Crowned', 'Zekrom', 'Arena Trap', 'Magnet Pull',
+			'Moody', 'Shadow Tag', 'Baton Pass', 'Last Respects', 'Revival Blessing',
 		],
 		restricted: [
-			'Agility', 'Baneful Bunker', 'Belly Drum', 'Block', 'Burning Bulwark', 'Chilly Reception', 'Copycat', 'Detect', 'Destiny Bond', 'Endure', 'Encore',
-			'Fairy Lock', 'Ingrain', 'Instruct', 'Mean Look', 'move:Metronome', 'Nasty Plot', 'Parting Shot', 'Protect', 'Roar', 'Silk Trap', 'Spiky Shield',
-			'Sleep Talk', 'Shed Tail', 'Shell Smash', 'Substitute', 'Swords Dance', 'Tail Glow', 'Tailwind', 'Taunt', 'Teleport', 'Thunder Wave', 'Trick Room',
-			'Will-O-Wisp', 'Whirlwind',
+			'Agility', 'Baneful Bunker', 'Belly Drum', 'Block', 'Burning Bulwark', 'Chilly Reception', 'Copycat', 'Dragon Dance', 'Detect', 'Destiny Bond',
+			'Endure', 'Encore', 'Fairy Lock', 'Ingrain', 'Instruct', 'Mean Look', 'move:Metronome', 'Nasty Plot', 'Parting Shot', 'Protect', 'Roar', 'Silk Trap',
+			'Spiky Shield', 'Sleep Talk', 'Shed Tail', 'Shell Smash', 'Substitute', 'Swords Dance', 'Tail Glow', 'Tailwind', 'Taunt', 'Teleport', 'Thunder Wave',
+			'Trick Room', 'Will-O-Wisp', 'Whirlwind',
 		],
 		onValidateTeam(team, format, teamHas) {
 			const problems = [];
@@ -684,8 +684,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Regigigas', 'Shedinja', 'Slaking', 'Arena Trap', 'Comatose', 'Contrary', 'Gorilla Tactics', 'Hadron Engine', 'Huge Power', 'Illusion', 'Innards Out',
 			'Libero', 'Liquid Ooze', 'Magnet Pull', 'Moody', 'Neutralizing Gas', 'Orichalcum Pulse', 'Parental Bond', 'Poison Heal', 'Protean', 'Pure Power',
 			'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Belly Drum', 'Ceaseless Edge', 'Clangorous Soul',
-			'Dire Claw', 'Electro Shot', 'Fillet Away', 'Imprison', 'Last Respects', 'Lumina Crash', 'No Retreat', 'Photon Geyser', 'Quiver Dance', 'Rage Fist',
-			'Revival Blessing', 'Shed Tail', 'Substitute', 'Shell Smash', 'Tail Glow',
+			'Dire Claw', 'Electro Shot', 'Fillet Away', 'Imprison', 'Last Respects', 'Lumina Crash', 'No Retreat', 'Photon Geyser', 'Power Trip', 'Quiver Dance',
+			'Rage Fist', 'Revival Blessing', 'Shed Tail', 'Substitute', 'Shell Smash', 'Tail Glow',
 		],
 	},
 	{
