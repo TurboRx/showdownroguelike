@@ -367,7 +367,7 @@ function genPokemon(quantity: number, level: number | number[], weighting?: Poke
 	}
 	for (const moveless of gennedMons) {
 		let viableMoves: string[] = [];
-		for (let lvl = 1; lvl <= moveless.level; lvl++) {
+		for (let lvl = 0; lvl <= moveless.level; lvl++) {
 			const movesAtlevel = getMovesAtTarget(moveless.species, 'L', lvl);
 			viableMoves = viableMoves.concat(movesAtlevel);
 		}
@@ -492,12 +492,20 @@ export class Roguelike {
 		while (this.rotationalShop.length < 5 && index < shuffled.length) {
 			if (ROTATIONAL_ITEM_POOL[shuffled[index]].type === 'item') {
 				const dexItem = Dex.items.get(ROTATIONAL_ITEM_POOL[shuffled[index]].name);
+				if (dexItem.isNonstandard  === 'CAP') {
+					index++;
+					continue;
+				}
 				const isViable = dexItem.itemUser || dexItem.zMove || Object.keys(dexItem).some(k => {
 					if (typeof dexItem[k] === 'function') {
 						return true;
 					}
 					return false;
 				});
+				if (dexItem.itemUser && !this.team.some(p => dexItem.itemUser?.includes(p.species))) {
+					index++;
+					continue;
+				}
 				if (!isViable) {
 					index++;
 					continue;
@@ -871,10 +879,10 @@ export class Roguelike {
 			const item = SHOP_ITEMS[key];
 			if (item.minStreak > this.streak) continue;
 			buf += `<tr><td><psicon item ="${item.icon}"> ${item.name}</td><td>${item.desc}</td><td>${item.cost} BP</td>`;
-			if (item.cost > this.battlePoints) {
-				buf += `<td><button class="button disabled">Not enough BP!</button>`;
-			} else if (item.type === 'key' && this.keyItems.includes(item.name)) {
+			if (item.type === 'key' && this.keyItems.includes(item.name)) {
 				buf += `<td><button class="button disabled">Already bought!</button>`;
+			} else if (item.cost > this.battlePoints) {
+				buf += `<td><button class="button disabled">Not enough BP!</button>`;
 			} else {
 				buf += `<td><button class="button" name="send" value="/roguelike buy ${key}">Purchase</button>`;
 			}
@@ -1338,7 +1346,6 @@ export const commands: Chat.ChatCommands = {
 				} else {
 					userData.team[index].moves.push(userData.flags.moveToLearn);
 					userData.teamData[index].ppLeft.push(Dex.moves.get(userData.flags.moveToLearn).pp * (8 / 5));
-					userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
 					userData.goToPage('forgetmove-done');
 				}
 				return;
