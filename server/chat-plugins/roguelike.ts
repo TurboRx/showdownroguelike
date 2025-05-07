@@ -592,7 +592,6 @@ export class Roguelike {
 			const path = mon.shiny ? `gen5-shiny` : `gen5`;
 			buf += `<tr><td><img src="https://play.pokemonshowdown.com/sprites/${path}/${dexSpecies.spriteid}.png" /><br />${mon.species} ${mon.gender !== 'N' ? '(' + mon.gender + ')' : ''}<br />HP: ${monData.curHP}/${monData.maxHP}<br />Status: ${monData.status ? monData.status.toUpperCase() : 'Healthy'}<br />Level: ${mon.level ? mon.level : 100}<br />Item: ${mon.item === '' ? 'None' : mon.item}`;
 			buf += `<br />EXP: ${monData.exp}/${monData.expAtNextLevel}</td>`;
-			// @ts-ignore ?????
 			buf += `<td>`;
 			buf += `Ability: ${mon.ability}<br />`;
 			buf += `Tera Type: ${mon.teraType}<br />`;
