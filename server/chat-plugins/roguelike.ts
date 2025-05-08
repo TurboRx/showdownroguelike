@@ -1179,13 +1179,13 @@ export const commands: Chat.ChatCommands = {
 					weighting.weightcap = 100;
 					break;
 				case 'Great Ball Pack':
-					weighting.range = 40;
+					weighting.range = 35;
 					weighting.midpoint = 450;
 					weighting.weightcap = 100;
 					break;
 				case 'Ultra Ball Pack':
-					weighting.range = 40;
-					weighting.midpoint = 520;
+					weighting.range = 30;
+					weighting.midpoint = 540;
 					weighting.weightcap = 100;
 					break;
 				case 'Master Ball Pack':
