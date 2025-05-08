@@ -206,7 +206,7 @@ function genItem(quantity: number, extraArg?: PokemonSet[] | string) {
 	return items;
 }
 
-function getMovesAtTarget(pokemon: string, target: 'M' | 'T' | 'L' | 'R' | 'E' | 'D' | 'S' | 'V' | 'C', level?: number) {
+function getMovesAtTarget(pokemon: string, target: 'M' | 'T' | 'L' | 'R' | 'E' | 'D' | 'S' | 'V' | 'C' | 'any', level?: number) {
 	let genNumber = 9;
 	while (genNumber > 1) {
 		if (Dex.mod(`gen${genNumber}`).species.get(toID(pokemon)).isNonstandard) {
@@ -240,6 +240,10 @@ function getMovesAtTarget(pokemon: string, target: 'M' | 'T' | 'L' | 'R' | 'E' |
 		}
 		const learnset = learnsetIndex.learnset;
 		for (const move in learnset) {
+			if (target === 'any') {
+				movesAtlevel.push(move);
+				continue;
+			}
 			const learnSetstring = target === 'L' ? `${genNumber}${target}${level}` : genNumber + target;
 			if (learnset[move].some(source => source === learnSetstring)) {
 				if (!movesAtlevel.includes(move)) {
@@ -834,7 +838,7 @@ export class Roguelike {
 				skipmsg = 'Undo';
 				break;
 			case 'TM':
-				failureCondition = (!getMovesAtTarget(mon.species, 'M').includes(toID(this.flags.moveToLearn)) || mon.moves.includes(this.flags.moveToLearn));
+				failureCondition = (!getMovesAtTarget(mon.species, 'any').includes(toID(this.flags.moveToLearn)) || mon.moves.includes(this.flags.moveToLearn));
 				cmd = 'redeem tm, ' + index;
 				skipmsg = 'Undo';
 				break;
@@ -1339,7 +1343,7 @@ export const commands: Chat.ChatCommands = {
 				index = parseInt(arg);
 				index--;
 				if (!userData.team[index]) throw new Chat.ErrorMessage(`You need to specify a pokemon on your team.`);
-				if (!getMovesAtTarget(userData.team[index].species, 'M').includes(toID(userData.flags.moveToLearn)) || userData.team[index].moves.includes(userData.flags.moveToLearn)) throw new Chat.ErrorMessage(`You can't use this on that pokemon.`);
+				if (!getMovesAtTarget(userData.team[index].species, 'any').includes(toID(userData.flags.moveToLearn)) || userData.team[index].moves.includes(userData.flags.moveToLearn)) throw new Chat.ErrorMessage(`You can't use this on that pokemon.`);
 				userData.flags.pokemonForTM = index;
 				if (userData.team[index].moves.length >= 4) {
 					userData.goToPage('forgetmove');

@@ -3468,7 +3468,7 @@ export class Battle {
 		}
 	}
 
-	getMovesAtTarget(pokemon: string, target: 'M' | 'T' | 'L' | 'R' | 'E' | 'D' | 'S' | 'V' | 'C', level?: number) {
+	getMovesAtTarget(pokemon: string, target: 'M' | 'T' | 'L' | 'R' | 'E' | 'D' | 'S' | 'V' | 'C' | 'any', level?: number) {
 		let genNumber = 9;
 		while (genNumber > 1) {
 			if (Dex.mod(`gen${genNumber}`).species.get(toID(pokemon)).isNonstandard) {
@@ -3498,6 +3498,10 @@ export class Battle {
 			}
 			const learnset = learnsetIndex.learnset;
 			for (const move in learnset) {
+				if (target === 'any') {
+					movesAtlevel.push(move);
+					continue;
+				}
 				const learnSetstring = target === 'L' ? `${genNumber}${target}${level}` : genNumber + target;
 				if (learnset[move].some(source => source === learnSetstring)) {
 					if (!movesAtlevel.includes(move)) {
