@@ -3557,17 +3557,17 @@ export class Battle {
 			const newEXP = Math.floor(((speciesData['expYield'] * target.level) / 7) * 1.5 * mult);
 			this.add('-message', `${source.name} gained ${newEXP} EXP!`);
 			source.m.exp += newEXP;
-			if (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {
-				return this.levelUp(source, target);
-			}
-			if (this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
-			if (this.switchAfterLevelup) {
-				this.makeRequest('switch');
-				this.switchAfterLevelup = false;
-				return;
-			}
-			if (this.endedMidCutscene || !target.side.foePokemonLeft()) return this.checkWin();
 		}
+		if (source.m.exp >= source.m.expAtNextLevel && source.level < 100) {
+			return this.levelUp(source, target);
+		}
+		if (this.findNextMonForEXP()) return this.giveExpAndEVs(target, this.findNextMonForEXP()!);
+		if (this.switchAfterLevelup) {
+			this.makeRequest('switch');
+			this.switchAfterLevelup = false;
+			return;
+		}
+		if (this.endedMidCutscene || !target.side.foePokemonLeft()) return this.checkWin();
 	}
 
 	findNextMonForEXP() {
