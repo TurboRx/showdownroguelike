@@ -17,8 +17,6 @@ New sections will be added to the bottom of the specified column.
 The column value will be ignored for repeat sections.
 */
 
-import { EXP_TABLE } from '../server/chat-plugins/roguelike';
-
 export const Formats: import('../sim/dex-formats').FormatList = [
 
 	// S/V Singles
