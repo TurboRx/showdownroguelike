@@ -496,7 +496,7 @@ export class Roguelike {
 		while (this.rotationalShop.length < 5 && index < shuffled.length) {
 			if (ROTATIONAL_ITEM_POOL[shuffled[index]].type === 'item') {
 				const dexItem = Dex.items.get(ROTATIONAL_ITEM_POOL[shuffled[index]].name);
-				if (dexItem.isNonstandard  === 'CAP') {
+				if (dexItem.isNonstandard === 'CAP') {
 					index++;
 					continue;
 				}
