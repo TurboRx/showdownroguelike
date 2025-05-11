@@ -157,7 +157,7 @@ function createAIBattle(userID: ID, ai: AITrainer) {
 			user,
 			team: Teams.pack(gameData.team) || '',
 			roguelikeTeamData: { teamData: gameData.teamData, keyItems: gameData.keyItems },
-			// @ts-ignore AI has no user data
+			// @ts-expect-error AI has no user data
 		}, {
 			username: ai.name,
 			team: Teams.pack(ai.team) || '',
@@ -439,14 +439,14 @@ export class Roguelike {
 			const teamSet = this.team[index];
 			const dexSpecies = Dex.species.get(teamSet.species);
 			const newMon = newData[index];
-			// @ts-ignore
+			// @ts-expect-error
 			mon.curHP = newMon.curHP;
-			// @ts-ignore
+			// @ts-expect-error
 			mon.status = newMon.status;
-			// @ts-ignore
+			// @ts-expect-error
 			mon.ppLeft = newMon.ppLeft;
 			mon.exp = newMon.exp;
-			// @ts-ignore
+			// @ts-expect-error
 			mon.evoFlag = newMon.evoFlag;
 			teamSet.evs = newMon.evs;
 			teamSet.item = newMon.item;
@@ -655,7 +655,7 @@ export class Roguelike {
 			const dexSpecies = Dex.species.get(mon.species);
 			const path = mon.shiny ? `gen5-shiny` : `gen5`;
 			buf += `<tr><td><img src="https://play.pokemonshowdown.com/sprites/${path}/${dexSpecies.spriteid}.png" /><br />${mon.species} ${mon.gender !== 'N' ? '(' + mon.gender + ')' : ''}<br />Level: ${mon.level ? mon.level : 100}<br />Item: ${mon.item === '' ? 'None' : mon.item}`;
-			// @ts-ignore ?????
+			// @ts-expect-error ?????
 			buf += `<td>`;
 			buf += `Ability: ${mon.ability}<br />`;
 			buf += `Tera Type: ${mon.teraType}<br />`;
@@ -714,7 +714,7 @@ export class Roguelike {
 				buf += `<img src="https://play.pokemonshowdown.com/sprites/${path}/${dexSpecies.spriteid}.png" /><br />${mon.species} ${mon.gender !== 'N' ? '(' + mon.gender + ')' : ''}<br />Level: ${mon.level ? mon.level : 100}`;
 				if (scoutData === 'revealSet') buf += `<br />Item: ${mon.item === '' ? 'None' : mon.item}`;
 			}
-			// @ts-ignore ?????
+			// @ts-expect-error ?????
 			buf += `<td>`;
 			if (scoutData === 'revealSet') {
 				buf += `Ability: ${mon.ability}<br />`;
@@ -902,7 +902,7 @@ export class Roguelike {
 		case 'pokemonPack':
 			exitButtonText = 'Skip';
 			buf += `<center><h3>Add a Pokemon!</h3></center><br />`;
-			// @ts-ignore
+			// @ts-expect-error
 			buf += this.genMiscTeamHTML(this.flags.pokemonOptions);
 			break;
 		case 'healHP':
@@ -923,7 +923,7 @@ export class Roguelike {
 			buf += `<center><h3>Get an item!</h3><br />`;
 			buf += `<div style="width:100%;">`;
 			let itempaddingindex = 0;
-			// @ts-ignore
+			// @ts-expect-error
 			for (const item of this.flags.itemOptions) {
 				if (itempaddingindex > 0) buf += `&nbsp;&nbsp;`;
 				buf += `<button class="button" name="send" value="/roguelike redeem item, ${toID(item)}"><psicon item="${item}" />${item}</button>`;
@@ -955,7 +955,7 @@ function saveRoguelikeData() {
 					JSONobj[okey][prop][deepProp] = value[prop][deepProp];
 				}
 			} else {
-				// @ts-ignore
+				// @ts-expect-error
 				JSONobj[okey][prop] = value[prop];
 			}
 		}
@@ -1023,7 +1023,7 @@ export const commands: Chat.ChatCommands = {
 						JSONobj[okey][prop][deepProp] = gameData[prop][deepProp];
 					}
 				} else {
-					// @ts-ignore
+					// @ts-expect-error
 					JSONobj[okey][prop] = gameData[prop];
 				}
 			}
@@ -1640,7 +1640,7 @@ export const pages: Chat.PageTable = {
 				throw new Chat.ErrorMessage('If you reached this error, you either already picked a starter or should contact HiZo.');
 			}
 			buf += `<center><h3>Choose a starter!</h3><br />`;
-			// @ts-ignore
+			// @ts-expect-error
 			buf += userGameData.genMiscTeamHTML(userGameData.flags.pokemonOptions, 'starter');
 			break;
 		case 'forgetmove':

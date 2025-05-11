@@ -3353,36 +3353,36 @@ export class Battle {
 				// p1 is always the human
 				for (const mon of this.p1.pokemon) {
 					const monData = {};
-					// @ts-ignore shut up
+					// @ts-expect-error shut up
 					monData.curHP = mon.hp;
 					const pokemon = mon.set;
-					// @ts-ignore
+					// @ts-expect-error
 					monData.status = mon.status.length ? mon.status : false;
-					// @ts-ignore
+					// @ts-expect-error
 					if (mon.hp < 1) monData.status = 'fnt';
-					// @ts-ignore
+					// @ts-expect-error
 					monData.ppLeft = [];
 					monData.moves = [];
 					for (const move of mon.baseMoveSlots) {
-						// @ts-ignore
+						// @ts-expect-error
 						monData.moves.push(move.move);
-						// @ts-ignore
+						// @ts-expect-error
 						monData.ppLeft.push(move.pp);
 					}
 					monData.exp = mon.m.exp;
-					// @ts-ignore
+					// @ts-expect-error
 					monData.evs = mon.set.evs;
-					// @ts-ignore
+					// @ts-expect-error
 					monData.level = mon.set.level;
-					// @ts-ignore
+					// @ts-expect-error
 					monData.evoFlag = mon.m.willEvolve || false;
-					// @ts-ignore
+					// @ts-expect-error
 					monData.item = mon.item.length ? Dex.items.get(mon.item).name : mon.item;
-					// @ts-ignore
+					// @ts-expect-error
 					monData.linkedTeamIndex = mon.m.roguelikeIndex;
 					roguelikeData.push(monData);
 				}
-				// @ts-ignore
+				// @ts-expect-error
 				roguelikeData.sort((a, b) => a.linkedTeamIndex - b.linkedTeamIndex);
 				this.send('sendroguelikedata', JSON.stringify(roguelikeData));
 			}

@@ -4760,26 +4760,26 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						const persist = data[index];
 						pokemon.m.exp = persist.exp;
 						pokemon.m.expAtNextLevel = persist.expAtNextLevel;
-						// @ts-ignore trust me bro
+						// @ts-expect-error trust me bro
 						pokemon.hp = persist.curHP;
-						// @ts-ignore
+						// @ts-expect-error
 						if (persist.status) {
-							// @ts-ignore
+							// @ts-expect-error
 							if (persist.status === 'fnt') {
 								pokemon.faint();
 								pokemon.m.willFaint = true;
 							} else {
-								// @ts-ignore
+								// @ts-expect-error
 								pokemon.setStatus(persist.status as ID, null, null, true);
 							}
 						}
 						let moveIndex = 0;
 						for (const move of pokemon.moveSlots) {
-							// @ts-ignore
+							// @ts-expect-error
 							move.pp = persist.ppLeft[moveIndex];
 							moveIndex++;
 						}
-						// @ts-ignore
+						// @ts-expect-error
 						pokemon.m.roguelikeIndex = persist.linkedTeamIndex;
 						index++;
 					}
@@ -4791,7 +4791,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						const newIndex = side.pokemon.indexOf(unfainted);
 						const carry = side.pokemon.shift();
 						side.pokemon.unshift(unfainted);
-						// @ts-ignore
+						// @ts-expect-error
 						side.pokemon[newIndex] = carry;
 						side.pokemon[newIndex].position = newIndex;
 						side.pokemon[0].position = 0;
