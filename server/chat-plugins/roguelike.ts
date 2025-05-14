@@ -290,7 +290,8 @@ function genPokemon(quantity: number, level: number | number[], weighting?: Poke
 				x_value = 500;
 				break;
 			case 'eternatuseternamax':
-				x_value = 725; // Unfeasible to appear otherwise
+				// If this shows up again something went wrong (in my mind)
+				// x_value = 725; // Unfeasible to appear otherwise
 				break;
 			}
 			const probWeight = (-1 / weighting.range) * (x_value - weighting.midpoint) ** 2 + (weighting.weightcap + weighting.range);
