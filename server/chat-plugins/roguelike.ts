@@ -466,7 +466,7 @@ export class Roguelike {
 	}
 
 	win() {
-		const RECOMMENDED_WEIGHTING = { midpoint: 300, range: 50, weightcap: 100 } as PokePackWeighting;
+		const RECOMMENDED_WEIGHTING = { midpoint: 250, range: 50, weightcap: 100 } as PokePackWeighting;
 		const RECOMMENDED_TEAM_LENGTH = [2, 3, 3, 4, 4, 5, 6];
 		const scale = [5, 10];
 		if (this.battle % 7 === 0) {
