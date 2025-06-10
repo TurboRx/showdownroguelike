@@ -155,7 +155,7 @@
 		"name": "Auspicious Armor",
 		"desc": "Evolves Charcadet into Armarouge when used.",
 		"icon": "Auspicious Armor",
-		"type": "item",
+		"type": "evolveItem",
 		"cost": 5,
 		"minStreak": 0
 	},
@@ -419,7 +419,7 @@
 		"name": "Chipped Pot",
 		"desc": "Evolves Sinistea-Antique into Polteageist-Antique when used.",
 		"icon": "Chipped Pot",
-		"type": "item",
+		"type": "evolveItem",
 		"cost": 5,
 		"minStreak": 0
 	},
@@ -507,7 +507,7 @@
 		"name": "Cracked Pot",
 		"desc": "Evolves Sinistea into Polteageist when used.",
 		"icon": "Cracked Pot",
-		"type": "item",
+		"type": "evolveItem",
 		"cost": 5,
 		"minStreak": 0
 	},
@@ -555,7 +555,7 @@
 		"name": "Dawn Stone",
 		"desc": "Evolves male Kirlia into Gallade and female Snorunt into Froslass when used.",
 		"icon": "Dawn Stone",
-		"type": "item",
+		"type": "evolveItem",
 		"cost": 5,
 		"minStreak": 0
 	},
@@ -699,7 +699,7 @@
 		"name": "Dusk Stone",
 		"desc": "Evolves Murkrow into Honchkrow, Misdreavus into Mismagius, Lampent into Chandelure, and Doublade into Aegislash when used.",
 		"icon": "Dusk Stone",
-		"type": "item",
+		"type": "evolveItem",
 		"cost": 5,
 		"minStreak": 0
 	},
@@ -891,7 +891,7 @@
 		"name": "Fire Stone",
 		"desc": "Evolves Vulpix into Ninetales, Growlithe into Arcanine, Eevee into Flareon, and Pansear into Simisear when used.",
 		"icon": "Fire Stone",
-		"type": "item",
+		"type": "evolveItem",
 		"cost": 5,
 		"minStreak": 0
 	},
@@ -995,7 +995,7 @@
 		"name": "Galarica Cuff",
 		"desc": "Evolves Galarian Slowpoke into Galarian Slowbro when used.",
 		"icon": "Galarica Cuff",
-		"type": "item",
+		"type": "evolveItem",
 		"cost": 5,
 		"minStreak": 0
 	},
@@ -1003,7 +1003,7 @@
 		"name": "Galarica Wreath",
 		"desc": "Evolves Galarian Slowpoke into Galarian Slowking when used.",
 		"icon": "Galarica Wreath",
-		"type": "item",
+		"type": "evolveItem",
 		"cost": 5,
 		"minStreak": 0
 	},
@@ -1299,7 +1299,7 @@
 		"name": "Ice Stone",
 		"desc": "Evolves Alolan Sandshrew into Alolan Sandslash, Alolan Vulpix into Alolan Ninetales, Eevee into Glaceon, and Galarian Darumaka into Galarian Darmanitan when used.",
 		"icon": "Ice Stone",
-		"type": "item",
+		"type": "evolveItem",
 		"cost": 5,
 		"minStreak": 0
 	},
@@ -1459,7 +1459,7 @@
 		"name": "Leaf Stone",
 		"desc": "Evolves Gloom into Vileplume, Weepinbell into Victreebel, Exeggcute into Exeggutor or Alolan Exeggutor, Eevee into Leafeon, Nuzleaf into Shiftry, and Pansage into Simisage when used.",
 		"icon": "Leaf Stone",
-		"type": "item",
+		"type": "evolveItem",
 		"cost": 5,
 		"minStreak": 0
 	},
@@ -1667,7 +1667,7 @@
 		"name": "Malicious Armor",
 		"desc": "Evolves Charcadet into Ceruledge when used.",
 		"icon": "Malicious Armor",
-		"type": "item",
+		"type": "evolveItem",
 		"cost": 5,
 		"minStreak": 0
 	},
@@ -1707,7 +1707,7 @@
 		"name": "Masterpiece Teacup",
 		"desc": "Evolves Poltchageist-Artisan into Sinistcha-Masterpiece when used.",
 		"icon": "Masterpiece Teacup",
-		"type": "item",
+		"type": "evolveItem",
 		"cost": 5,
 		"minStreak": 0
 	},
@@ -1755,7 +1755,7 @@
 		"name": "Metal Alloy",
 		"desc": "Evolves Duraludon into Archaludon when used.",
 		"icon": "Metal Alloy",
-		"type": "item",
+		"type": "evolveItem",
 		"cost": 5,
 		"minStreak": 0
 	},
@@ -1867,7 +1867,7 @@
 		"name": "Moon Stone",
 		"desc": "Evolves Nidorina into Nidoqueen, Nidorino into Nidoking, Clefairy into Clefable, Jigglypuff into Wigglytuff, Skitty into Delcatty, and Munna into Musharna when used.",
 		"icon": "Moon Stone",
-		"type": "item",
+		"type": "evolveItem",
 		"cost": 5,
 		"minStreak": 0
 	},
@@ -2507,7 +2507,7 @@
 		"name": "Shiny Stone",
 		"desc": "Evolves Togetic into Togekiss, Roselia into Roserade, Minccino into Cinccino, and Floette into Florges when used.",
 		"icon": "Shiny Stone",
-		"type": "item",
+		"type": "evolveItem",
 		"cost": 5,
 		"minStreak": 0
 	},
@@ -2731,7 +2731,7 @@
 		"name": "Sun Stone",
 		"desc": "Evolves Gloom into Bellossom, Sunkern into Sunflora, Cottonee into Whimsicott, Petilil into Lilligant, and Helioptile into Heliolisk when used.",
 		"icon": "Sun Stone",
-		"type": "item",
+		"type": "evolveItem",
 		"cost": 5,
 		"minStreak": 0
 	},
@@ -2747,7 +2747,7 @@
 		"name": "Sweet Apple",
 		"desc": "Evolves Applin into Appletun when used.",
 		"icon": "Sweet Apple",
-		"type": "item",
+		"type": "evolveItem",
 		"cost": 5,
 		"minStreak": 0
 	},
@@ -2755,7 +2755,7 @@
 		"name": "Syrupy Apple",
 		"desc": "Evolves Applin into Dipplin when used.",
 		"icon": "Syrupy Apple",
-		"type": "item",
+		"type": "evolveItem",
 		"cost": 5,
 		"minStreak": 0
 	},
@@ -2787,7 +2787,7 @@
 		"name": "Tart Apple",
 		"desc": "Evolves Applin into Flapple when used.",
 		"icon": "Tart Apple",
-		"type": "item",
+		"type": "evolveItem",
 		"cost": 5,
 		"minStreak": 0
 	},
@@ -2819,7 +2819,7 @@
 		"name": "Thunder Stone",
 		"desc": "Evolves Pikachu into Raichu or Alolan Raichu, Eevee into Jolteon, Eelektrik into Eelektross, and Charjabug into Vikavolt when used.",
 		"icon": "Thunder Stone",
-		"type": "item",
+		"type": "evolveItem",
 		"cost": 5,
 		"minStreak": 0
 	},
@@ -2883,7 +2883,7 @@
 		"name": "Unremarkable Teacup",
 		"desc": "Evolves Poltchageist into Sinistcha when used.",
 		"icon": "Unremarkable Teacup",
-		"type": "item",
+		"type": "evolveItem",
 		"cost": 5,
 		"minStreak": 0
 	},
@@ -2939,7 +2939,7 @@
 		"name": "Water Stone",
 		"desc": "Evolves Poliwhirl into Poliwrath, Shellder into Cloyster, Staryu into Starmie, Eevee into Vaporeon, Lombre into Ludicolo, and Panpour into Simipour when used.",
 		"icon": "Water Stone",
-		"type": "item",
+		"type": "evolveItem",
 		"cost": 5,
 		"minStreak": 0
 	},

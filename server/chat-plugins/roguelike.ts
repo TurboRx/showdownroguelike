@@ -49,7 +49,24 @@ function getMinExpForMonAtLevel(species: string, level: number) {
 	}
 }
 
-type ItemType = 'pokemonPack' | 'healHP' | 'healPP' | 'TM' | 'key' | 'debug' | 'revive' | 'cureStatus' | 'itemPack' | 'item';
+function checkForEvolution(pokemon: Pokemon, misc?: any) {
+	const evoList = Dex.species.get(pokemon.species).evos;
+	if (!evoList) return;
+	for (const newEvo of evoList) {
+		switch (Dex.species.get(newEvo).evoType) {
+			// figure out rest later
+			case 'useItem':
+				if (typeof misc === 'string' && Dex.species.get(newEvo).evoItem === misc) {
+					pokemon.m.willEvolve = newEvo;
+				}
+				break;
+			}
+		}
+
+	}
+}
+
+type ItemType = 'pokemonPack' | 'healHP' | 'healPP' | 'TM' | 'key' | 'debug' | 'revive' | 'cureStatus' | 'itemPack' | 'item' | 'evolveItem';
 
 type opponentScout = 'revealMon' | 'revealSet' | false;
 
