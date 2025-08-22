@@ -101,14 +101,14 @@ const SHOP_ITEMS: { [k: string]: ShopItem } = {
 	ultraballpack: { name: 'Ultra Ball Pack', icon: 'Ultra Ball', type: 'pokemonPack', desc: 'Pick 1 of 3 good random Pokemon.', cost: 12, minStreak: 3 },
 	masterballpack: { name: 'Master Ball Pack', icon: 'Master Ball', type: 'pokemonPack', desc: 'Pick 1 of 3 strong random Pokemon.', cost: 25, minStreak: 7 },
 	helditempack: { name: 'Held Item Pack', icon: 'Leftovers', type: 'itemPack', desc: 'Pick 1 of 3 held items to put on a Pokemon', cost: 3, minStreak: 0 },
-	potion: { name: 'Potion', icon: 'Electirizer', type: 'healHP', desc: 'Heals 20 HP for a Pokemon.', cost: 3, minStreak: 0 },
-	superpotion: { name: 'Super Potion', icon: 'Electirizer', type: 'healHP', desc: 'Heals 50 HP for a Pokemon.', cost: 5, minStreak: 1 },
-	hyperpotion: { name: 'Hyper Potion', icon: 'Electirizer', type: 'healHP', desc: 'Heals 120 HP for a Pokemon.', cost: 7, minStreak: 4 },
-	maxpotion: { name: 'Max Potion', icon: 'Electirizer', type: 'healHP', desc: 'Heals a pokemon\'s HP fully.', cost: 10, minStreak: 6 },
-	maxelixir: { name: 'Max Elixir', icon: 'Magmarizer', type: 'healPP', desc: 'Restores the PP of all of a pokemon\'s moves.', cost: 5, minStreak: 0 },
-	fullheal: { name: 'Full Heal', icon: 'Flower Sweet', type: 'cureStatus', desc: 'Cures a pokemon\'s status.', cost: 3, minStreak: 0 },
-	revive: { name: 'Revive', icon: 'Star Sweet', type: 'revive', desc: 'Revives a Pokemon to half its maximum HP.', cost: 7, minStreak: 1 },
-	expall: { name: 'Exp. All', icon: 'Ribbon Sweet', type: 'key', desc: 'Gives 50% Exp. to all non-fainted Pokemon not in the battle', cost: 25, minStreak: 2 },
+	potion: { name: 'Potion', icon: 'Potion', type: 'healHP', desc: 'Heals 20 HP for a Pokemon.', cost: 3, minStreak: 0 },
+	superpotion: { name: 'Super Potion', icon: 'Super Potion', type: 'healHP', desc: 'Heals 50 HP for a Pokemon.', cost: 5, minStreak: 1 },
+	hyperpotion: { name: 'Hyper Potion', icon: 'Hyper Potion', type: 'healHP', desc: 'Heals 120 HP for a Pokemon.', cost: 7, minStreak: 4 },
+	maxpotion: { name: 'Max Potion', icon: 'Max Potion', type: 'healHP', desc: 'Heals a pokemon\'s HP fully.', cost: 10, minStreak: 6 },
+	maxelixir: { name: 'Max Elixir', icon: 'Max Elixir', type: 'healPP', desc: 'Restores the PP of all of a pokemon\'s moves.', cost: 5, minStreak: 0 },
+	fullheal: { name: 'Full Heal', icon: 'Full Heal', type: 'cureStatus', desc: 'Cures a pokemon\'s status.', cost: 3, minStreak: 0 },
+	revive: { name: 'Revive', icon: 'Revive', type: 'revive', desc: 'Revives a Pokemon to half its maximum HP.', cost: 7, minStreak: 1 },
+	expall: { name: 'Exp. All', icon: 'Exp Share', type: 'key', desc: 'Gives 50% Exp. to all non-fainted Pokemon not in the battle', cost: 25, minStreak: 2 },
 	// debug2: { name: 'Debug 2', icon: 'berserk gene', type: 'debug', desc: 'Bans HoeenHero from this server twice.', cost: 999, minStreak: 1 },
 };
 
@@ -869,7 +869,7 @@ export class Roguelike {
 			for (const key of this.rotationalShop) {
 				const item = ROTATIONAL_ITEM_POOL[key];
 				if (item.minStreak > this.streak) continue;
-				buf += `<tr><td><psicon item ="${item.icon}"> ${item.name}</td><td>${item.desc}</td><td>${item.cost} BP</td>`;
+				buf += `<tr><td><img src="https://www.smogon.com/forums/media/minisprites/${item.icon.toLowerCase().replaceAll(' ', '-')}.png" height=24px width=24px /> ${item.name}</td><td>${item.desc}</td><td>${item.cost} BP</td>`;
 				if (item.cost > this.battlePoints) {
 					buf += `<td><button class="button disabled">Not enough BP!</button>`;
 				} else {
@@ -883,7 +883,7 @@ export class Roguelike {
 		for (const key in SHOP_ITEMS) {
 			const item = SHOP_ITEMS[key];
 			if (item.minStreak > this.streak) continue;
-			buf += `<tr><td><psicon item ="${item.icon}"> ${item.name}</td><td>${item.desc}</td><td>${item.cost} BP</td>`;
+			buf += `<tr><td><img src="https://www.smogon.com/forums/media/minisprites/${item.icon.toLowerCase().replaceAll(' ', '-')}.png" height=24px width=24px /> ${item.name}</td><td>${item.desc}</td><td>${item.cost} BP</td>`;
 			if (item.type === 'key' && this.keyItems.includes(item.name)) {
 				buf += `<td><button class="button disabled">Already bought!</button>`;
 			} else if (item.cost > this.battlePoints) {
