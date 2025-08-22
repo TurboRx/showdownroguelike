@@ -60,9 +60,7 @@ function checkForEvolution(pokemon: Pokemon, misc?: any) {
 					pokemon.m.willEvolve = newEvo;
 				}
 				break;
-			}
 		}
-
 	}
 }
 
@@ -941,10 +939,9 @@ export class Roguelike {
 			buf += `<center><h3>Get an item!</h3><br />`;
 			buf += `<div style="width:100%;">`;
 			let itempaddingindex = 0;
-			// @ts-expect-error
 			for (const item of this.flags.itemOptions) {
 				if (itempaddingindex > 0) buf += `&nbsp;&nbsp;`;
-				buf += `<button class="button" name="send" value="/roguelike redeem item, ${toID(item)}"><psicon item="${item}" />${item}</button>`;
+				buf += `<button class="button" name="send" value="/roguelike redeem item, ${toID(item)}"><img src="https://www.smogon.com/forums/media/minisprites/${item.toLowerCase().replaceAll(' ', '-')}.png" height=24px width=24px />${item}</button>`;
 				itempaddingindex++;
 			}
 			buf += `</div>`;
