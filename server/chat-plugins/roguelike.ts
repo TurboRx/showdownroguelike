@@ -663,6 +663,7 @@ export class Roguelike {
 				linkedMoveIndex++;
 			}
 			buf += `<td><button class="button" name="send" value="/roguelike switch ${linkedIndex + 1}">Move</button>`;
+			if (mon.item) buf += `<br /><br /><button class="button" name="send" value="/roguelike switchitem ${linkedIndex + 1}">Switch Item</button>`;
 			buf += `</td></tr>`;
 			linkedIndex++;
 		}
@@ -822,7 +823,7 @@ export class Roguelike {
 		return buf;
 	}
 
-	genQuickSelectHTML(checkItem: ItemType | "switch", targetIndex?: number) {
+	genQuickSelectHTML(checkItem: ItemType | "switch" | "switchitem", targetIndex?: number) {
 		let buf = `<div style="width:100%;"><center>`;
 		let cmd;
 		let skip = 'shop';
@@ -868,6 +869,12 @@ export class Roguelike {
 				failureCondition = index === targetIndex;
 				cmd = `switch ${targetIndex}, ` + index;
 				skip = 'switch undo';
+				skipmsg = 'Undo';
+				break;
+			case 'switchitem':
+				failureCondition = index === targetIndex;
+				cmd = `switchitem ${targetIndex}, ` + index;
+				skip = 'switchitem undo';
 				skipmsg = 'Undo';
 				break;
 			case 'TM':
@@ -1577,6 +1584,35 @@ export const commands: Chat.ChatCommands = {
 				userData.goToPage('shop-team');
 			}
 		},
+		switchitem(target, room, user) {
+			const userData = roguelikeGames.get(user.id);
+			if (!userData || userData.runEnded) throw new Chat.ErrorMessage(`You need to make a new run first.`);
+			if (target === 'undo') {
+				userData.goToPage('shop-team');
+			}
+			const args = target.split(',');
+			let arg = args.shift();
+			if (!arg) throw new Chat.ErrorMessage(`You need to specify a pokemon to switch with!`);
+			let index1 = parseInt(arg);
+			if (!index1) throw new Chat.ErrorMessage(`You need to specify a pokemon to switch with!`);
+			if (!userData.team[index1 - 1]) throw new Chat.ErrorMessage(`You need to specify a pokemon to switch with!`);
+			if (!userData.team[index1 - 1].item) throw new Chat.ErrorMessage(`This Pokemon has no item!`);
+			arg = args.shift();
+			if (!arg) {
+				userData.goToPage(`shop-switchitem-${index1}`);
+				return;
+			} else {
+				let index2 = parseInt(arg);
+				if (!index2) throw new Chat.ErrorMessage(`You need to specify a pokemon to switch with!`);
+				index1--;
+				index2--;
+				if (!userData.team[index1] || !userData.team[index2]) throw new Chat.ErrorMessage(`You need to specify a pokemon to switch with!`);
+				const carryData = userData.team[index1].item;
+				userData.team[index1].item = userData.team[index2].item;
+				userData.team[index2].item = carryData;
+				userData.goToPage('shop-team');
+			}
+		},
 		giveitem(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
 			if (!userData || userData.runEnded) throw new Chat.ErrorMessage(`You need to make a new run first.`);
@@ -1699,6 +1735,14 @@ export const pages: Chat.PageTable = {
 				buf = `<center>Switch with who?</center><br />`;
 				const switchNumber = parseInt(switchIndex);
 				buf += userGameData.genQuickSelectHTML('switch', switchNumber);
+				break;
+			case 'switchitem':
+				subtitle = 'Current Team';
+				const switchItemIndex = gameArgs.shift();
+				if (!switchItemIndex) throw new Chat.ErrorMessage('If you tried to switch and reached this error, contact HiZo.');
+				buf = `<center>Switch with who?</center><br />`;
+				const switchItemNumber = parseInt(switchItemIndex);
+				buf += userGameData.genQuickSelectHTML('switchitem', switchItemNumber);
 				break;
 			default:
 				subtitle = 'Shop';
