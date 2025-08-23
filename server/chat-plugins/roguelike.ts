@@ -490,13 +490,13 @@ export class Roguelike {
 
 	rollShop() {
 		this.rotationalShop = [];
-		const shuffled = Utils.shuffle(Object.keys(ROTATIONAL_ITEM_POOL));
-		let index = 0;
-		while (this.rotationalShop.length < 5 && index < shuffled.length) {
-			const dexItem = Dex.items.get(ROTATIONAL_ITEM_POOL[shuffled[index]].name);
-			if (ROTATIONAL_ITEM_POOL[shuffled[index]].type === 'item') {
+
+		let viableItems = [];
+
+		for (const index of Object.keys(ROTATIONAL_ITEM_POOL)) {
+			const dexItem = Dex.items.get(ROTATIONAL_ITEM_POOL[index].name);
+			if (ROTATIONAL_ITEM_POOL[index].type === 'item') {
 				if (dexItem.isNonstandard === 'CAP') {
-					index++;
 					continue;
 				}
 				const isViable = dexItem.itemUser || dexItem.zMove || Object.keys(dexItem).some(k => {
@@ -506,21 +506,35 @@ export class Roguelike {
 					return false;
 				});
 				if (dexItem.itemUser && !this.team.some(p => dexItem.itemUser?.includes(p.species))) {
-					index++;
 					continue;
 				}
 				if (!isViable) {
-					index++;
 					continue;
 				}
-			} else if (ROTATIONAL_ITEM_POOL[shuffled[index]].type === 'evolveItem') {
+			} else if (ROTATIONAL_ITEM_POOL[index].type === 'evolveItem') {
 				if (!this.team.some(p => checkForEvolution(p, dexItem.name))) {
-					index++;
 					continue;
 				}
 			}
-			this.rotationalShop.push(shuffled[index]);
-			index++;
+			viableItems.push(index);
+		}
+
+		while (this.rotationalShop.length < 5) {
+			let potential = [];
+			const randomNo = Math.floor(Math.random() * 100);
+			if (randomNo > 30) {
+				potential = viableItems.filter(item => ROTATIONAL_ITEM_POOL[item].type === 'item');
+			} else if (randomNo > 10) {
+				potential = viableItems.filter(item => ROTATIONAL_ITEM_POOL[item].type === 'TM');
+				if (!potential.length) potential = viableItems.filter(item => ROTATIONAL_ITEM_POOL[item].type === 'item');
+			} else {
+				potential = viableItems.filter(item => ROTATIONAL_ITEM_POOL[item].type === 'evolveItem' || Dex.items.get(item)?.itemUser);
+				if (!potential.length) potential = viableItems.filter(item => ROTATIONAL_ITEM_POOL[item].type === 'item');
+			}
+			let winner = Utils.shuffle(potential).pop();
+			if (!winner) break;
+			this.rotationalShop.push(winner);
+			viableItems = viableItems.filter(e => e !== winner);
 		}
 	}
 
