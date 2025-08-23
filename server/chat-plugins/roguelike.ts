@@ -49,7 +49,7 @@ function getMinExpForMonAtLevel(species: string, level: number) {
 	}
 }
 
-function checkForEvolution(pokemon: Pokemon, misc?: any) {
+function checkForEvolution(pokemon: PokemonSet, misc?: any) {
 	const evoList = Dex.species.get(pokemon.species).evos;
 	if (!evoList) return;
 	for (const newEvo of evoList) {
@@ -57,11 +57,12 @@ function checkForEvolution(pokemon: Pokemon, misc?: any) {
 			// figure out rest later
 			case 'useItem':
 				if (typeof misc === 'string' && Dex.species.get(newEvo).evoItem === misc) {
-					pokemon.m.willEvolve = newEvo;
+					return newEvo;
 				}
 				break;
 		}
 	}
+	return false;
 }
 
 function itemURLFormat(item: string) {
@@ -513,7 +514,7 @@ export class Roguelike {
 					continue;
 				}
 			} else if (ROTATIONAL_ITEM_POOL[shuffled[index]].type === 'evolveItem') {
-				if (!this.team.some(p => Dex.species.get(p.species).evoItem === dexItem.name)) {
+				if (!this.team.some(p => checkForEvolution(p, dexItem.name))) {
 					index++;
 					continue;
 				}
