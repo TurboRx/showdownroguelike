@@ -900,7 +900,7 @@ export class Roguelike {
 			if (!checkForEvolution(mon, item.name)) {
 				buf += `<button class="button disabled"><psicon pokemon ="${mon.species}"> ${mon.name}</button>`;
 			} else {
-				buf += `<button class="button" name="send" value="/roguelike useevoitem, ${index}"><psicon pokemon ="${mon.species}" /> ${mon.name}</button>`;
+				buf += `<button class="button" name="send" value="/roguelike redeem evolveitem, ${index}"><psicon pokemon ="${mon.species}" /> ${mon.name}</button>`;
 			}
 			if (index < this.team.length) {
 				buf += `&nbsp;&nbsp;&nbsp;&nbsp;`;
@@ -1405,6 +1405,23 @@ export const commands: Chat.ChatCommands = {
 				userData.goToPage('purchase-item');
 				delete userData.flags.itemOptions;
 				return;
+			case 'evolveitem':
+				arg = args.shift();
+				if (!arg) throw new Chat.ErrorMessage(`You need to specify a pokemon.`);
+				index = parseInt(arg);
+				index--;
+				if (!userData.team[index]) throw new Chat.ErrorMessage(`You need to specify a pokemon on your team.`);
+				let targetEvo = checkForEvolution(userData.team[index], (userData.flags.purchasedItem as ShopItem).name)
+				if (!targetEvo) throw new Chat.ErrorMessage(`You can't use this on that pokemon.`);
+				userData.teamData[index].evoFlag = targetEvo;
+				userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
+				if (userData.flags.purchasedItem) delete userData.flags.purchasedItem;
+				if (userData.flags.isRotationalItem) {
+					userData.rotationalShop.splice(userData.rotationalShop.indexOf(toID(userData.flags.newItem)), 1);
+					delete userData.flags.isRotationalItem;
+				}
+				userData.goToPage('evolution');
+				return;
 			case 'tm':
 				arg = args.shift();
 				if (!arg) throw new Chat.ErrorMessage(`You need to specify a pokemon.`);
@@ -1487,6 +1504,11 @@ export const commands: Chat.ChatCommands = {
 				if (userData.teamData.some(t => !!t.evoFlag)) {
 					userData.goToPage('evolution');
 				} else {
+					if (userData.flags.newItem) {
+						delete userData.flags.newItem;
+						userData.goToPage('shop');
+						return;
+					}
 					userData.goToPage('results');
 				}
 				return;
@@ -1511,6 +1533,11 @@ export const commands: Chat.ChatCommands = {
 				if (userData.teamData.some(t => !!t.evoFlag)) {
 					userData.goToPage('evolution');
 				} else {
+					if (userData.flags.newItem) {
+						delete userData.flags.newItem;
+						userData.goToPage('shop');
+						return;
+					}
 					userData.goToPage('results');
 				}
 				return;
@@ -1703,7 +1730,7 @@ export const pages: Chat.PageTable = {
 						buf = `<center>Give this item to who?</center><br />`;
 						buf += userGameData.genQuickSelectHTML(type);
 				}
-				
+
 				break;
 			default:
 				buf += userGameData.genPurchaseHTML();
