@@ -152,6 +152,7 @@ interface BackupData {
 	teamData: UserTeamData[];
 	keyItems: string[];
 	rotationalShop: string[];
+	timesRerolled: number;
 	flags: {
 		[k: string]: any,
 	};
@@ -423,6 +424,7 @@ export class Roguelike {
 	teamData: UserTeamData[];
 	keyItems: string[];
 	rotationalShop: string[];
+	timesRerolled: number;
 	flags: {
 		pokemonOptions?: PokemonSet[],
 		opponentTeamScout?: opponentScout[],
@@ -443,6 +445,7 @@ export class Roguelike {
 		this.flags = backup?.flags || [];
 		this.keyItems = backup?.keyItems || [];
 		this.rotationalShop = backup?.rotationalShop || [];
+		this.timesRerolled = backup?.timesRerolled || 0;
 		this.opponentTeam = backup?.opponentTeam || [];
 		this.curRoom = backup?.curRoom || 'intro';
 		this.runEnded = backup?.runEnded || false;
@@ -480,6 +483,43 @@ export class Roguelike {
 		}
 	}
 
+	rollShop() {
+		this.rotationalShop = [];
+		const shuffled = Utils.shuffle(Object.keys(ROTATIONAL_ITEM_POOL));
+		let index = 0;
+		while (this.rotationalShop.length < 5 && index < shuffled.length) {
+			const dexItem = Dex.items.get(ROTATIONAL_ITEM_POOL[shuffled[index]].name);
+			if (ROTATIONAL_ITEM_POOL[shuffled[index]].type === 'item') {
+				if (dexItem.isNonstandard === 'CAP') {
+					index++;
+					continue;
+				}
+				const isViable = dexItem.itemUser || dexItem.zMove || Object.keys(dexItem).some(k => {
+					if (typeof dexItem[k] === 'function') {
+						return true;
+					}
+					return false;
+				});
+				if (dexItem.itemUser && !this.team.some(p => dexItem.itemUser?.includes(p.species))) {
+					index++;
+					continue;
+				}
+				if (!isViable) {
+					index++;
+					continue;
+				}
+			} else if (ROTATIONAL_ITEM_POOL[shuffled[index]].type === 'evolveItem') {
+				if (!this.team.some(p => Dex.species.get(p.species).evoItem === dexItem.name)) {
+					index++;
+					continue;
+				}
+			}
+			this.rotationalShop.push(shuffled[index]);
+			index++;
+		}
+		console.log()
+	}
+
 	win() {
 		const RECOMMENDED_WEIGHTING = { midpoint: 250, range: 50, weightcap: 100 } as PokePackWeighting;
 		const RECOMMENDED_TEAM_LENGTH = [2, 3, 3, 4, 4, 5, 6];
@@ -506,34 +546,7 @@ export class Roguelike {
 		for (let x = 0; x < this.opponentTeam.length; x++) {
 			this.flags.opponentTeamScout.push(false);
 		}
-		this.rotationalShop = [];
-		const shuffled = Utils.shuffle(Object.keys(ROTATIONAL_ITEM_POOL));
-		let index = 0;
-		while (this.rotationalShop.length < 5 && index < shuffled.length) {
-			if (ROTATIONAL_ITEM_POOL[shuffled[index]].type === 'item') {
-				const dexItem = Dex.items.get(ROTATIONAL_ITEM_POOL[shuffled[index]].name);
-				if (dexItem.isNonstandard === 'CAP') {
-					index++;
-					continue;
-				}
-				const isViable = dexItem.itemUser || dexItem.zMove || Object.keys(dexItem).some(k => {
-					if (typeof dexItem[k] === 'function') {
-						return true;
-					}
-					return false;
-				});
-				if (dexItem.itemUser && !this.team.some(p => dexItem.itemUser?.includes(p.species))) {
-					index++;
-					continue;
-				}
-				if (!isViable) {
-					index++;
-					continue;
-				}
-			}
-			this.rotationalShop.push(shuffled[index]);
-			index++;
-		}
+		this.rollShop();
 	}
 
 	lose() {
@@ -879,8 +892,13 @@ export class Roguelike {
 	genShopHTML() {
 		let buf = `<center><h3>Shop</h3></center><br />`;
 		if (this.rotationalShop.length) {
-			buf += `<center><strong>Current Deals<strong></center><br />`;
-			buf += `<table style="width:100%; border-collapse: collapse;"border="1"><tr><th>Item</th><th>Description</th><th>Price</th></tr>`;
+			buf += `<center><strong>Current Deals<strong></center>`;
+			if (2 + this.timesRerolled > this.battlePoints) {
+				buf += `<button style="float: left;" class="button disabled">Not enough BP!</button>`;
+			} else {
+				buf += `<button style="float: left;" class="button" name="send" value="/roguelike reroll">Reroll Shop (${2 + this.timesRerolled} BP)</button>`;
+			}
+			buf += `<br /><br /><table style="width:100%; border-collapse: collapse;"border="1"><tr><th>Item</th><th>Description</th><th>Price</th></tr>`;
 			for (const key of this.rotationalShop) {
 				const item = ROTATIONAL_ITEM_POOL[key];
 				if (item.minStreak > this.streak) continue;
@@ -1132,6 +1150,17 @@ export const commands: Chat.ChatCommands = {
 			if (!userData || userData.runEnded) throw new Chat.ErrorMessage(`You need to make a new run first.`);
 			if (!checkSequence(userData.curRoom, 'shop')) throw new Chat.ErrorMessage(`Can't go to shop yet!`);
 			if (userData.flags.purchasedItem) delete userData.flags.purchasedItem;
+			userData.goToPage('shop');
+		},
+		reroll(target, room, user) {
+			const userData = roguelikeGames.get(user.id);
+			if (!userData || userData.runEnded) throw new Chat.ErrorMessage(`You need to make a new run first.`);
+			if (!checkSequence(userData.curRoom, 'shop')) throw new Chat.ErrorMessage(`You aren't in the shop!`);
+			const price = 2 + userData.timesRerolled;
+			if (price > userData.battlePoints) return this.popupReply(`You don't have enough BP to buy this!`);
+			userData.rollShop();
+			userData.battlePoints -= price;
+			userData.timesRerolled++;
 			userData.goToPage('shop');
 		},
 		checkteam(target, room, user) {
