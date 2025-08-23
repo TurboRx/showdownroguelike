@@ -893,6 +893,25 @@ export class Roguelike {
 		return buf;
 	}
 
+	genEvoSelectHTML(item: RotationalItem) {
+		let buf = `<div style="width:100%;"><center>`;
+		let index = 1;
+		for (const mon of this.team) {
+			if (!checkForEvolution(mon, item.name)) {
+				buf += `<button class="button disabled"><psicon pokemon ="${mon.species}"> ${mon.name}</button>`;
+			} else {
+				buf += `<button class="button" name="send" value="/roguelike useevoitem, ${index}"><psicon pokemon ="${mon.species}" /> ${mon.name}</button>`;
+			}
+			if (index < this.team.length) {
+				buf += `&nbsp;&nbsp;&nbsp;&nbsp;`;
+			}
+			index++;
+		}
+		buf += `<br /><br /><button class="button" name="send" value="/roguelike shop">Undo</button>`;
+		buf += `</center></div>`;
+		return buf;
+	}
+
 	genShopHTML() {
 		let buf = `<center><h3>Shop</h3></center><br />`;
 		if (this.rotationalShop.length) {
@@ -1254,6 +1273,7 @@ export const commands: Chat.ChatCommands = {
 				userData.battlePoints -= item.cost;
 				break;
 			case 'item':
+			case 'evolveItem':
 				userData.flags.newItem = item.name;
 				userData.flags.isRotationalItem = true;
 				userData.flags.purchasedItem = item;
@@ -1673,9 +1693,17 @@ export const pages: Chat.PageTable = {
 				buf += userGameData.genQuickSelectHTML('pokemonPack');
 				break;
 			case 'item':
-				buf = `<center>Give this item to who?</center><br />`;
 				const type = userGameData.flags.purchasedItem?.type || 'itemPack';
-				buf += userGameData.genQuickSelectHTML(type);
+				switch (type) {
+					case 'evolveItem':
+						buf = `<center>Use this item on who?</center><br />`;
+						buf += userGameData.genEvoSelectHTML(userGameData.flags.purchasedItem);
+						break;
+					default:
+						buf = `<center>Give this item to who?</center><br />`;
+						buf += userGameData.genQuickSelectHTML(type);
+				}
+				
 				break;
 			default:
 				buf += userGameData.genPurchaseHTML();
