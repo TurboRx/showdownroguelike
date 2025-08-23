@@ -664,7 +664,7 @@ export class Roguelike {
 			}
 			buf += `<td><button class="button" name="send" value="/roguelike switch ${linkedIndex + 1}">Move</button>`;
 			if (mon.item) buf += `<br /><br /><button class="button" name="send" value="/roguelike switchitem ${linkedIndex + 1}">Switch Item</button>`;
-			buf +=`<br /><hr><button class="button" name="send" value="/roguelike release ${linkedIndex + 1}">Release</button>`;
+			buf +=`<br /><br /><br /><br /><br /><hr><button class="button" name="send" value="/roguelike release ${linkedIndex + 1}">Release</button>`;
 			buf += `</td></tr>`;
 			linkedIndex++;
 		}
@@ -1619,6 +1619,15 @@ export const commands: Chat.ChatCommands = {
 			const userData = roguelikeGames.get(user.id);
 			if (!userData || userData.runEnded) throw new Chat.ErrorMessage(`You need to make a new run first.`);
 			if (!index || !userData.team[index - 1]) throw new Chat.ErrorMessage(`You need to specify a pokemon to release!`);
+			let allFainted = true;
+			for (const monIndex of userData.teamData) {
+				if (monIndex.linkedTeamIndex === index - 1) continue;
+				if (monIndex.status !== 'fnt') {
+					allFainted = false;
+					break;
+				}
+			}
+			if (allFainted) throw new Chat.ErrorMessage(`Can't release! You will have no pokemon left!`);
 			if (user.lastCommand !== 'roguelike release' + index) {
 				user.lastCommand = 'roguelike release' + index;
 				return this.popupReply(`Do you really want to release ${userData.team[index - 1].name}? If so, click the release button again.`);
@@ -1629,7 +1638,7 @@ export const commands: Chat.ChatCommands = {
 			for (let x = 0; x < userData.teamData.length; x++) {
 				userData.teamData[x].linkedTeamIndex = x;
 			}
-			
+			userData.goToPage('shop-team');
 		},
 		giveitem(target, room, user) {
 			const userData = roguelikeGames.get(user.id);
