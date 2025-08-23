@@ -64,6 +64,10 @@ function checkForEvolution(pokemon: Pokemon, misc?: any) {
 	}
 }
 
+function itemURLFormat(item: string) {
+	return item.replaceAll(/[^a-zA-Z-]+/g, '').toLowerCase().replaceAll(' ', '-');
+}
+
 type ItemType = 'pokemonPack' | 'healHP' | 'healPP' | 'TM' | 'key' | 'debug' | 'revive' | 'cureStatus' | 'itemPack' | 'item' | 'evolveItem';
 
 type opponentScout = 'revealMon' | 'revealSet' | false;
@@ -902,7 +906,7 @@ export class Roguelike {
 			for (const key of this.rotationalShop) {
 				const item = ROTATIONAL_ITEM_POOL[key];
 				if (item.minStreak > this.streak) continue;
-				buf += `<tr><td><img src="https://www.smogon.com/forums/media/minisprites/${item.icon.toLowerCase().replaceAll(' ', '-')}.png" height=24px width=24px /> ${item.name}</td><td>${item.desc}</td><td>${item.cost} BP</td>`;
+				buf += `<tr><td><img src="https://www.smogon.com/forums/media/minisprites/${itemURLFormat(item.icon)}.png" height=24px width=24px /> ${item.name}</td><td>${item.desc}</td><td>${item.cost} BP</td>`;
 				if (item.cost > this.battlePoints) {
 					buf += `<td><button class="button disabled">Not enough BP!</button>`;
 				} else {
@@ -916,7 +920,7 @@ export class Roguelike {
 		for (const key in SHOP_ITEMS) {
 			const item = SHOP_ITEMS[key];
 			if (item.minStreak > this.streak) continue;
-			buf += `<tr><td><img src="https://www.smogon.com/forums/media/minisprites/${item.icon.toLowerCase().replaceAll(' ', '-')}.png" height=24px width=24px /> ${item.name}</td><td>${item.desc}</td><td>${item.cost} BP</td>`;
+			buf += `<tr><td><img src="https://www.smogon.com/forums/media/minisprites/${itemURLFormat(item.icon)}.png" height=24px width=24px /> ${item.name}</td><td>${item.desc}</td><td>${item.cost} BP</td>`;
 			if (item.type === 'key' && this.keyItems.includes(item.name)) {
 				buf += `<td><button class="button disabled">Already bought!</button>`;
 			} else if (item.cost > this.battlePoints) {
@@ -959,7 +963,7 @@ export class Roguelike {
 			let itempaddingindex = 0;
 			for (const item of this.flags.itemOptions) {
 				if (itempaddingindex > 0) buf += `&nbsp;&nbsp;`;
-				buf += `<button class="button" name="send" value="/roguelike redeem item, ${toID(item)}"><img src="https://www.smogon.com/forums/media/minisprites/${item.toLowerCase().replaceAll(' ', '-')}.png" height=24px width=24px />${item}</button>`;
+				buf += `<button class="button" name="send" value="/roguelike redeem item, ${toID(item)}"><img src="https://www.smogon.com/forums/media/minisprites/${itemURLFormat(item)}.png" height=24px width=24px />${item}</button>`;
 				itempaddingindex++;
 			}
 			buf += `</div>`;
