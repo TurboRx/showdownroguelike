@@ -65,7 +65,7 @@ function checkForEvolution(pokemon: Pokemon, misc?: any) {
 }
 
 function itemURLFormat(item: string) {
-	return item.replaceAll(/[^a-zA-Z-]+/g, '').toLowerCase().replaceAll(' ', '-');
+	return item.replaceAll(/[^a-zA-Z0-9 \-]+/g, '').toLowerCase().replaceAll(' ', '-');
 }
 
 type ItemType = 'pokemonPack' | 'healHP' | 'healPP' | 'TM' | 'key' | 'debug' | 'revive' | 'cureStatus' | 'itemPack' | 'item' | 'evolveItem';
