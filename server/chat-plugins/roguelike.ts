@@ -1,7 +1,7 @@
 /**
 * HiZo's Untitled Roguelike
 * @author HiZo
-* @version Alpha 3 (Codename: Porygon2)
+* @version Alpha 3.5 (Codename: Stonjourner)
 */
 
 import { FS, Utils } from '../../lib';
