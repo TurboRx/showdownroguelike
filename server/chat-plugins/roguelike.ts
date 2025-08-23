@@ -521,7 +521,6 @@ export class Roguelike {
 			this.rotationalShop.push(shuffled[index]);
 			index++;
 		}
-		console.log()
 	}
 
 	win() {
