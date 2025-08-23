@@ -54,12 +54,12 @@ function checkForEvolution(pokemon: PokemonSet, misc?: any) {
 	if (!evoList) return;
 	for (const newEvo of evoList) {
 		switch (Dex.species.get(newEvo).evoType) {
-			// figure out rest later
-			case 'useItem':
-				if (typeof misc === 'string' && Dex.species.get(newEvo).evoItem === misc) {
-					return newEvo;
-				}
-				break;
+		// figure out rest later
+		case 'useItem':
+			if (typeof misc === 'string' && Dex.species.get(newEvo).evoItem === misc) {
+				return newEvo;
+			}
+			break;
 		}
 	}
 	return false;
