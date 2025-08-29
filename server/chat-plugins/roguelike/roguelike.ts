@@ -9,7 +9,7 @@ import { TeamValidator } from '../../../sim/team-validator';
 const SAVE_DATA = 'config/roguelike.json';
 const roguelikeGames = new Map<ID, Roguelike>();
 
-export const EXP_TABLE = JSON.parse(FS('exp.json').readSync());
+export const EXP_TABLE = JSON.parse(FS('server/chat-plugins/roguelike/exp.json').readSync());
 
 function getMinExpForMonAtLevel(species: string, level: number) {
 	const nextlevel = level + 1;
@@ -109,28 +109,13 @@ interface PokePackWeighting {
 	special?: string; // TODO: 'Fun' packs
 }
 
-const TM_LIST: { [k: string]: TMItem } = JSON.parse(FS('tmdb.json').readSync());
+const TM_LIST: { [k: string]: TMItem } = JSON.parse(FS('server/chat-plugins/roguelike/tmdb.json').readSync());
 
-const ROTATIONAL_ITEM_POOL: { [k: string]: RotationalItem | TMItem } = JSON.parse(FS('itemdb.json').readSync());
+const ROTATIONAL_ITEM_POOL: { [k: string]: RotationalItem | TMItem } = JSON.parse(FS('server/chat-plugins/roguelike/itemdb.json').readSync());
 
 Object.assign(ROTATIONAL_ITEM_POOL, TM_LIST);
 
-const SHOP_ITEMS: { [k: string]: ShopItem } = {
-	pokeballpack: { name: 'Poke Ball Pack', icon: 'Poke Ball', type: 'pokemonPack', desc: 'Pick 1 of 3 weak random Pokemon.', cost: 5, minStreak: 0 },
-	greatballpack: { name: 'Great Ball Pack', icon: 'Great Ball', type: 'pokemonPack', desc: 'Pick 1 of 3 decent random Pokemon.', cost: 8, minStreak: 1 },
-	ultraballpack: { name: 'Ultra Ball Pack', icon: 'Ultra Ball', type: 'pokemonPack', desc: 'Pick 1 of 3 good random Pokemon.', cost: 12, minStreak: 3 },
-	masterballpack: { name: 'Master Ball Pack', icon: 'Master Ball', type: 'pokemonPack', desc: 'Pick 1 of 3 strong random Pokemon.', cost: 25, minStreak: 7 },
-	helditempack: { name: 'Held Item Pack', icon: 'Leftovers', type: 'itemPack', desc: 'Pick 1 of 3 held items to put on a Pokemon', cost: 3, minStreak: 0 },
-	potion: { name: 'Potion', icon: 'Potion', type: 'healHP', desc: 'Heals 20 HP for a Pokemon.', cost: 3, minStreak: 0 },
-	superpotion: { name: 'Super Potion', icon: 'Super Potion', type: 'healHP', desc: 'Heals 50 HP for a Pokemon.', cost: 5, minStreak: 1 },
-	hyperpotion: { name: 'Hyper Potion', icon: 'Hyper Potion', type: 'healHP', desc: 'Heals 120 HP for a Pokemon.', cost: 7, minStreak: 4 },
-	maxpotion: { name: 'Max Potion', icon: 'Max Potion', type: 'healHP', desc: 'Heals a pokemon\'s HP fully.', cost: 10, minStreak: 6 },
-	maxelixir: { name: 'Max Elixir', icon: 'Max Elixir', type: 'healPP', desc: 'Restores the PP of all of a pokemon\'s moves.', cost: 5, minStreak: 0 },
-	fullheal: { name: 'Full Heal', icon: 'Full Heal', type: 'cureStatus', desc: 'Cures a pokemon\'s status.', cost: 3, minStreak: 0 },
-	revive: { name: 'Revive', icon: 'Revive', type: 'revive', desc: 'Revives a Pokemon to half its maximum HP.', cost: 7, minStreak: 1 },
-	expall: { name: 'Exp. All', icon: 'Exp Share', type: 'key', desc: 'Gives 50% Exp. to all non-fainted Pokemon not in the battle', cost: 25, minStreak: 2 },
-	// debug2: { name: 'Debug 2', icon: 'berserk gene', type: 'debug', desc: 'Bans HoeenHero from this server twice.', cost: 999, minStreak: 1 },
-};
+const SHOP_ITEMS: { [k: string]: ShopItem } = JSON.parse(FS('server/chat-plugins/roguelike/shopdb.json').readSync());
 
 interface UserTeamData {
 	linkedTeamIndex: number;
@@ -564,6 +549,7 @@ export class Roguelike {
 		for (let x = 0; x < this.opponentTeam.length; x++) {
 			this.flags.opponentTeamScout.push(false);
 		}
+		this.timesRerolled = 0;
 		this.rollShop();
 	}
 
