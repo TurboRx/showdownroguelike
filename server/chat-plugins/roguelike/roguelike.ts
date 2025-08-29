@@ -4,12 +4,12 @@
 * @version Alpha 3.5 (Codename: Stonjourner)
 */
 
-import { FS, Utils } from '../../lib';
-import { TeamValidator } from '../../sim/team-validator';
+import { FS, Utils } from '../../../lib';
+import { TeamValidator } from '../../../sim/team-validator';
 const SAVE_DATA = 'config/roguelike.json';
 const roguelikeGames = new Map<ID, Roguelike>();
 
-export const EXP_TABLE = JSON.parse(FS('data/roguelike/exp.json').readSync());
+export const EXP_TABLE = JSON.parse(FS('exp.json').readSync());
 
 function getMinExpForMonAtLevel(species: string, level: number) {
 	const nextlevel = level + 1;
@@ -109,9 +109,9 @@ interface PokePackWeighting {
 	special?: string; // TODO: 'Fun' packs
 }
 
-const TM_LIST: { [k: string]: TMItem } = JSON.parse(FS('data/roguelike/tmdb.json').readSync());
+const TM_LIST: { [k: string]: TMItem } = JSON.parse(FS('tmdb.json').readSync());
 
-const ROTATIONAL_ITEM_POOL: { [k: string]: RotationalItem | TMItem } = JSON.parse(FS('data/roguelike/itemdb.json').readSync());
+const ROTATIONAL_ITEM_POOL: { [k: string]: RotationalItem | TMItem } = JSON.parse(FS('itemdb.json').readSync());
 
 Object.assign(ROTATIONAL_ITEM_POOL, TM_LIST);
 

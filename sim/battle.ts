@@ -24,7 +24,7 @@ import { State } from './state';
 import { BattleQueue, type Action } from './battle-queue';
 import { BattleActions } from './battle-actions';
 import { Utils } from '../lib/utils';
-import { EXP_TABLE } from '../server/chat-plugins/roguelike';
+import { EXP_TABLE } from '../server/chat-plugins/roguelike/roguelike';
 declare const __version: any;
 
 export type ChannelID = 0 | 1 | 2 | 3 | 4;
