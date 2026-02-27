@@ -1402,6 +1402,12 @@ export class Battle {
 		if (!this.sides.some(s => s.isAI) && this.sides.every(side => side.isChoiceDone())) {
 			throw new Error(`Choices are done immediately after a request`);
 		}
+		for (const side of this.sides) {
+			if (side?.isAI) {
+				const decision = this.roguelikeAI(side.activeRequest!);
+				if (decision) this.choose(side.id, decision);
+			}
+		}
 	}
 
 	clearRequest() {

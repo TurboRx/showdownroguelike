@@ -495,10 +495,6 @@ export class Side {
 		if (updatedRequest) (this.activeRequest as MoveRequest | SwitchRequest).update = true;
 		this.battle.send('sideupdate', `${this.id}\n|request|${JSON.stringify(update)}`);
 		this.activeRequest = update;
-		if (this.isAI) {
-			const decision = this.battle.roguelikeAI(update);
-			if (decision) this.battle.choose(this.id, decision);
-		}
 	}
 
 	emitChoiceError(
