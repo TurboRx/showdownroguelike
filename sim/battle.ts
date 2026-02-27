@@ -3581,11 +3581,11 @@ export class Battle {
 	roguelikeAI(request: ChoiceRequest) {
 		if (request.wait) return false;
 		if (request.forceSwitch) {
-			const choiceSlot = this.random(request.side.pokemon.length - 1) + 2;
+			const choiceSlot = this.random(2, request.side.pokemon.length + 1);
 			return 'switch ' + choiceSlot;
 		}
 		if (request.active[0]) {
-			const choiceSlot = this.random(request.side.pokemon.length - 1) + 1;
+			const choiceSlot = this.random(1, request.active[0].moves.length + 1);
 			return 'move ' + choiceSlot;
 		}
 		return 'default';
