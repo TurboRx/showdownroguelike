@@ -3424,6 +3424,7 @@ export class Battle {
 					if (mon.hp < 1) monData.status = 'fnt';
 					// @ts-expect-error
 					monData.ppLeft = [];
+					// @ts-expect-error shut up
 					monData.moves = [];
 					for (const move of mon.baseMoveSlots) {
 						// @ts-expect-error
@@ -3431,6 +3432,7 @@ export class Battle {
 						// @ts-expect-error
 						monData.ppLeft.push(move.pp);
 					}
+					// @ts-expect-error shut up
 					monData.exp = mon.m.exp;
 					// @ts-expect-error
 					monData.evs = mon.set.evs;
@@ -3583,7 +3585,9 @@ export class Battle {
 			const choiceSlot = this.random(2, request.side.pokemon.length + 1);
 			return 'switch ' + choiceSlot;
 		}
+		// @ts-expect-error jank request parser
 		if (request.active[0]) {
+			// @ts-expect-error jank request parser
 			const choiceSlot = this.random(1, request.active[0].moves.length + 1);
 			return 'move ' + choiceSlot;
 		}
