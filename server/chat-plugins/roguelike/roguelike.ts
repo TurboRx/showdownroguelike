@@ -516,7 +516,7 @@ export class Roguelike {
 				potential = viableItems.filter(item => ROTATIONAL_ITEM_POOL[item].type === 'evolveItem' || Dex.items.get(item)?.itemUser);
 				if (!potential.length) potential = viableItems.filter(item => ROTATIONAL_ITEM_POOL[item].type === 'item');
 			}
-			let winner = Utils.shuffle(potential).pop();
+			const winner = Utils.shuffle(potential).pop();
 			if (!winner) break;
 			this.rotationalShop.push(winner);
 			viableItems = viableItems.filter(e => e !== winner);
@@ -664,7 +664,7 @@ export class Roguelike {
 			}
 			buf += `<td><button class="button" name="send" value="/roguelike switch ${linkedIndex + 1}">Move</button>`;
 			if (mon.item) buf += `<br /><br /><button class="button" name="send" value="/roguelike switchitem ${linkedIndex + 1}">Switch Item</button>`;
-			buf +=`<br /><br /><br /><br /><br /><hr><button class="button" name="send" value="/roguelike release ${linkedIndex + 1}">Release</button>`;
+			buf += `<br /><br /><br /><br /><br /><hr><button class="button" name="send" value="/roguelike release ${linkedIndex + 1}">Release</button>`;
 			buf += `</td></tr>`;
 			linkedIndex++;
 		}
@@ -1419,7 +1419,7 @@ export const commands: Chat.ChatCommands = {
 				index = parseInt(arg);
 				index--;
 				if (!userData.team[index]) throw new Chat.ErrorMessage(`You need to specify a pokemon on your team.`);
-				let targetEvo = checkForEvolution(userData.team[index], (userData.flags.purchasedItem as ShopItem).name)
+				const targetEvo = checkForEvolution(userData.team[index], (userData.flags.purchasedItem as ShopItem).name);
 				if (!targetEvo) throw new Chat.ErrorMessage(`You can't use this on that pokemon.`);
 				userData.teamData[index].evoFlag = targetEvo;
 				userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
@@ -1793,13 +1793,13 @@ export const pages: Chat.PageTable = {
 			case 'item':
 				const type = userGameData.flags.purchasedItem?.type || 'itemPack';
 				switch (type) {
-					case 'evolveItem':
-						buf = `<center>Use this item on who?</center><br />`;
-						buf += userGameData.genEvoSelectHTML(userGameData.flags.purchasedItem);
-						break;
-					default:
-						buf = `<center>Give this item to who?</center><br />`;
-						buf += userGameData.genQuickSelectHTML(type);
+				case 'evolveItem':
+					buf = `<center>Use this item on who?</center><br />`;
+					buf += userGameData.genEvoSelectHTML(userGameData.flags.purchasedItem);
+					break;
+				default:
+					buf = `<center>Give this item to who?</center><br />`;
+					buf += userGameData.genQuickSelectHTML(type);
 				}
 
 				break;
