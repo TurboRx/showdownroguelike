@@ -3575,7 +3575,7 @@ export class Battle {
 			}
 		}
 		// randomize moves at equal level
-		Utils.shuffle(movesAtlevel);
+		this.prng.shuffle(movesAtlevel);
 		return movesAtlevel;
 	}
 
