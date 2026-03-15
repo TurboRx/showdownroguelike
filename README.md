@@ -7,7 +7,7 @@ Navigation: [Website][1] | **Server repository** | [Client repository][2] | [Dex
   [2]: https://github.com/smogon/pokemon-showdown-client
   [3]: https://github.com/Zarel/Pokemon-Showdown-Dex
 
-[![Build Status](https://github.com/smogon/pokemon-showdown/workflows/Node.js%20CI/badge.svg)](https://github.com/smogon/pokemon-showdown/actions?query=workflow%3A%22Node.js+CI%22)
+[![Node.js CI](https://github.com/HisuianZoroark/showdownroguelike/actions/workflows/test.yml/badge.svg)](https://github.com/HisuianZoroark/showdownroguelike/actions/workflows/test.yml)
 [![Dependency Status](https://img.shields.io/librariesio/github/smogon/pokemon-showdown)](https://libraries.io/github/smogon/pokemon-showdown)
 
 
