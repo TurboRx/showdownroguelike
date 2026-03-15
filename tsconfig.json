@@ -5,7 +5,7 @@
         "jsx": "react",
         "jsxFactory": "Chat.h",
         "jsxFragmentFactory": "Chat.Fragment",
-        "target": "es2020",
+        "target": "es2021",
         "skipLibCheck": true,
         "module": "CommonJS",
         "moduleResolution": "node",
