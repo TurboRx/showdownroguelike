@@ -10,7 +10,7 @@ const SAVE_DATA = 'config/roguelike.json';
 const ROGUELIKE_DATA_PATH = 'server/chat-plugins/roguelike';
 const roguelikeGames = new Map<ID, Roguelike>();
 
-export const EXP_TABLE = JSON.parse(FS(`${ROGUELIKE_DATA_PATH}/exp.json`).readSync());
+const EXP_TABLE = JSON.parse(FS(`${ROGUELIKE_DATA_PATH}/exp.json`).readSync());
 
 function getMinExpForMonAtLevel(species: string, level: number) {
 	species = toID(species);
