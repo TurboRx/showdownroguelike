@@ -80,6 +80,7 @@ jobs:
         CI: true
         FILES: ${{ steps.changed-files.outputs.all_changed_and_modified_files }}
         SKIPSIMTESTS: ${{ steps.changed-directories.outputs.all_changed_and_modified_files == '' }}
+        NODE_OPTIONS: "--max_old_space_size=4096"
 
     - name: Run full lint & test (if push to master)
       run: npm run full-test
