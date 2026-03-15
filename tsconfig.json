@@ -31,7 +31,6 @@
         "./data/text/*",
         "./data/random-battles/**/*",
         "./data/mods/*/*",
-        "./data/roguelike/*",
         "./dev-tools/*.ts",
         "./lib/*.ts",
         "./server/**/*.ts",
