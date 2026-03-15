@@ -5488,6 +5488,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		onSwitchIn(pokemon) {
 			if (pokemon.side.isAI) {
 				pokemon.side.foe.active[0].m.willGetEXP = true;
+				// @ts-expect-error hacky implementation
 				if (pokemon.side.foe.roguelikeTeamData.keyItems.includes('Exp. All')) {
 					pokemon.side.foe.pokemon.forEach(p => {
 						p.m.giveExpAll = true;
@@ -5516,10 +5517,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		onBegin() {
 			for (const side of this.sides) {
 				if (side.isAI) continue;
+				// @ts-expect-error hacky implementation
 				if (side.roguelikeTeamData.teamData) {
+					// @ts-expect-error hacky implementation
 					const data = side.roguelikeTeamData.teamData;
 					let index = 0;
 					for (const pokemon of side.pokemon) {
+						// @ts-expect-error hacky implementation
 						if (side.roguelikeTeamData.keyItems.includes('Exp. All')) {
 							pokemon.m.giveExpAll = true;
 							pokemon.m.expAll = true;
@@ -5527,26 +5531,20 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						const persist = data[index];
 						pokemon.m.exp = persist.exp;
 						pokemon.m.expAtNextLevel = persist.expAtNextLevel;
-						// @ts-expect-error trust me bro
 						pokemon.hp = persist.curHP;
-						// @ts-expect-error
 						if (persist.status) {
-							// @ts-expect-error
 							if (persist.status === 'fnt') {
 								pokemon.faint();
 								pokemon.m.willFaint = true;
 							} else {
-								// @ts-expect-error
 								pokemon.setStatus(persist.status as ID, null, null, true);
 							}
 						}
 						let moveIndex = 0;
 						for (const move of pokemon.moveSlots) {
-							// @ts-expect-error
 							move.pp = persist.ppLeft[moveIndex];
 							moveIndex++;
 						}
-						// @ts-expect-error
 						pokemon.m.roguelikeIndex = persist.linkedTeamIndex;
 						index++;
 					}
