@@ -3417,7 +3417,6 @@ export class Battle {
 					const monData = {};
 					// @ts-expect-error shut up
 					monData.curHP = mon.hp;
-					const pokemon = mon.set;
 					// @ts-expect-error
 					monData.status = mon.status.length ? mon.status : false;
 					// @ts-expect-error
@@ -3495,7 +3494,6 @@ export class Battle {
 
 	// Functions for Roguelike battles
 	getMinExpForMonAtLevel(species: string, level: number) {
-		const nextlevel = level + 1;
 		species = toID(species);
 		const speciesData = EXP_TABLE[species] || EXP_TABLE[toID(this.dex.species.get(species).baseSpecies)];
 		if (level === 1) return 0;
@@ -3566,7 +3564,7 @@ export class Battle {
 					movesAtlevel.push(move);
 					continue;
 				}
-				const learnSetstring = target === 'L' ? `${genNumber}${target}${level}` : genNumber + target;
+				const learnSetstring = target === 'L' ? `${genNumber}${target}${level}` : `${genNumber}${target}`;
 				if (learnset[move].some(source => source === learnSetstring)) {
 					if (!movesAtlevel.includes(move)) {
 						movesAtlevel.push(move);
@@ -3583,13 +3581,13 @@ export class Battle {
 		if (request.wait) return false;
 		if (request.forceSwitch) {
 			const choiceSlot = this.random(2, request.side.pokemon.length + 1);
-			return 'switch ' + choiceSlot;
+			return `switch ${choiceSlot}`;
 		}
 		// @ts-expect-error jank request parser
 		if (request.active[0]) {
 			// @ts-expect-error jank request parser
 			const choiceSlot = this.random(1, request.active[0].moves.length + 1);
-			return 'move ' + choiceSlot;
+			return `move ${choiceSlot}`;
 		}
 		return 'default';
 	}
@@ -3614,7 +3612,7 @@ export class Battle {
 		source.m.giveExpAll = false;
 		for (const stat of Object.keys(speciesData['evYield'])) {
 			const num = speciesData['evYield'][stat];
-			for (let x = speciesData['evYield'][stat]; x > 0; x--) {
+			for (let x = num; x > 0; x--) {
 				if (Object.values(source.set.evs).reduce((a, b) => a + b, 0) >= 512) break;
 				source.set.evs[stat as StatID] = this.clampIntRange(source.set.evs[stat as StatID] + 1, 0, 255);
 			}

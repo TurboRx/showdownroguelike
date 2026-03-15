@@ -1098,7 +1098,11 @@ export class Pokemon {
 
 		if (this.m.overwrite) {
 			data.moves = this.battle.dex.deepClone(this.baseMoveSlots);
-			data.moves.forEach(m => m.disabled = false);
+			data.moves.forEach(m => {
+				m.disabled = false;
+				return true;
+			}
+			);
 			data.moves.push({
 				move: 'Undo',
 				id: 'undo' as ID,
