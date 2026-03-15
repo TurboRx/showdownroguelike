@@ -1,7 +1,7 @@
 /**
 * HiZo's Untitled Roguelike
 * @author HiZo
-* @version Alpha 3.5 (Codename: Stonjourner)
+* @version Alpha 3.6 (Codename: Furret)
 */
 
 import { FS, Utils } from '../../../lib';
@@ -74,6 +74,7 @@ function checkForEvolution(pokemon: PokemonSet, misc?: any) {
 }
 
 function itemURLFormat(item: string) {
+	// @ts-expect-error replaceAll doesnt exist on 2020, but still compiles
 	return item.replaceAll(/[^a-zA-Z0-9\s-]+/g, '').toLowerCase().replaceAll(' ', '-');
 }
 
@@ -1198,6 +1199,7 @@ export const commands: Chat.ChatCommands = {
 		const data = roguelikeGames.get(user.id);
 		if (data) {
 			const buf = `<b>Your team in the Roguelike (as of now):</b><br /><br />`;
+			// @ts-expect-error replaceAll doesnt exist on 2020, but still compiles
 			return this.sendReplyBox(buf + Teams.export(data.team).replaceAll(`\n`, `<br />`));
 		}
 		throw new Chat.ErrorMessage(`Do you have save data on this account?`);
