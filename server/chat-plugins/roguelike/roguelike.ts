@@ -7,12 +7,12 @@
 import { FS, Utils } from '../../../lib';
 import { TeamValidator } from '../../../sim/team-validator';
 const SAVE_DATA = 'config/roguelike.json';
+const ROGUELIKE_DATA_PATH = 'server/chat-plugins/roguelike';
 const roguelikeGames = new Map<ID, Roguelike>();
 
-export const EXP_TABLE = JSON.parse(FS('server/chat-plugins/roguelike/exp.json').readSync());
+export const EXP_TABLE = JSON.parse(FS(`${ROGUELIKE_DATA_PATH}/exp.json`).readSync());
 
 function getMinExpForMonAtLevel(species: string, level: number) {
-	const nextlevel = level + 1;
 	species = toID(species);
 	const speciesData = EXP_TABLE[species] || EXP_TABLE[toID(Dex.species.get(species).baseSpecies)];
 	if (level === 1) return 0;
@@ -66,12 +66,13 @@ function checkForEvolution(pokemon: PokemonSet, misc?: any) {
 }
 
 function itemURLFormat(item: string) {
-	return item.replaceAll(/[^a-zA-Z0-9 \-]+/g, '').toLowerCase().replaceAll(' ', '-');
+	return item.replaceAll(/[^a-zA-Z0-9\s-]+/g, '').toLowerCase().replaceAll(' ', '-');
 }
 
-type ItemType = 'pokemonPack' | 'healHP' | 'healPP' | 'TM' | 'key' | 'debug' | 'revive' | 'cureStatus' | 'itemPack' | 'item' | 'evolveItem';
+type ItemType = 'pokemonPack' | 'healHP' | 'healPP' | 'TM' |
+	'key' | 'debug' | 'revive' | 'cureStatus' | 'itemPack' | 'item' | 'evolveItem';
 
-type opponentScout = 'revealMon' | 'revealSet' | false;
+type OpponentScout = 'revealMon' | 'revealSet' | false;
 
 const SEQUENCE_CHECK: { [k: string]: string[] } = {
 	battle: ['results'],
@@ -109,13 +110,14 @@ interface PokePackWeighting {
 	special?: string; // TODO: 'Fun' packs
 }
 
-const TM_LIST: { [k: string]: TMItem } = JSON.parse(FS('server/chat-plugins/roguelike/tmdb.json').readSync());
+const TM_LIST: { [k: string]: TMItem } = JSON.parse(FS(`${ROGUELIKE_DATA_PATH}/tmdb.json`).readSync());
 
-const ROTATIONAL_ITEM_POOL: { [k: string]: RotationalItem | TMItem } = JSON.parse(FS('server/chat-plugins/roguelike/itemdb.json').readSync());
+const ROTATIONAL_ITEM_POOL: { [k: string]: RotationalItem | TMItem } =
+	JSON.parse(FS(`${ROGUELIKE_DATA_PATH}/itemdb.json`).readSync());
 
 Object.assign(ROTATIONAL_ITEM_POOL, TM_LIST);
 
-const SHOP_ITEMS: { [k: string]: ShopItem } = JSON.parse(FS('server/chat-plugins/roguelike/shopdb.json').readSync());
+const SHOP_ITEMS: { [k: string]: ShopItem } = JSON.parse(FS(`${ROGUELIKE_DATA_PATH}/shopdb.json`).readSync());
 
 interface UserTeamData {
 	linkedTeamIndex: number;
@@ -186,7 +188,7 @@ function genItem(quantity: number, extraArg?: PokemonSet[] | string) {
 					const dexSpecies = Dex.species.get(poke.species);
 					let validSpecies = [dexSpecies.name];
 					if (dexSpecies.otherFormes) validSpecies = validSpecies.concat(dexSpecies.otherFormes);
-					return i.itemUser.some(v => validSpecies.includes(v));
+					return i.itemUser?.some(v => validSpecies.includes(v));
 				});
 			}
 		} else {
@@ -198,6 +200,7 @@ function genItem(quantity: number, extraArg?: PokemonSet[] | string) {
 				return false;
 			});
 		}
+		return false;
 	});
 	all = Utils.shuffle(all);
 	const items = [];
@@ -417,7 +420,7 @@ export class Roguelike {
 	timesRerolled: number;
 	flags: {
 		pokemonOptions?: PokemonSet[],
-		opponentTeamScout?: opponentScout[],
+		opponentTeamScout?: OpponentScout[],
 		[k: string]: any,
 	};
 	opponentTeam: PokemonSet[];
