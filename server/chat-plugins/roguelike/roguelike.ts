@@ -577,7 +577,6 @@ export class Roguelike {
 				monData.curHP = monData.maxHP;
 				monData.ppLeft.forEach((v, i) => {
 					monData.ppLeft[i] = Dex.moves.get(this.team[index].moves[i]).pp * (8 / 5);
-					return true;
 				});
 				monData.status = false;
 				index++;
@@ -587,7 +586,6 @@ export class Roguelike {
 		this.battlePoints += 5;
 		scale.forEach((e, i) => {
 			scale[i] = Utils.clampIntRange(e + (this.streak * 5), 1, 100);
-			return true;
 		});
 		const num = RECOMMENDED_TEAM_LENGTH[Utils.clampIntRange(this.streak, 0, 6)];
 		RECOMMENDED_WEIGHTING.midpoint = Utils.clampIntRange(RECOMMENDED_WEIGHTING.midpoint + (this.streak * 50), 0, 650);
@@ -1314,7 +1312,6 @@ export const commands: Chat.ChatCommands = {
 				const scale = [5, 10];
 				scale.forEach((e, i) => {
 					scale[i] = Utils.clampIntRange(e + (userData.streak * 5), 1, 100);
-					return true;
 				});
 				const weighting = { range: 0, midpoint: 0, weightcap: 0 } as PokePackWeighting;
 				switch (item.name) {
@@ -1459,7 +1456,6 @@ export const commands: Chat.ChatCommands = {
 				userData.teamData[index].ppLeft.forEach((v, i) => {
 					userData.teamData[index].ppLeft[i] =
 						Dex.moves.get(userData.team[index].moves[i]).pp * (8 / 5);
-					return true;
 				});
 				userData.battlePoints -= (userData.flags.purchasedItem as ShopItem).cost;
 				// TODO: More items
