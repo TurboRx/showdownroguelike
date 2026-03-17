@@ -1925,12 +1925,7 @@ export const pages: Chat.PageTable = {
 		case 'evolution':
 			subtitle = 'Evolution';
 			if (gameArgs.shift() === 'success') {
-				const argShift = gameArgs.shift();
-				const justEvolvedIndex = argShift ? parseInt(argShift) : undefined;
-				if (!justEvolvedIndex) {
-					this.title = '[Roguelike] Error';
-					throw new Chat.ErrorMessage('If you reached this error, you should contact HiZo.');
-				}
+				const justEvolvedIndex = parseInt(gameArgs.shift()!);
 				const justEvolved = userGameData.team[justEvolvedIndex];
 				buf += `<center><h3>Your ${userGameData.flags.prevoName} evolved into ${justEvolved.name}!</h3><br />`;
 				buf += `<psicon pokemon=${justEvolved.species}><br /><br />`;
